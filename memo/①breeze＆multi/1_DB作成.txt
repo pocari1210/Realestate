@@ -1,0 +1,14 @@
+
+Mysqlでデータベースを作成
+⇒realestate_db
+
+
+◆.env編集◆
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+DB_DATABASE=realestate_db
+
+下記コマンドでマイグレーション実行
+
+php artisan migrate

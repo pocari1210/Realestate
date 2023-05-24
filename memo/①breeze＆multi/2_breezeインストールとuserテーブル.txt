@@ -1,0 +1,88 @@
+
+2_breezeインストール
+
+composer require laravel/breeze --dev
+
+php artisan breeze:install
+
+Which stack would you like to install?
+❯ blade
+
+Would you like to install dark mode support? (yes/no) [no]
+❯ no
+
+Would you prefer Pest tests instead of PHPUnit? (yes/no) [no]
+❯ no
+
+
+◆userテーブルの編集◆
+
+ディレクトリ
+\database\migrations\2014_10_12_000000_create_users_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Schema::create('users', function (Blueprint $table) {
+    $table->id();
+    $table->string('name');
+    $table->string('username')->nullable(); //追記
+    $table->string('email')->unique();
+    $table->timestamp('email_verified_at')->nullable();
+    $table->string('password');
+    $table->string('photo')->nullable(); //追記
+    $table->string('phone')->nullable(); //追記
+    $table->text('address')->nullable(); //追記
+    $table->enum('role',['admin','agent','user'])->default('user'); //追記
+    $table->enum('status',['active','inactive'])->default('active'); //追記
+    $table->rememberToken();
+    $table->timestamps();
+});
+
+★コード解説★
+
+●Stringとtextの違い●
+⇒入力できる文字数に違いがある
+
+https://biz.addisteria.com/string_text_longtext/#toc2
+
+●enum(列挙型)で、ロールとステータスを作成●
+複数の定数をひとつにまとめておくことができる型のこと
+
+$table->enum('role',['admin','agent','user'])->default('user'); //追記
+⇒管理者、エージェント、ユーザーのロールを作成
+⇒デフォルト値はユーザー(user)
+
+table->enum('status',['active','inactive'])->default('active'); //追記
+⇒アクティブと非アクティブを作成
+⇒デフォルト値はアクティブ(active)
+
+※新しくregisterで登録をしたら、default値で登録をされる
+
+/////////////////////////////////////////////////////////////////////
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\User.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+protected $fillableを削除し、下記に書き換える
+
+protected $guarded = []; 
+
+★コード解説★
+
+userテーブルのすべてのフィールドが入力可能になる
+
+////////////////////////////////////////////////////////////////////////
+
+◆コマンド実行◆
+
+php artisan migrate:refresh --seed
+
+musqlのuser tableを確認し、
+テーブルに入力したカラムが入っているか、確認する
+
+
+

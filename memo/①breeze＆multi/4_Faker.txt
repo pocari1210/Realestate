@@ -1,0 +1,56 @@
+
+4_Faker
+
+◆Faker編集◆
+
+ディレクトリ
+\database\factories\UserFactory.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function definition(): array
+  {
+    return [
+      'name' => fake()->name(),
+      'email' => fake()->unique()->safeEmail(),
+      'email_verified_at' => now(),
+      'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+      'phone' => fake()->phoneNumber, // 追記
+      'address' => fake()->address, // 追記
+      'photo' => fake()->imageUrl('60', '60'), // 追記
+      'role' => fake()->randomElement(['admin', 'agent', 'user']), // 追記
+      'status' => fake()->randomElement(['active', 'inactive']), // 追記
+      'remember_token' => Str::random(10),
+    ];
+  }
+
+★コード解説★
+randomElementで、ランダムで配列の中身を一つ取得している
+
+/////////////////////////////////////////////////////////////////////////
+
+◆データベースSeeder編集◆
+
+ディレクトリ
+\database\seeders\DatabaseSeeder.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function run(): void
+  {
+    // Seeder実行
+    $this->call(UsersTableSeeder::class);
+
+    // factories実行
+    \App\Models\User::factory(5)->create();
+
+★コード解説★
+トータルで8個のデータができる
+
+//////////////////////////////////////////////////////////////////////
+
+ここまで完了したら、下記コマンドを実行する
+
+php artisan migrate:fresh --seed
+
+
