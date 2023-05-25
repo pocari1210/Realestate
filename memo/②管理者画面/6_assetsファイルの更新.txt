@@ -1,0 +1,16 @@
+
+6_assetsファイルの更新
+
+\public\backendの下に、下記フォルダをコピペする
+C:\xampp\htdocs\Realestate\cms\Downloads\Backend Theme\assets
+
+ファイルのインポート先を記述しなおす
+
+\resources\views\admin\admin_dashboard.blade.php
+\resources\views\admin\admin_login.blade.php
+
+php artisan optimize
+
+以下のコマンドが実行されます。
+php artisan config:cache
+php artisan route:cache

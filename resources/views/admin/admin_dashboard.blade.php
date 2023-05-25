@@ -22,16 +22,16 @@
   <link rel="stylesheet" href="{{ asset('backend/assets/vendors/jquery-tags-input/jquery.tagsinput.min.css') }}">
 
   <!-- core:css -->
-  <link rel="stylesheet" href="{{ asset('../assets/vendors/core/core.css') }}">
+  <link rel="stylesheet" href="{{ asset('backend/assets/vendors/core/core.css') }}">
   <!-- endinject -->
 
   <!-- Plugin css for this page -->
-  <link rel="stylesheet" href="{{ asset('../assets/vendors/flatpickr/flatpickr.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('backend/assets/vendors/flatpickr/flatpickr.min.css') }}">
   <!-- End plugin css for this page -->
 
   <!-- inject:css -->
-  <link rel="stylesheet" href="{{ asset('../assets/fonts/feather-font/css/iconfont.css') }}">
-  <link rel="stylesheet" href="{{ asset('../assets/vendors/flag-icon-css/css/flag-icon.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('backend/assets/fonts/feather-font/css/iconfont.css') }}">
+  <link rel="stylesheet" href="{{ asset('backend/assets/vendors/flag-icon-css/css/flag-icon.min.css') }}">
   <!-- endinject -->
 
   <!-- Layout styles -->
@@ -88,17 +88,17 @@
   <!-- endinject -->
 
   <!-- Plugin js for this page -->
-  <script src="{{ asset('../assets/vendors/flatpickr/flatpickr.min.js') }}"></script>
-  <script src="{{ asset('../assets/vendors/apexcharts/apexcharts.min.js') }}"></script>
+  <script src="{{ asset('backend/assets/vendors/flatpickr/flatpickr.min.js') }}"></script>
+  <script src="{{ asset('backend/assets/vendors/apexcharts/apexcharts.min.js') }}"></script>
   <!-- End plugin js for this page -->
 
   <!-- inject:js -->
-  <script src="{{ asset('../assets/vendors/feather-icons/feather.min.js') }}"></script>
-  <script src="{{ asset('../assets/js/template.js') }}"></script>
+  <script src="{{ asset('backend/assets/vendors/feather-icons/feather.min.js') }}"></script>
+  <script src="{{ asset('backend/assets/js/template.js') }}"></script>
   <!-- endinject -->
 
   <!-- Custom js for this page -->
-  <script src="{{ asset('../assets/js/dashboard-dark.js') }}"></script>
+  <script src="{{ asset('backend/assets/js/dashboard-dark.js') }}"></script>
   <!-- End custom js for this page -->
 
 </body>
