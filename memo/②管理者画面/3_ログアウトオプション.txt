@@ -1,0 +1,59 @@
+
+3_ログアウトオプション
+
+◆headerファイル編集◆
+
+ディレクトリ
+\resources\views\admin\body\header.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+</li>
+<li class="dropdown-item py-2">
+  <a href="{{ route('admin.logout')}}" class="text-body ms-0">
+    <i class="me-2 icon-md" data-feather="log-out"></i>
+    <span>ログアウト</span>
+  </a>
+</li>
+
+//////////////////////////////////////////////////////////////
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Route::middleware(['auth','roles:admin'])->group(function(){
+↓追記↓
+ Route::get('/admin/logout', [AdminController::class, 'AdminLogout'])
+ ->name('admin.logout');
+
+★コード解説★
+Adminの管理ページのログアウトを実装
+
+//////////////////////////////////////////////////////////////
+
+◆コントローラー編集◆
+
+ディレクトリ
+\app\Http\Controllers\AdminController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AdminLogout(Request $request): RedirectResponse
+  {
+    Auth::guard('web')->logout();
+
+    $request->session()->invalidate();
+
+    $request->session()->regenerateToken();
+
+    return redirect('/login');
+  }
+
+★コード解説★
+\app\Http\Controllers\Auth\AuthenticatedSessionController.php
+のdestroyメソッドをベースに
+ログアウトの処理を記述している

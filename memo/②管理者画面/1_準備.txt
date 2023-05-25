@@ -1,0 +1,51 @@
+
+◆新規フォルダを追記する◆
+
+ディレクトリ
+\public
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+\public\assets
+⇒Downloadフォルダのassetsフォルダを張り付ける
+
+\public\backend
+⇒下記二つのフォルダを張り付ける
+\Downloads\Backend Theme\Main\pages
+\Downloads\Backend Theme\Main\partials
+
+////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(dashboard)◆
+
+headタグ内のcssのリンクとscriptタグをすべて下記のように
+編集する
+
+ディレクトリ
+\resources\views\admin\admin_dashboard.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+href="{{ asset('読み込むファイル') }}"
+
+<script src="{{ asset('読み込むファイル') }}"></script>
+
+      <!-- partial -->
+
+      @yield('admin')
+
+////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(index)◆
+
+ディレクトリ
+\resources\views\admin\index.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+@extends('admin.admin_dashboard')
+@section('admin')
+
+中身を記述
+
+@endsection

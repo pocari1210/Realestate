@@ -38,6 +38,10 @@ Route::middleware(['auth', 'roles:admin'])->group(function () {
   // adminのdashboard
   Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])
     ->name('admin.dashboard');
+
+  // dashboardからログアウトするルート
+  Route::get('/admin/logout', [AdminController::class, 'AdminLogout'])
+    ->name('admin.logout');
 }); // End Group Admin Middleware
 
 
@@ -48,3 +52,8 @@ Route::middleware(['auth', 'roles:agent'])->group(function () {
   Route::get('/agent/dashboard', [AgentController::class, 'AgentDashboard'])
     ->name('agent.dashboard');
 }); // End Group Agent Middleware
+
+
+// adminのログインルート
+Route::get('/admin/login', [AdminController::class, 'AdminLogin'])
+  ->name('admin.login');

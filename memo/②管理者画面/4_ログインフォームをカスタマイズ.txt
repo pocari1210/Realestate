@@ -1,0 +1,47 @@
+
+4_ログインフォームをカスタマイズ
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Route::get('/admin/login', [AdminController::class, 'AdminLogin'])
+  ->name('admin.login')
+  ->middleware(RedirectIfAuthenticated::class);
+
+★コード解説★
+
+・RedirectIfAuthenticated
+
+認証済かチェックし、認証済であれば 
+/home にリダイレクトする機能
+
+
+/////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\AdminController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AdminLogin()
+  {
+    return view('admin.admin_login');
+  }
+
+/////////////////////////////////////////////////////////////////
+
+◆ビューの編集◆
+
+ディレクトリ
+\resources\views\admin\admin_login.blade.php(新規作成)
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+\Downloads\Backend Theme\Main\pages\auth\login.htmlの
+ファイルをコピーし、作成する
