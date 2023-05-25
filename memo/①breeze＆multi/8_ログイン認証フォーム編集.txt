@@ -1,0 +1,83 @@
+
+8_ログイン認証フォーム編集
+
+breezeのデフォルトでは、フォームがメールアドレスと
+パスワードだが、名前や電話番号に変更をする
+
+◆ログイン認証ページ編集◆
+
+ディレクトリ
+\resources\views\auth\login.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<!-- Email Address(編集後) -->
+<div>
+  <x-input-label for="login" :value="__('Email/Name/Phone')" />
+  <x-text-input id="login" class="block mt-1 w-full" type="text" 
+  name="login" :value="old('login')" required autofocus autocomplete="username" />
+</div>
+
+////////////////////////////////////////////////////////////////////
+
+◆リクエストファイル編集◆
+
+ディレクトリ
+\app\Http\Requests\Auth\LoginRequest.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
+①:rulesメソッド編集
+
+  public function rules(): array
+  {
+    return [
+      'login' => ['required', 'string'],
+      'password' => ['required', 'string'],
+    ];
+  }
+
+★コード解説★
+変数loginは、login.blade.phpファイルのinputタグ内の
+name情報と紐づいている
+
+loginの連想配列からemailを削除した
+
+②-1:authenticateメソッド編集
+
+  public function authenticate(): void
+  {
+    $this->ensureIsNotRateLimited();
+
+    ↓↓↓追記↓↓↓
+    $user = User::where('email', $this->login)
+      ->orWhere('name', $this->login)
+      ->orWhere('phone', $this->login)
+      ->first();
+    ↑↑↑追記↑↑↑
+
+★コード解説★
+
+email(メールアドレス),name(名前),phone(電話番号)で
+ログインを行えるようにしている
+
+②-2:authenticateメソッド編集
+
+if (!$user || !Hash::check($this->password, $user->password)) {
+  RateLimiter::hit($this->throttleKey());
+
+  throw ValidationException::withMessages([
+    'login' => trans('auth.failed'),
+  ]);
+
+★コード解説★
+$this->passwordはrulesメソッドのpasswordフィールドを指している
+$user->passwordはDBに登録しているパスワード情報を指している
+
+②-3:authenticateメソッド編集
+
+//remember me機能?
+Auth::login($user, $this->boolean('remember'));

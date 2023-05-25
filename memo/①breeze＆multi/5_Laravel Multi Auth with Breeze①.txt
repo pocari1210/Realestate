@@ -1,0 +1,62 @@
+
+5_Laravel Multi Auth with Breeze
+
+画面の反映を行う
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AgentController;
+
+// adminのdashboard
+Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])
+->name('admin.dashboard');
+
+// agentのdashboard
+Route::get('/agent/dashboard', [AgentController::class, 'AgentDashboard'])
+->name('agent.dashboard');
+
+//////////////////////////////////////////////////////////////////////////
+
+◆コントローラー作成◆
+
+コマンド
+php artisan make:controller AdminController
+php artisan make:controller AgentController
+
+////////////////////////////////////////////////////////////////////////////
+
+◆Adminコントローラー編集◆
+
+ディレクトリ
+\app\Http\Controllers\AdminController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+public function AdminDashboard(){
+
+  return view('admin.admin_dashboard');
+
+}
+
+/////////////////////////////////////////////////////////////
+
+◆Agentコントローラー編集◆
+
+ディレクトリ
+\app\Http\Controllers\AgentController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+public function AgentDashboard(){
+
+  return view('agent.agent_dashboard');
+
+}
+
+/agent/dashboardで検索し、反映されたらOK

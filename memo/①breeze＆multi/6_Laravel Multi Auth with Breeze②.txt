@@ -1,0 +1,41 @@
+
+6_Laravel Multi Auth with Breeze②
+
+◆AuthenticatedSessionController編集◆
+
+ディレクトリ
+\app\Http\Controllers\Auth\AuthenticatedSessionController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function store(LoginRequest $request): RedirectResponse
+  {
+    $request->authenticate();
+
+    $request->session()->regenerate();
+
+    ↓↓↓追記↓↓↓
+    $url = '';
+
+    if ($request->user()->role === 'admin') {
+      $url = 'admin/dashboard';
+    } elseif ($request->user()->role === 'agent') {
+      $url = 'agent/dashboard';
+    } elseif ($request->user()->role === 'user') {
+      $url = '/dashboard';
+    }
+
+    return redirect()->intended($url);
+
+    ↑↑↑追記↑↑↑
+  }
+
+★コード解説★
+
+それぞれの権限でログインし、
+$urlで指定したページに遷移されればOK
+
+adminとagentはuser画面の'/dashboard'も開くことができる
+
+この時点では
+adminでagent,agentでadminのページに遷移ができる

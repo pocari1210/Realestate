@@ -1,0 +1,72 @@
+
+7_Laravel Multi Auth with Breeze③
+
+下記コマンドを実行し、
+ミドルウェアファイルを作成
+
+php artisan make:middleware Role
+
+◆Kernelの追記◆
+
+ディレクトリ
+\app\Http\Kernel.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+protected $middlewareAliases = [
+  'roles' => \App\Http\Middleware\Role::class, // 追記
+
+
+///////////////////////////////////////////////////////////
+
+
+◆ミドルウェア(Role)編集◆
+
+ディレクトリ
+\app\Http\Middleware\Role.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    public function handle(Request $request, Closure $next, $role): Response
+    {
+        if ($request->user()->role !== $role) {
+            return redirect('dashboard');
+        }
+
+★コード解説★
+Role.phpでミドルウェアをカーネルに登録をする
+記述をしている
+
+///////////////////////////////////////////////////////////
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// ★admin権限でログインした場合のルートグループ★
+Route::middleware(['auth', 'roles:admin'])->group(function () {
+
+  // adminのdashboard
+  Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])
+    ->name('admin.dashboard');
+}); // End Group Admin Middleware
+
+
+// ★agent権限でログインした場合のルートグループ★
+Route::middleware(['auth', 'roles:agent'])->group(function () {
+
+  // agentのdashboard
+  Route::get('/agent/dashboard', [AgentController::class, 'AgentDashboard'])
+    ->name('agent.dashboard');
+}); // End Group Agent Middleware
+
+★コード解説★
+adminとagentの権限でログインした際の、ルートのグループを作成
+
+adminでagentのダッシュボードを開こうとしたら、
+dashboardにリダイレクトされたらOK
+
+
