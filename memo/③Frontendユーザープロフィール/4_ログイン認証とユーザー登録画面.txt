@@ -1,0 +1,60 @@
+
+4_ログイン認証とユーザー登録画面
+
+◆ビューの編集◆
+\resources\views\auth\login.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<form action="{{ route('register') }}" method="post" class="default-form">
+  @csrf
+
+  <div class="form-group">
+    <label>氏名</label>
+    <input type="text" name="name" required="">
+  </div>
+
+  <div class="form-group">
+    <label>メールアドレス</label>
+    <input type="email" name="email" id="email" required="">
+  </div>
+
+  <div class="form-group">
+    <label>パスワード</label>
+    <input type="password" name="password" id="password" required="">
+  </div>
+
+  <div class="form-group">
+    <label>確認用パスワード</label>
+    <input type="password" name="password_confirmation" id="password_confirmation" required="">
+  </div>
+
+  <div class="form-group message-btn">
+    <button type="submit" class="theme-btn btn-one">登録</button>
+  </div>
+</form>
+
+★コード解説★
+
+登録ボタンをおしたら、\routes\auth.phpのcreateが実行される
+
+inputタグのnameとid情報は、同じ名前で登録
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラー編集◆
+
+ディレクトリ
+\app\Http\Controllers\Auth\RegisteredUserController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function create(): View
+  {
+    return view('auth.login');
+  }
+
+★コード解説★
+テンプレートのSigin Inページの登録画面は、
+/login内にあるため、ルートをあわせる
+

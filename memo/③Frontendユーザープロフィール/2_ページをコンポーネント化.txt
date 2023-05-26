@@ -1,0 +1,105 @@
+
+2_ページをコンポーネント化
+
+\resources\views\frontend\homeのフォルダを新規作成し、
+下記ファイルを作成する
+
+footer.blade.php
+header.blade.php
+mobile_menu.blade.php
+preload.blade.php
+
+
+
+◆コンポーネント化①◆
+
+ディレクトリ
+\resources\views\frontend\frontend_dashboard.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+・変更前
+    <!-- preloader -->
+    <div class="loader-wrap">
+      ～中身～
+    </div>
+
+★コード解説★
+preloaderの中身を下記にコピーし、貼り付ける
+\resources\views\frontend\home\preload.blade.php
+
+●変更後
+    <!-- preloader -->
+    @include('frontend.home.preload')
+
+★コード解説★
+preload.blade.phpの中身をインポートしている
+
+//////////////////////////////////////////////////////////////
+
+◆コンポーネント化②◆
+
+ディレクトリ
+\resources\views\frontend\frontend_dashboard.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+●変更前●
+    <!-- main header -->
+    <header class="main-header">
+      ～中身～
+    </header>
+
+★コード解説★
+main headerの中身を下記にコピーし、貼り付ける
+\resources\views\frontend\home\header.blade.php
+
+●変更後●
+    <!-- main header -->
+    @include('frontend.home.header')
+
+//////////////////////////////////////////////////////////////
+
+◆コンポーネント化③◆
+
+ディレクトリ
+\resources\views\frontend\frontend_dashboard.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+●変更前●
+    <!-- Mobile Menu  -->
+    <div class="mobile-menu">
+      ～中身～
+　　</div>
+
+●変更後●
+    <!-- Mobile Menu  -->
+    @include('frontend.home.mobile_menu')
+
+//////////////////////////////////////////////////////////////
+
+
+◆コンポーネント化④◆
+
+ディレクトリ
+\resources\views\frontend\frontend_dashboard.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+●変更前●
+    <!-- main-footer -->
+    <footer class="main-footer">
+    </footer>
+
+///////////////////////////////////////////////////////////////////////
+
+◆ベースのコンポーネントを作成◆
+
+下記ディレクトリを作成し、download-sectionの中身をはりつける
+
+\resources\views\frontend\index.blade.php
+
+    <!-- download-section -->
+    <section class="download-section bg-color-3">
+    </section>

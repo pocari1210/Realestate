@@ -1,0 +1,7 @@
+
+3_さらに細分化
+
+下記のGitをベースにコンポーネントを細分化
+
+https://github.com/easylearningbd/laravel-property-management-system/commit/eff6b0a02eacea1d5a06474a3180d7b73efc6b0c#diff-716ef5e031280fbb5eae02923502b39073c2821b929804a2e2c5fd2be58746a3
+
