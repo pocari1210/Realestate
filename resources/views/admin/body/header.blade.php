@@ -39,8 +39,8 @@
               </a>
             </div>
             <div class="col-3 text-center">
-              <a href="" class="dropdown-item d-flex flex-column align-items-center justify-content-center wd-70 ht-70"><i data-feather="instagram" class="icon-lg mb-1"></i>
-                <p class="tx-12">プロフィール</p>
+              <a href="pages/general/profile.html" class="dropdown-item d-flex flex-column align-items-center justify-content-center wd-70 ht-70"><i data-feather="instagram" class="icon-lg mb-1"></i>
+                <p class="tx-12">Profile</p>
               </a>
             </div>
           </div>
@@ -189,18 +189,30 @@
           </div>
         </div>
       </li>
+
+      <!-- bladeファイルでログインしているuser情報を
+      取得している -->
+      @php
+      $id = Auth::user()->id;
+      $profileData = App\Models\User::find($id);
+      @endphp
+
+      <!-- adminの画像を表示 -->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <img class="wd-30 ht-30 rounded-circle" src="https://via.placeholder.com/30x30" alt="profile">
+          <img class="wd-30 ht-30 rounded-circle" src="{{ (!empty($profileData->photo)) ? url('upload/admin_images/'.$profileData->photo) : url('upload/no_image.jpg') }}" alt="profile">
         </a>
         <div class="dropdown-menu p-0" aria-labelledby="profileDropdown">
           <div class="d-flex flex-column align-items-center border-bottom px-5 py-3">
             <div class="mb-3">
-              <img class="wd-80 ht-80 rounded-circle" src="https://via.placeholder.com/80x80" alt="">
+              <img class="wd-80 ht-80 rounded-circle" src="{{ (!empty($profileData->photo)) ? url('upload/admin_images/'.$profileData->photo) : url('upload/no_image.jpg') }}" alt="">
             </div>
+
+            <!-- headerのプロフィール情報を登録している
+            nameとemailの情報にする -->
             <div class="text-center">
-              <p class="tx-16 fw-bolder">Amiah Burton</p>
-              <p class="tx-12 text-muted">amiahburton@gmail.com</p>
+              <p class="tx-16 fw-bolder">{{ $profileData->name }}</p>
+              <p class="tx-12 text-muted">{{ $profileData->email }}</p>
             </div>
           </div>
           <ul class="list-unstyled p-1">

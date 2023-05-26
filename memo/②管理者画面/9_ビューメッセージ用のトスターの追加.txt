@@ -1,0 +1,111 @@
+
+9_ビューメッセージ用のトスターの追加
+
+◆ビューの編集◆
+
+ディレクトリ
+\resources\views\admin\admin_dashboard.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+//★toastr.cssを読み込む★
+<!-- End layout styles -->
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+
+
+//★toastr.min.jsを読み込む★
+  <!-- End custom js for this page -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+ @if(Session::has('message'))
+ var type = "{{ Session::get('alert-type','info') }}"
+ switch(type){
+    case 'info':
+    toastr.info(" {{ Session::get('message') }} ");
+    break;
+    case 'success':
+    toastr.success(" {{ Session::get('message') }} ");
+    break;
+    case 'warning':
+    toastr.warning(" {{ Session::get('message') }} ");
+    break;
+    case 'error':
+    toastr.error(" {{ Session::get('message') }} ");
+    break; 
+ }
+ @endif 
+</script>
+
+////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\AdminController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AdminProfileStore(Request $request)
+  {
+
+    if ($request->file('photo')) {
+      $file = $request->file('photo');
+
+      ↓↓追記↓↓
+      @unlink(public_path('upload/admin_images/' . $data->photo));
+
+    }
+
+    // return redirect()->back();
+
+    $notification = array(
+      'message' => 'プロフィールを変更しました',
+      'alert-type' => 'success'
+    );
+
+★コード解説★
+
+@unlinkをつかって、更新前の画像を削除している
+
+$notificationのalert-typeは、
+\resources\views\admin\admin_dashboard.blade.phpファイルの
+caseに記載した変数を読み込んでいる
+
+////////////////////////////////////////////////////////////////////////////////
+
+◆adminの登録情報、画像の変更◆
+
+ディレクトリ
+\resources\views\admin\admin_dashboard.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<!-- bladeファイルでログインしているuser情報を
+取得している -->
+@php
+$id = Auth::user()->id;
+$profileData = App\Models\User::find($id);
+@endphp
+
+<!-- adminの画像を表示 -->
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <img class="wd-30 ht-30 rounded-circle" src="{{ (!empty($profileData->photo)) ? url('upload/admin_images/'.$profileData->photo) : url('upload/no_image.jpg') }}" alt="profile">
+  </a>
+  <div class="dropdown-menu p-0" aria-labelledby="profileDropdown">
+    <div class="d-flex flex-column align-items-center border-bottom px-5 py-3">
+      <div class="mb-3">
+        <img class="wd-80 ht-80 rounded-circle" src="{{ (!empty($profileData->photo)) ? url('upload/admin_images/'.$profileData->photo) : url('upload/no_image.jpg') }}" alt="">
+      </div>
+
+      <!-- headerのプロフィール情報を登録している
+      nameとemailの情報にする -->
+      <div class="text-center">
+        <p class="tx-16 fw-bolder">{{ $profileData->name }}</p>
+        <p class="tx-12 text-muted">{{ $profileData->email }}</p>
+      </div>
+
+★コード解説★
+
+imgタグのsrcを変更し、ファイルの保存先を指定している

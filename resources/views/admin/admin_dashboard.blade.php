@@ -40,6 +40,7 @@
 
   <link rel="shortcut icon" href="{{ asset('../assets/images/favicon.png') }}" />
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+
 </head>
 
 <body>
@@ -48,23 +49,7 @@
     <!-- partial:partials/_sidebar.html -->
     @include('admin.body.sidebar')
 
-    <nav class="settings-sidebar">
-      <div class="sidebar-body">
-        <a href="#" class="settings-sidebar-toggler">
-          <i data-feather="settings"></i>
-        </a>
-        <div class="theme-wrapper">
-          <h6 class="text-muted mb-2">Light Theme:</h6>
-          <a class="theme-item" href="../demo1/dashboard.html">
-            <img src="../assets/images/screenshots/light.jpg" alt="light theme">
-          </a>
-          <h6 class="text-muted mb-2">Dark Theme:</h6>
-          <a class="theme-item active" href="../demo2/dashboard.html">
-            <img src="../assets/images/screenshots/dark.jpg" alt="light theme">
-          </a>
-        </div>
-      </div>
-    </nav>
+
     <!-- partial -->
 
     <div class="page-wrapper">
@@ -100,6 +85,32 @@
   <!-- Custom js for this page -->
   <script src="{{ asset('backend/assets/js/dashboard-dark.js') }}"></script>
   <!-- End custom js for this page -->
+
+  <!-- ★toastrのjsをimport★ -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+  <script>
+    @if(Session::has('message'))
+    var type = "{{ Session::get('alert-type','info') }}"
+    switch (type) {
+      case 'info':
+        toastr.info(" {{ Session::get('message') }} ");
+        break;
+
+      case 'success':
+        toastr.success(" {{ Session::get('message') }} ");
+        break;
+
+      case 'warning':
+        toastr.warning(" {{ Session::get('message') }} ");
+        break;
+
+      case 'error':
+        toastr.error(" {{ Session::get('message') }} ");
+        break;
+    }
+    @endif
+  </script>
 
 </body>
 
