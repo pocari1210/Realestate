@@ -1,0 +1,83 @@
+
+8_プロフィールと画像の変更②
+
+\public\uploadのフォルダに下記ディレクトリの画像を
+登録する
+
+Downloads\no_image.jpg
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+  
+// プロフィール更新のルート
+  Route::post('/admin/profile/store', [AdminController::class, 'AdminProfileStore'])
+    ->name('admin.profile.store');
+
+/////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(更新元)◆
+
+ディレクトリ
+\resources\views\admin\admin_profile_view.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#image').change(function(e) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        $('#showImage').attr('src', e.target.result);
+      }
+
+　　　//インデックスは0である必要がある
+      reader.readAsDataURL(e.target.files['0']);
+    });
+  });
+</script>
+
+★コード解説★
+
+attrの属性は、showImageでIDをしているタグを確認し、src属性ということがわかる
+
+エキスプローラーを開き、画像が貼れていたらOK
+
+
+/////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\AdminController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+     public function AdminProfileStore(Request $request){
+
+        $id = Auth::user()->id;
+        $data = User::find($id);
+        $data->username = $request->username;
+        $data->name = $request->name;
+        $data->email = $request->email;
+        $data->phone = $request->phone;
+        $data->address = $request->address; 
+
+        if ($request->file('photo')) {
+            $file = $request->file('photo');
+            $filename = date('YmdHi').$file->getClientOriginalName(); 
+            $file->move(public_path('upload/admin_images'),$filename);
+            $data['photo'] = $filename;  
+        }
+
+        $data->save();
+
+        return redirect()->back();
+
+     }// End Method 
+

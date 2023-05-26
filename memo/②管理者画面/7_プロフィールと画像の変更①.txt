@@ -1,0 +1,61 @@
+
+7_プロフィールと画像の変更①
+
+◆headerの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\header.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<div class="col-3 text-center">
+  <a href="{{ route('admin.profile') }}" class="dropdown-item d-flex flex-column align-items-center justify-content-center wd-70 ht-70"><i data-feather="instagram" class="icon-lg mb-1"></i>
+    <p class="tx-12">プロフィール</p>
+  </a>
+</div>
+
+////////////////////////////////////////////////////////////////////////////////
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Route::middleware(['auth', 'roles:admin'])->group(function () {
+
+  // dashboardからログアウトするルート
+  Route::get('/admin/logout', [AdminController::class, 'AdminLogout'])
+    ->name('admin.logout');
+
+//////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの作成◆
+
+ディレクトリ
+\app\Http\Controllers\AdminController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AdminProfile()
+  {
+    //現在認証しているユーザーのid情報を取得
+    $id = Auth::user()->id;
+
+　　//引数で指定したidのレコードを1件だけ取得
+    $profileData = User::find($id);
+
+    return view(
+      'admin.admin_profile_view',
+      compact('profileData')
+    );
+  }
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集◆
+
+ディレクトリ
+
+

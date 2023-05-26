@@ -42,8 +42,15 @@ Route::middleware(['auth', 'roles:admin'])->group(function () {
   // dashboardからログアウトするルート
   Route::get('/admin/logout', [AdminController::class, 'AdminLogout'])
     ->name('admin.logout');
-}); // End Group Admin Middleware
 
+  // プロフィールのルート
+  Route::get('/admin/profile', [AdminController::class, 'AdminProfile'])
+    ->name('admin.profile');
+
+  // プロフィール更新(保存)のルート
+  Route::post('/admin/profile/store', [AdminController::class, 'AdminProfileStore'])
+    ->name('admin.profile.store');
+}); // End Group Admin Middleware
 
 // ★agent権限でログインした場合のルートグループ★
 Route::middleware(['auth', 'roles:agent'])->group(function () {

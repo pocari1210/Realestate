@@ -55,7 +55,7 @@ admin_dashboard.bladeのpartial:partials/_footer.htmlの中身を
 
 ////////////////////////////////////////////////////////////////////////
 
-◆admin_dashboard編集◆
+◆admin_dashboard編集()◆
 
 ディレクトリ
 \resources\views\admin\admin_dashboard.blade.php
