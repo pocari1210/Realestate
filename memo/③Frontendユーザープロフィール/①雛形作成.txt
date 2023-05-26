@@ -1,0 +1,64 @@
+
+①雛形作成
+
+下記コマンドでコントローラーを作成
+
+php artisan make:controller UserController
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Http\Controllers\UserController;
+
+// ★User Frontend★
+Route::get('/', [UserController::class, 'Index']);
+
+////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\UserController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class UserController extends Controller
+{
+  public function Index()
+  {
+    return view('frontend.frontend_dashboard');
+  } // End Method 
+}
+
+////////////////////////////////////////////////////////////////////////////
+
+◆ビューの作成◆
+
+ディレクトリ
+\resources\views\frontend\frontend_dashboard.blade.php(新規作成)
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+コードはこれから作成
+
+
+
+
+////////////////////////////////////////////////////////////////////////////
+
+◆js,css等ファイル追加◆
+
+\public\frontend\assetsのフォルダを新規作成し、
+下記フォルダをコピーし、
+格納する
+
+\Downloads\Frontend\assets\css
+\Downloads\Frontend\assets\fonts
+\Downloads\Frontend\assets\images
+\Downloads\Frontend\assets\js
+
+
