@@ -1,0 +1,82 @@
+
+11_パスワード変更②
+
+パスワードのupdate(更新)処理を実装する
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// ★admin権限でログインした場合のルートグループ★
+Route::middleware(['auth', 'roles:admin'])->group(function () {
+
+  // パスワードの更新処理のルート
+  Route::post('/admin/update/password', [AdminController::class, 'AdminUpdatePassword'])
+    ->name('admin.update.password');
+
+////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\AdminController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use Illuminate\Support\Facades\Hash;
+
+  public function AdminUpdatePassword(Request $request)
+  {
+
+    // Validation 
+    $request->validate([
+      'old_password' => 'required',
+
+      // confirmedでパスワードがあっているか確認
+      'new_password' => 'required|confirmed'
+
+    ]);
+
+    /// Match The Old Password
+
+    if (!Hash::check($request->old_password, auth::user()->password)) {
+
+      $notification = array(
+        'message' => '古いパスワード情報が誤っています',
+        'alert-type' => 'error'
+      );
+
+      return back()->with($notification);
+    }
+
+    /// Update The New Password 
+
+    User::whereId(auth()->user()->id)->update([
+      'password' => Hash::make($request->new_password)
+
+    ]);
+
+    $notification = array(
+      'message' => 'パスワードの変更に成功しました',
+      'alert-type' => 'success'
+    );
+
+    return back()->with($notification);
+  } // End Method
+
+//////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集◆
+
+ディレクトリ
+\resources\views\admin\admin_change_password.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<h6 class="card-title">パスワードの変更</h6>
+
+<form method="POST" action="{{ route('admin.update.password') }}" class="forms-sample" enctype="multipart/form-data">
+  @csrf

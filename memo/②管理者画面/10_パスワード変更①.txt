@@ -1,0 +1,72 @@
+
+10_パスワード変更①
+
+パスワードの変更機能を実装
+edit(更新)処理を実装する
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// ★admin権限でログインした場合のルートグループ★
+Route::middleware(['auth', 'roles:admin'])->group(function () {
+
+  // パスワード変更のルート
+  Route::get('/admin/change/password', [AdminController::class, 'AdminChangePassword'])
+    ->name('admin.change.password');
+
+////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\header.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<li class="dropdown-item py-2">
+  <a href="{{ route('admin.change.password') }}" class="text-body ms-0">
+    <i class="me-2 icon-md" data-feather="edit"></i>
+    <span>パスワード変更</span>
+  </a>
+</li>
+
+//////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\AdminController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AdminChangePassword()
+  {
+    $id = Auth::user()->id;
+    $profileData = User::find($id);
+
+    return view(
+      'admin.admin_change_password',
+      compact('profileData')
+    );
+  } // End Method
+
+////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\admin\admin_change_password.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+参考URL
+https://qiita.com/Haruna-Miyuki/items/8813839febaf156ddf23
+
+@error('name')　「name」にエラーがあるかチェックできる。
+
+

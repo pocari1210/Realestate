@@ -1,0 +1,9 @@
+
+12_ローカルホストでバックアップと復元を行う
+
+php artisan config:cache
+php artisan cache:clear
+php artisan view:clear
+php artisan optimize
+
+後ほど確認

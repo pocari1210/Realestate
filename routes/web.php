@@ -50,6 +50,14 @@ Route::middleware(['auth', 'roles:admin'])->group(function () {
   // プロフィール更新(保存)のルート
   Route::post('/admin/profile/store', [AdminController::class, 'AdminProfileStore'])
     ->name('admin.profile.store');
+
+  // パスワード変更のルート
+  Route::get('/admin/change/password', [AdminController::class, 'AdminChangePassword'])
+    ->name('admin.change.password');
+
+  // パスワードの更新処理のルート
+  Route::post('/admin/update/password', [AdminController::class, 'AdminUpdatePassword'])
+    ->name('admin.update.password');
 }); // End Group Admin Middleware
 
 // ★agent権限でログインした場合のルートグループ★
