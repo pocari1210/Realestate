@@ -1,0 +1,127 @@
+
+2_保存処理
+
+プロフィール編集の保存処理を記述
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Route::middleware('auth')->group(function () {
+
+  // プロフィールの保存処理のルート
+  Route::post('/user/profile/store', [UserController::class, 'UserProfileStore'])
+    ->name('user.profile.store');
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューファイル編集◆
+
+ディレクトリ
+\resources\views\frontend\dashboard\edit_profile.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+@extends('frontend.frontend_dashboard')
+@section('main')
+
+↓↓追記↓↓
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+<!-- プロフィールの更新処理のフォーム -->
+<form action="{{ route('user.profile.store') }}" method="post" class="default-form" enctype="multipart/form-data">
+  @csrf
+
+  <div class="form-group">
+    <label for="formFile" class="form-label">Default file input example</label>
+    <input class="form-control" name="photo" type="file" id="image">
+  </div>
+  <div class="form-group">
+    <label for="formFile" class="form-label"> </label>
+    <img id="showImage" src="{{ (!empty($userData->photo)) ? url('upload/user_images/'.$userData->photo) : url('upload/no_image.jpg') }}" alt="" style="width: 100px; height: 100px;"></a>
+  </div>
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+◆テンプレートファイル編集◆
+
+ディレクトリ
+\resources\views\frontend\frontend_dashboard.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" >
+
+  <script>
+    @if(Session::has('message'))
+    var type = "{{ Session::get('alert-type','info') }}"
+    switch (type) {
+      case 'info':
+        toastr.info(" {{ Session::get('message') }} ");
+        break;
+      case 'success':
+        toastr.success(" {{ Session::get('message') }} ");
+        break;
+      case 'warning':
+        toastr.warning(" {{ Session::get('message') }} ");
+        break;
+      case 'error':
+        toastr.error(" {{ Session::get('message') }} ");
+        break;
+    }
+    @endif
+  </script>
+
+★コード解説★
+toastrライブラリを読み込んでいる
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\UserController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function UserProfileStore(Request $request)
+  {
+
+    // ログインしているユーザーのid取得
+    $id = Auth::user()->id;
+
+    // Userモデルの$idを1件取得
+    $data = User::find($id);
+    $data->username = $request->username;
+    $data->name = $request->name;
+    $data->email = $request->email;
+    $data->phone = $request->phone;
+    $data->address = $request->address;
+
+    // formから画像の登録があった場合の処理
+    if ($request->file('photo')) {
+      $file = $request->file('photo');
+      @unlink(public_path('upload/user_images/' . $data->photo));
+      $filename = date('YmdHi') . $file->getClientOriginalName();
+      $file->move(public_path('upload/user_images'), $filename);
+      $data['photo'] = $filename;
+    }
+
+    $data->save();
+
+    $notification = array(
+      'message' => 'プロフィールの更新が成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  }
+
+★コード解説★
+アップロードされたファイルの名前を取得するには、
+getClientOriginalNameメソッドを使う。
+
+public_pathでpublicディレクトリ内のフルパスを取得(upload/user_images)

@@ -33,6 +33,10 @@ Route::middleware('auth')->group(function () {
   // プロフィールの編集ページのルート
   Route::get('/user/profile', [UserController::class, 'UserProfile'])
     ->name('user.profile');
+
+  // プロフィールの保存処理のルート
+  Route::post('/user/profile/store', [UserController::class, 'UserProfileStore'])
+    ->name('user.profile.store');
 });
 
 require __DIR__ . '/auth.php';

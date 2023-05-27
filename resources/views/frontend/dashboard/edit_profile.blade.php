@@ -1,5 +1,6 @@
 @extends('frontend.frontend_dashboard')
 @section('main')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 
 <!--Page Title-->
 <section class="page-title centred" style="background-image: url({{ asset('frontend/assets/images/background/page-title-5.jpg') }});">
@@ -30,13 +31,13 @@
         <div class="blog-sidebar">
           <div class="sidebar-widget post-widget">
             <div class="widget-title">
-              <h4>User Profile </h4>
+              <h4>User Profile</h4>
             </div>
             <div class="post-inner">
               <div class="post">
                 <figure class="post-thumb"><a href="blog-details.html">
                     <img src="{{ (!empty($userData->photo)) ? url('upload/user_images/'.$userData->photo) : url('upload/no_image.jpg') }}" alt=""></a></figure>
-                <h5><a href="blog-details.html">{{ $userData->name }} </a></h5>
+                <h5><a href="blog-details.html">{{ $userData->username }} </a></h5>
                 <p>{{ $userData->email }} </p>
               </div>
             </div>
@@ -54,7 +55,10 @@
           <div class="news-block-one">
             <div class="inner-box">
               <div class="lower-content">
-                <form action="signin.html" method="post" class="default-form">
+
+                <!-- プロフィールの更新処理のフォーム -->
+                <form action="{{ route('user.profile.store') }}" method="post" class="default-form" enctype="multipart/form-data">
+                  @csrf
                   <div class="form-group">
                     <label>Username</label>
                     <input type="text" name="username" value="{{ $userData->username }}">
@@ -77,10 +81,14 @@
                   </div>
                   <div class="form-group">
                     <label for="formFile" class="form-label">Default file input example</label>
-                    <input class="form-control" name="photo" type="file" id="formFile">
+                    <input class="form-control" name="photo" type="file" id="image">
+                  </div>
+                  <div class="form-group">
+                    <label for="formFile" class="form-label"> </label>
+                    <img id="showImage" src="{{ (!empty($userData->photo)) ? url('upload/user_images/'.$userData->photo) : url('upload/no_image.jpg') }}" alt="" style="width: 100px; height: 100px;"></a>
                   </div>
                   <div class="form-group message-btn">
-                    <button type="submit" class="theme-btn btn-one">Save Changes </button>
+                    <button type="submit" class="theme-btn btn-one">更新</button>
                   </div>
                 </form>
               </div>
@@ -118,5 +126,18 @@
   </div>
 </section>
 <!-- subscribe-section end -->
+
+<script type="text/javascript">
+  // ★JSで画像表示★
+  $(document).ready(function() {
+    $('#image').change(function(e) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        $('#showImage').attr('src', e.target.result);
+      }
+      reader.readAsDataURL(e.target.files['0']);
+    });
+  });
+</script>
 
 @endsection
