@@ -17,9 +17,21 @@
           <li><a href="index.html"><i class="fab fa-google-plus-g"></i></a></li>
           <li><a href="index.html"><i class="fab fa-vimeo-v"></i></a></li>
         </ul>
+
+        <!-- ログインをしている時の表示 -->
+        @auth
         <div class="sign-box">
-          <a href="{{ route('login') }}"><i class="fas fa-user"></i>Sign In</a>
+          <a href="{{ route('dashboard') }}"><i class="fas fa-user"></i>Dashboard</a>
+          <a href="{{ route('user.logout') }}"><i class="fas fa-user"></i>ログアウト</a>
         </div>
+
+        <!-- ログインをしていない時の表示 -->
+        @else
+        <div class="sign-box">
+          <a href="{{ route('login') }}"><i class="fas fa-user"></i>ログイン</a>
+        </div>
+
+        @endauth
       </div>
     </div>
   </div>

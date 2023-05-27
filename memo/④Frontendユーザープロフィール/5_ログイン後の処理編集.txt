@@ -1,0 +1,27 @@
+
+5_ログイン後の処理編集
+
+ログインをした後の不要な項目を削除
+
+ディレクトリ
+\resources\views\frontend\home\header.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<!-- ログインをしている時の表示 -->
+@auth
+<div class="sign-box">
+  <a href="{{ route('dashboard') }}"><i class="fas fa-user"></i>Dashboard</a>
+  <a href="{{ route('user.logout') }}"><i class="fas fa-user"></i>ログアウト</a>
+</div>
+
+<!-- ログインをしていない時の表示 -->
+@else
+<div class="sign-box">
+  <a href="{{ route('login') }}"><i class="fas fa-user"></i>ログイン</a>
+</div>
+
+@endauth
+
+★コード解説★
+ログイン時とログアウト時の表示を切り替えている
