@@ -1,0 +1,97 @@
+
+4_パスワード更新
+
+プロフィールページから、ログインするときのパスワードを
+変更する処理を記述
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // パスワード変更ページのルート
+  Route::get('/user/change/password', [UserController::class, 'UserChangePassword'])
+    ->name('user.change.password');
+
+  // パスワード更新のルート
+  Route::post('/user/password/update', [UserController::class, 'UserPasswordUpdate'])
+    ->name('user.password.update');
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+◆コンポーネントファイルの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\dashboard\dashboard_sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<li><a href="{{ route('user.change.password') }}"><i class="fa fa-key" aria-hidden="true"></i> パスワード変更 </a></li>
+
+★コード解説★
+パスワード更新ページのルートを追記
+
+////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラー編集◆
+
+ディレクトリ
+\app\Http\Controllers\UserController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function UserChangePassword()
+  {
+    return view('frontend.dashboard.change_password');
+  } // End Method 
+
+  public function UserPasswordUpdate(Request $request)
+  {
+    // Validation 
+    $request->validate([
+      'old_password' => 'required',
+      'new_password' => 'required|confirmed'
+
+    ]);
+
+    /// Match The Old Password
+
+    if (!Hash::check($request->old_password, auth::user()->password)) {
+
+      $notification = array(
+        'message' => '古いパスワード情報が誤っています',
+        'alert-type' => 'error'
+      );
+
+      return back()->with($notification);
+    }
+
+    /// Update The New Password 
+
+    User::whereId(auth()->user()->id)->update([
+      'password' => Hash::make($request->new_password)
+
+    ]);
+
+    $notification = array(
+      'message' => 'パスワードの変更に成功しました',
+      'alert-type' => 'success'
+    );
+
+    return back()->with($notification);
+  } // End Method 
+
+
+//////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集◆
+
+ディレクトリ
+\resources\views\frontend\dashboard\change_password.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+下記をベースに編集を行う
+\resources\views\admin\admin_change_password.blade.php
