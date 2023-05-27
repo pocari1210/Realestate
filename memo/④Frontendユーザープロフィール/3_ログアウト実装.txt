@@ -1,0 +1,55 @@
+
+3_ログアウト実装
+
+プロフィール画面(dashboard)から
+ログアウトさせる処理を実装
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Route::middleware('auth')->group(function () {
+
+  // プロフィールからのログアウトのルート
+  Route::get('/user/logout', [UserController::class, 'UserLogout'])
+    ->name('user.logout');
+
+////////////////////////////////////////////////////////////////////////////
+
+◆コンポーネントファイル編集◆
+
+ログアウトのルートを追記
+
+ディレクトリ
+\resources\views\frontend\dashboard\dashboard_sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<li><a href="{{ route('user.logout') }}"><i class="fa fa-chevron-circle-up" aria-hidden="true"></i> ログアウト </a>
+
+★コード解説★
+iタグは、文字をイタリックにするときに使う。
+少し斜体で表示される
+
+///////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\UserController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function UserLogout(Request $request){
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/login');
+  }// End Method 
+
