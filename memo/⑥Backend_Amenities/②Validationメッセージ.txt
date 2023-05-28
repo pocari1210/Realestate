@@ -1,0 +1,81 @@
+
+②Validationメッセージ
+
+◆jsファイル登録◆
+
+ディレクトリ
+\public\backend\assets\js\code
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+validate.min.jsファイルを追記する
+
+/////////////////////////////////////////////////////////////////////////////////
+
+◆テンプレートファイル編集◆
+
+ディレクトリ
+\resources\views\admin\admin_dashboard.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="{{ asset('backend/assets/js/code/code.js') }}"></script>
+
+  ↓↓追記↓↓
+  <script src="{{ asset('backend/assets/js/code/validate.min.js') }}"></script>
+  ↑↑追記↑↑
+
+  <!-- Start datatables -->
+
+★コード解説★
+ライブラリをインポートしている
+
+////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの設定(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\amenities\add_amenities.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#myForm').validate({
+      rules: {
+        amenitis_name: {
+          required: true,
+        },
+
+      },
+      messages: {
+        amenitis_name: {
+          required: 'Please Enter Amenities Name',
+        },
+
+      },
+      errorElement: 'span',
+      errorPlacement: function(error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function(element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function(element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      },
+    });
+  });
+</script>
+
+★コード解説★
+validationmessage.txtをはりつけている
+
+//////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+

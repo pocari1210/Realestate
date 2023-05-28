@@ -126,6 +126,9 @@ Typeの後に追記する
 ディレクトリ
 \resources\views\backend\amenities\all_amenities.blade.php
 
+ディレクトリ
+
+
 ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
 
 

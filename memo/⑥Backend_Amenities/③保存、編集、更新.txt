@@ -1,0 +1,35 @@
+
+③保存、編集、更新、削除
+
+◆ビューの編集(遷移元1)◆
+
+ディレクトリ
+\resources\views\backend\amenities\all_amenities.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+@foreach($amenities as $key => $item)
+<tr>
+  <td>{{ $key+1 }}</td>
+  <td>{{ $item->amenitis_name }}</td>
+  <td>
+
+    ↓↓追記↓↓
+    <a href="{{ route('edit.amenitie',$item->id) }}" class="btn btn-inverse-warning"> 編集 </a>
+    <a href="{{ route('delete.amenitie',$item->id) }}" class="btn btn-inverse-danger" id="delete"> 削除 </a>
+    ↑↑追記↑↑
+
+  </td>
+</tr>
+@endforeach
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元2)◆
+
+ディレクトリ
+\resources\views\backend\amenities\add_amenities.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<form id="myForm" method="POST" action="{{ route('store.amenitie') }}" class="forms-sample">

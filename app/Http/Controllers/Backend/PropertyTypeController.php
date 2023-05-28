@@ -99,5 +99,60 @@ class PropertyTypeController extends Controller
     return view('backend.amenities.add_amenities');
   } // End Method 
 
+  public function StoreAmenitie(Request $request)
+  {
+    Amenities::insert([
+      'amenitis_name' => $request->amenitis_name,
+    ]);
+
+    $notification = array(
+      'message' => 'Amenitiesの作成が成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.amenitie')->with($notification);
+  } // End Method 
+
+
+  public function EditAmenitie($id)
+  {
+
+    $amenities = Amenities::findOrFail($id);
+    return view('backend.amenities.edit_amenities', compact('amenities'));
+  } // End Method 
+
+
+  public function UpdateAmenitie(Request $request)
+  {
+
+    $ame_id = $request->id;
+
+    Amenities::findOrFail($ame_id)->update([
+
+      'amenitis_name' => $request->amenitis_name,
+    ]);
+
+    $notification = array(
+      'message' => 'Amenitiesの更新が完了しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.amenitie')->with($notification);
+  } // End Method 
+
+
+  public function DeleteAmenitie($id)
+  {
+
+    Amenities::findOrFail($id)->delete();
+
+    $notification = array(
+      'message' => 'Amenitiesの削除が成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method 
+
 
 }
