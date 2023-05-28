@@ -1,0 +1,103 @@
+
+5_削除処理
+
+Typeの削除処理を実装
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // Property Type All Route 
+  Route::controller(PropertyTypeController::class)->group(function () {
+
+    // Type:削除処理のルート
+    Route::get('/delete/type/{id}', 'DeleteType')
+      ->name('delete.type');
+
+///////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\type\all_type.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<a href="{{ route('delete.type',$item->id) }}" class="btn btn-inverse-danger" id="delete"> 削除 </a>
+
+/////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\PropertyTypeController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function DeleteType($id)
+  {
+
+    PropertyType::findOrFail($id)->delete();
+
+    $notification = array(
+      'message' => 'Property Typeの削除が成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method 
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+◆テンプレートファイルの編集◆
+
+ディレクトリ
+\resources\views\admin\admin_dashboard.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="{{ asset('backend/assets/js/code/code.js') }}"></script>
+
+  <!-- Start datatables -->
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆jsファイル作成◆
+
+ディレクトリ
+\public\backend\assets\js\code\code.js
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+//toastrファイルのAdd Sweetalertを読み込んでいる
+
+$(function () {
+  $(document).on('click', '#delete', function (e) {
+    e.preventDefault();
+    var link = $(this).attr("href");
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Delete This Data?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = link
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+      }
+    })
+  });
+
+});

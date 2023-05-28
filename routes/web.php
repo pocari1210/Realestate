@@ -119,5 +119,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Type:更新処理のルート
     Route::post('/update/type', 'UpdateType')
       ->name('update.type');
+
+    // Type:削除処理のルート
+    Route::get('/delete/type/{id}', 'DeleteType')
+      ->name('delete.type');
   });
 }); // End Group Admin Middleware
