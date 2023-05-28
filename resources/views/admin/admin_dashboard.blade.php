@@ -21,6 +21,10 @@
   <link rel="stylesheet" href="{{ asset('backend/assets/vendors/select2/select2.min.css') }}">
   <link rel="stylesheet" href="{{ asset('backend/assets/vendors/jquery-tags-input/jquery.tagsinput.min.css') }}">
 
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="{{ asset('backend/assets/vendors/datatables.net-bs5/dataTables.bootstrap5.css') }}">
+  <!-- End plugin css for this page -->
+
   <!-- core:css -->
   <link rel="stylesheet" href="{{ asset('backend/assets/vendors/core/core.css') }}">
   <!-- endinject -->

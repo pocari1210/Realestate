@@ -55,7 +55,7 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 // ★admin権限でログインした場合のルートグループ★
-Route::middleware(['auth', 'roles:admin'])->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
 
   // adminのdashboard
   Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])
@@ -83,7 +83,7 @@ Route::middleware(['auth', 'roles:admin'])->group(function () {
 }); // End Group Admin Middleware
 
 // ★agent権限でログインした場合のルートグループ★
-Route::middleware(['auth', 'roles:agent'])->group(function () {
+Route::middleware(['auth', 'role:agent'])->group(function () {
 
   // agentのdashboard
   Route::get('/agent/dashboard', [AgentController::class, 'AgentDashboard'])
@@ -101,6 +101,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
   // Property Type All Route 
   Route::controller(PropertyTypeController::class)->group(function () {
 
-    Route::get('/all/type', 'AllType')->name('all.type');
+    Route::get('/all/type', 'AllType')
+      ->name('all.type');
+
+    // Type:新規作成のルート
+    Route::get('/add/type', 'AddType')
+      ->name('add.type');
+
+    // Type:保存処理のルート
+    Route::post('/store/type', 'StoreType')
+      ->name('store.type');
   });
 }); // End Group Admin Middleware

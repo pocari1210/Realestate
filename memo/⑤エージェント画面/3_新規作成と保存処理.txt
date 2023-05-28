@@ -1,0 +1,85 @@
+
+3_新規作成と保存処理
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // Property Type All Route 
+  Route::controller(PropertyTypeController::class)->group(function () {
+
+    // Type:新規作成のルート
+    Route::get('/add/type', 'AddType')
+      ->name('add.type');
+
+    // Type:保存処理のルート
+    Route::post('/store/type', 'StoreType')
+      ->name('store.type');
+  });
+
+//////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\type\all_type.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<a href="{{ route('add.type') }}" class="btn btn-inverse-info"> Add Property Type  </a>
+
+/////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+createとstoreを記述
+
+ディレクトリ
+\app\Http\Controllers\Backend\PropertyTypeController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AddType()
+  {
+    return view('backend.type.add_type');
+  } // End Method 
+
+  public function StoreType(Request $request)
+  {
+
+    // Validation 
+    $request->validate([
+      'type_name' => 'required|unique:property_types|max:200',
+      'type_icon' => 'required'
+    ]);
+
+    PropertyType::insert([
+
+      'type_name' => $request->type_name,
+      'type_icon' => $request->type_icon,
+    ]);
+
+    $notification = array(
+      'message' => 'Property Type Create Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.type')->with($notification);
+  } // End Method 
+
+///////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\type\add_type.blade.php
+
+//////////////////////////////////////////////////////////////////////////
+
+登録処理ができればOK
+
+
+
