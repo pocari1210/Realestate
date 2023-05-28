@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Backend\PropertyTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,3 +94,13 @@ Route::middleware(['auth', 'roles:agent'])->group(function () {
 // adminのログインルート
 Route::get('/admin/login', [AdminController::class, 'AdminLogin'])
   ->name('admin.login');
+
+/// Admin Group Middleware 
+Route::middleware(['auth', 'role:admin'])->group(function () {
+
+  // Property Type All Route 
+  Route::controller(PropertyTypeController::class)->group(function () {
+
+    Route::get('/all/type', 'AllType')->name('all.type');
+  });
+}); // End Group Admin Middleware

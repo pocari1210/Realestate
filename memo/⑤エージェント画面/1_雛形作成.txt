@@ -1,0 +1,117 @@
+
+1_雛形作成
+
+下記コマンドでコントローラー作成
+php artisan make:controller Backend/PropertyTypeController
+
+下記コマンドで、モデルとテーブルを作成する
+php artisan make:model PropertyType -m
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Http\Controllers\Backend\PropertyTypeController;
+
+  // Property Type All Route 
+  Route::controller(PropertyTypeController::class)->group(function () {
+
+    Route::get('/all/type', 'AllType')->name('all.type');
+  });
+}); // End Group Admin Middleware
+
+////////////////////////////////////////////////////////////////////////
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\PropertyType.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class PropertyType extends Model
+{
+    use HasFactory;
+
+    // property_types_tableテーブルの
+    // すべてのフィールドが入力可能になる
+    protected $guarded = [];
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+◆テーブルの編集◆
+
+ディレクトリ
+\database\migrations\2023_05_28_001742_create_property_types_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function up(): void
+  {
+    Schema::create('property_types', function (Blueprint $table) {
+      $table->id();
+      $table->string('type_name');
+      $table->string('type_icon')
+        ->nullable();
+      $table->timestamps();
+    });
+  }
+
+////////////////////////////////////////////////////////////////////////////////////
+
+ここまで完了したらmigrateする
+
+php artisan migrate
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラー編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\PropertyTypeController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use Illuminate\Support\Facades\Auth;
+use App\Models\PropertyType;
+
+class PropertyTypeController extends Controller
+{
+  public function AllType()
+  {
+    // テーブルの最終行（最新行）を取得
+    $types = PropertyType::latest()->get();
+
+    return view(
+      'backend.type.all_type',
+      compact('types')
+    );
+  } // End Method
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+
+◆admin管理画面のサイドバーの編集◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+サイドバーのリストの名称を変更
+
+
+////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの作成◆
+
+ディレクトリ
+\resources\views\backend\type\all_type.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+雛形を作成する
