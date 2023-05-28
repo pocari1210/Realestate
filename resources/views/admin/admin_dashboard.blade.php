@@ -10,16 +10,13 @@
   <meta name="author" content="NobleUI">
   <meta name="keywords" content="nobleui, bootstrap, bootstrap 5, bootstrap5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
 
-  <title>NobleUI - HTML Bootstrap 5 Admin Dashboard Template</title>
+  <title>Admin Panel - Real Estate </title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-
   <!-- End fonts -->
-  <link rel="stylesheet" href="{{ asset('backend/assets/vendors/select2/select2.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('backend/assets/vendors/jquery-tags-input/jquery.tagsinput.min.css') }}">
 
   <!-- Plugin css for this page -->
   <link rel="stylesheet" href="{{ asset('backend/assets/vendors/datatables.net-bs5/dataTables.bootstrap5.css') }}">
@@ -39,10 +36,11 @@
   <!-- endinject -->
 
   <!-- Layout styles -->
-  <link rel="stylesheet" href="{{ asset('../assets/css/demo2/style.css') }}">
+  <link rel="stylesheet" href="{{ asset('backend/assets/css/demo2/style.css') }}">
   <!-- End layout styles -->
 
-  <link rel="shortcut icon" href="{{ asset('../assets/images/favicon.png') }}" />
+  <link rel="shortcut icon" href="{{ asset('backend/assets/images/favicon.png') }}" />
+
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
 
 </head>
@@ -115,6 +113,12 @@
     }
     @endif
   </script>
+
+  <!-- Start datatables -->
+  <script src="{{ asset('backend/assets/vendors/datatables.net/jquery.dataTables.js') }}"></script>
+  <script src="{{ asset('backend/assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js') }}"></script>
+  <script src="{{ asset('backend/assets/js/data-table.js') }}"></script>
+  <!-- End datatables -->
 
 </body>
 

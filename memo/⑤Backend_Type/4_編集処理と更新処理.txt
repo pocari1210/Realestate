@@ -1,0 +1,47 @@
+
+4_編集処理と更新処理
+
+Typeの編集処理と更新処理を実装する
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // Property Type All Route 
+  Route::controller(PropertyTypeController::class)->group(function () {
+
+    // Type:編集処理のルート
+    Route::get('/edit/type/{id}', 'EditType')
+      ->name('edit.type');
+
+    // Type:更新処理のルート
+    Route::post('/update/type', 'UpdateType')
+      ->name('update.type');
+
+///////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\type\all_type.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<a href="{{ route('edit.type',$item->id) }}" class="btn btn-inverse-warning"> 編集 </a>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\PropertyTypeController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+更新ができていればOK
+
+※NUllにした場合、エラーメッセージを出したいが、
+エラー出てしまう為、後ほど確認する

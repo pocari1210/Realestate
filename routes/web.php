@@ -111,5 +111,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Type:保存処理のルート
     Route::post('/store/type', 'StoreType')
       ->name('store.type');
+
+    // Type:編集処理のルート
+    Route::get('/edit/type/{id}', 'EditType')
+      ->name('edit.type');
+
+    // Type:更新処理のルート
+    Route::post('/update/type', 'UpdateType')
+      ->name('update.type');
   });
 }); // End Group Admin Middleware

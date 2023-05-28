@@ -15,7 +15,8 @@
 
   <!-- Start datatables -->
   <script src="{{ asset('backend/assets/vendors/datatables.net/jquery.dataTables.js') }}"></script>
-  <script src="{{ asset('backend/assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js') }}"></script> 
+  <script src="{{ asset('backend/assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js') }}"></script>
+  //10,30,50のカテゴリーを取得している
   <script src="{{ asset('backend/assets/js/data-table.js') }}"></script>
   <!-- End datatables -->
 
