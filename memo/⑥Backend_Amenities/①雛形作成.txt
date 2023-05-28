@@ -1,0 +1,132 @@
+
+①雛形作成
+
+下記コマンドで、モデルとテーブル作成
+php artisan make:model Amenities -m
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\Amenities.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class Amenities extends Model
+{
+    use HasFactory;
+
+    protected $guarded = [];
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+★テーブルの編集★
+
+ディレクトリ
+\database\migrations\2023_05_28_222722_create_amenities_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function up(): void
+  {
+    Schema::create('amenities', function (Blueprint $table) {
+      $table->id();
+      $table->string('amenitis_name');
+      $table->timestamps();
+    });
+  }
+
+///////////////////////////////////////////////////////////////////////////////
+
+ここまで完了したらmigrateする
+
+php artisan migrate
+
+/////////////////////////////////////////////////////////////////////////////
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+/// Admin Group Middleware 
+Route::middleware(['auth', 'role:admin'])->group(function () {
+
+  // Amenities Type All Route 
+  Route::controller(PropertyTypeController::class)->group(function () {
+
+    // Amenitie:トップページのルート
+    Route::get('/all/amenitie', 'AllAmenitie')
+      ->name('all.amenitie');
+
+    // Amenitie:新規作成のルート
+    Route::get('/add/amenitie', 'AddAmenitie')
+      ->name('add.amenitie');
+
+    // Amenitie:保存処理のルート
+    Route::post('/store/amenitie', 'StoreAmenitie')
+      ->name('store.amenitie');
+
+    // Amenitie:編集処理のルート
+    Route::get('/edit/amenitie/{id}', 'EditAmenitie')
+      ->name('edit.amenitie');
+
+    // Amenitie:更新処理のルート
+    Route::post('/update/amenitie', 'UpdateAmenitie')
+      ->name('update.amenitie');
+
+    // Amenitie:削除処理のルート
+    Route::get('/delete/amenitie/{id}', 'DeleteAmenitie')
+      ->name('delete.amenitie');
+  });
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+Typeの後に追記する
+
+ディレクトリ
+\app\Http\Controllers\Backend\PropertyTypeController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AllAmenitie()
+  {
+    $amenities = Amenities::latest()->get();
+
+    return view(
+      'backend.amenities.all_amenities',
+      compact('amenities')
+    );
+  } // End Method 
+
+  public function AddAmenitie()
+  {
+    return view('backend.amenities.add_amenities');
+  } // End Method 
+
+///////////////////////////////////////////////////////////////////////////////
+
+◆コンポーネント編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+サイドバーコンポーネントにアメニティ追記
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集◆
+
+ディレクトリ
+\resources\views\backend\amenities\all_amenities.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+

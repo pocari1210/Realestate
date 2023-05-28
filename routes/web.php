@@ -101,6 +101,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
   // Property Type All Route 
   Route::controller(PropertyTypeController::class)->group(function () {
 
+    // Type:トップページのルート
     Route::get('/all/type', 'AllType')
       ->name('all.type');
 
@@ -123,5 +124,33 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Type:削除処理のルート
     Route::get('/delete/type/{id}', 'DeleteType')
       ->name('delete.type');
+  });
+
+  // Amenities Type All Route 
+  Route::controller(PropertyTypeController::class)->group(function () {
+
+    // Amenitie:トップページのルート
+    Route::get('/all/amenitie', 'AllAmenitie')
+      ->name('all.amenitie');
+
+    // Amenitie:新規作成のルート
+    Route::get('/add/amenitie', 'AddAmenitie')
+      ->name('add.amenitie');
+
+    // Amenitie:保存処理のルート
+    Route::post('/store/amenitie', 'StoreAmenitie')
+      ->name('store.amenitie');
+
+    // Amenitie:編集処理のルート
+    Route::get('/edit/amenitie/{id}', 'EditAmenitie')
+      ->name('edit.amenitie');
+
+    // Amenitie:更新処理のルート
+    Route::post('/update/amenitie', 'UpdateAmenitie')
+      ->name('update.amenitie');
+
+    // Amenitie:削除処理のルート
+    Route::get('/delete/amenitie/{id}', 'DeleteAmenitie')
+      ->name('delete.amenitie');
   });
 }); // End Group Admin Middleware
