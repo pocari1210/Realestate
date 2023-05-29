@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Backend\PropertyTypeController;
+use App\Http\Controllers\Backend\PropertyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -152,5 +153,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Amenitie:削除処理のルート
     Route::get('/delete/amenitie/{id}', 'DeleteAmenitie')
       ->name('delete.amenitie');
+  });
+
+  // Property All Route 
+  Route::controller(PropertyController::class)->group(function () {
+
+    // property:トップページのルート
+    Route::get('/all/property', 'AllProperty')
+      ->name('all.property');
   });
 }); // End Group Admin Middleware

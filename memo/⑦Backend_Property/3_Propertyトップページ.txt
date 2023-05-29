@@ -1,0 +1,54 @@
+
+3_Propertyトップページ
+
+◆ルートの設定◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Http\Controllers\Backend\PropertyController;
+
+  // Property All Route 
+  Route::controller(PropertyController::class)->group(function () {
+
+    // property:トップページのルート
+    Route::get('/all/property', 'AllProperty')
+      ->name('all.property');
+  });
+
+/////////////////////////////////////////////////////////////////
+
+◆ビューの編集◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+サイドバーにPropertyのリスト追加
+
+////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\PropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\Property;
+use App\Models\MultiImage;
+use App\Models\Facility;
+
+  public function AllProperty()
+  {
+    $property = Property::latest()->get();
+
+    return view(
+      'backend.property.all_property',
+      compact('property')
+    );
+  } // End Method 
+
