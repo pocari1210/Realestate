@@ -1,0 +1,11 @@
+
+8_施設の登録と距離
+
+FacilityPartの中身をはりつけた
+
+クラス追加機能
+
+visibility:hidden
+要素を可視化させる
+
+

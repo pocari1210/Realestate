@@ -1,0 +1,75 @@
+
+9_バリデーションエラー
+
+◆ビューの編集◆
+
+ディレクトリ
+\resources\views\backend\property\add_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<form method="post" action="" id="myForm" enctype="multipart/form-data">
+  @csrf
+
+~~~~中身~~~~~~~~~
+
+  <button type="submit" class="btn btn-primary submit">登録</button>
+</form>
+
+<!-- バリデーションエラーの処理 -->
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#myForm').validate({
+      rules: {
+        property_name: {
+          required: true,
+        },
+        property_status: {
+          required: true,
+        },
+        lowest_price: {
+          required: true,
+        },
+        max_price: {
+          required: true,
+        },
+        ptype_id: {
+          required: true,
+        },
+      },
+
+      messages: {
+        property_name: {
+          required: 'Please Enter Property Name',
+        },
+        property_status: {
+          required: 'Please Select Property Status',
+        },
+        lowest_price: {
+          required: 'Please Enter Lowest Price',
+        },
+        max_price: {
+          required: 'Please Enter Max Price',
+        },
+        ptype_id: {
+          required: 'Please Select Property Type',
+        },
+      },
+
+      errorElement: 'span',
+      errorPlacement: function(error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function(element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function(element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      },
+    });
+  });
+</script>
+
+★コード解説★
+rulesとmessagesは、inputのname情報と紐づく
