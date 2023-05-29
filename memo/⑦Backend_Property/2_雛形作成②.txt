@@ -1,0 +1,89 @@
+
+2_雛形作成②
+
+MultiImage(複数画像)とFacility(施設)の雛形作成
+
+下記コマンドでモデルとテーブル作成
+php artisan make:model MultiImage -m
+
+php artisan make:model Facility -m
+
+
+◆MultiImageモデルの設定◆
+
+ディレクトリ
+\app\Models\MultiImage.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class MultiImage extends Model
+{
+  use HasFactory;
+
+  protected $guarded = [];
+}
+
+////////////////////////////////////////////////////////////////////
+
+◆MultiImageテーブルの編集◆
+
+ディレクトリ
+\database\migrations\2023_05_29_103920_create_multi_images_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function up(): void
+  {
+    Schema::create('multi_images', function (Blueprint $table) {
+      $table->id();
+
+      ↓↓追記↓↓
+      $table->integer('property_id');
+      $table->string('photo_name');
+　　　↑↑追記↑↑
+
+      $table->timestamps();
+    });
+  }
+
+//////////////////////////////////////////////////////////////////
+
+◆Facilityモデルの設定◆
+
+ディレクトリ
+\app\Models\Facility.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class MultiImage extends Model
+{
+  use HasFactory;
+
+  protected $guarded = [];
+}
+
+///////////////////////////////////////////////////////////////////
+
+◆Facilityテーブルの編集◆
+
+ディレクトリ
+\database\migrations\2023_05_29_103928_create_facilities_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function up(): void
+  {
+    Schema::create('facilities', function (Blueprint $table) {
+      $table->id();
+      $table->integer('property_id');
+      $table->string('facility_name')->nullable();
+      $table->string('distance')->nullable();
+      $table->timestamps();
+    });
+  }
+
+
+
+
+
+
