@@ -1,0 +1,41 @@
+
+4_Property新規作成
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // Property All Route 
+  Route::controller(PropertyController::class)->group(function () {
+
+  // property:新規作成のルート
+  Route::get('/add/property', 'AddProperty')
+    ->name('add.property');
+
+//////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<a href="{{ route('add.property') }}" class="nav-link">Add Property</a>
+
+//////////////////////////////////////////////////////////////////
+
+◆コントローラー編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\PropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AddProperty()
+  {
+    return view('backend.property.add_property');
+  } // End Method 
