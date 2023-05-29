@@ -54,6 +54,11 @@ class PropertyTypeController extends Controller
   public function UpdateType(Request $request)
   {
 
+    $request->validate([
+      'type_name' => 'required|unique:property_types|max:200',
+      'type_icon' => 'required'
+    ]);
+
     $pid = $request->id;
 
     PropertyType::findOrFail($pid)->update([
@@ -101,6 +106,11 @@ class PropertyTypeController extends Controller
 
   public function StoreAmenitie(Request $request)
   {
+    // Validation 
+    $request->validate([
+      'amenitis_name' => 'required|unique:amenities|max:200',
+    ]);
+
     Amenities::insert([
       'amenitis_name' => $request->amenitis_name,
     ]);
@@ -124,6 +134,11 @@ class PropertyTypeController extends Controller
 
   public function UpdateAmenitie(Request $request)
   {
+
+    // Validation 
+    $request->validate([
+      'amenitis_name' => 'required|unique:amenities|max:200',
+    ]);
 
     $ame_id = $request->id;
 
