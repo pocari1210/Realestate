@@ -1,0 +1,38 @@
+
+①Intervention Image
+
+画像のサイズを統一し、登録する
+
+composer require intervention/image
+
+◆app/config編集◆
+
+ディレクトリ
+\config\app.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  'providers' => ServiceProvider::defaultProviders()->merge([
+
+    ↓追記↓
+    Intervention\Image\ImageServiceProvider::class,
+    /*
+         * Package Service Providers...
+         */
+
+  'aliases' => Facade::defaultAliases()->merge([
+
+    ↓追記↓
+    'Image' => Intervention\Image\Facades\Image::class,
+    ↑追記追記
+
+    // 'Example' => App\Facades\Example::class,
+  ])->toArray(),
+
+///////////////////////////////////////////////////////////////
+
+ここまで完了したら下記コマンド実行
+
+php artisan vendor:publish --provider="Intervention\Image\ImageServiceProviderLaravelRecent"
+
+\config\image.phpができていればOK
