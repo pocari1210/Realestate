@@ -1,0 +1,61 @@
+
+◆フォームの項目の追加◆
+
+ディレクトリ
+\resources\views\backend\property\add_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\PropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\Amenities;
+use App\Models\PropertyType;
+use App\Models\User;
+
+  public function AddProperty()
+  {
+    $propertytype = PropertyType::latest()->get();
+    $amenities = Amenities::latest()->get();
+    $activeAgent = User::where('status', 'active')
+      ->where('role', 'agent')
+      ->latest()->get();
+
+    return view(
+      'backend.property.add_property',
+      compact('propertytype', 'amenities', 'activeAgent')
+    );
+  } // End Method 
+
+//////////////////////////////////////////////////////////////////
+
+◆テンプレートファイル追記◆
+
+ディレクトリ
+\resources\views\admin\admin_dashboard.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <link rel="stylesheet" href="{{ asset('backend/assets/vendors/select2/select2.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('backend/assets/vendors/jquery-tags-input/jquery.tagsinput.min.css') }}">
+
+※css/demo2/style.css'の上にCSSファイルを追加する必要がある
+
+  <!-- Input Tags -->
+  <script src="{{ asset('backend/assets/vendors/inputmask/jquery.inputmask.min.js') }}"></script>
+  <script src="{{ asset('backend/assets/vendors/select2/select2.min.js') }}"></script>
+  <script src="{{ asset('backend/assets/vendors/typeahead.js/typeahead.bundle.min.js') }}"></script>
+  <script src="{{ asset('backend/assets/vendors/jquery-tags-input/jquery.tagsinput.min.js') }}"></script>
+  <script src="{{ asset('backend/assets/js/inputmask.js') }}"></script>
+  <script src="{{ asset('backend/assets/js/select2.js') }}"></script>
+  <script src="{{ asset('backend/assets/js/typeahead.js') }}"></script>
+  <script src="{{ asset('backend/assets/js/tags-input.js') }}"></script>
+  <!-- Input Tags -->
+
+formのinputをクリックし、選択できたらOK
