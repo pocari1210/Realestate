@@ -1,0 +1,70 @@
+
+2_property保存処理
+
+◆laravel-id-generator◆
+LaravelフレームワークのデータベーステーブルからカスタムIDを生成する
+
+参考サイト
+https://github.com/haruncpi/laravel-id-generator
+https://laravelarticle.com/laravel-custom-id-generator
+
+composer require haruncpi/laravel-id-generator
+
+下記をコントローラーファイルにインポートさせる
+use Haruncpi\LaravelIdGenerator\IdGenerator;
+
+//////////////////////////////////////////////////////////////
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+  // Property All Route 
+  Route::controller(PropertyController::class)->group(function () {
+
+    // property:保存処理のルート
+    Route::post('/store/property', 'StoreProperty')
+      ->name('store.property');
+
+////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\PropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use Haruncpi\LaravelIdGenerator\IdGenerator;
+use Carbon\Carbon;
+
+  public function StoreProperty(Request $request)
+  {
+
+    // 画像
+    $image = $request->file('property_thambnail');
+
+    // uniqidを10進数にし、文字列連携で、
+    // $imageの拡張子(png)を取得
+    $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+
+    Image::make($image)->resize(370, 250)
+      ->save('upload/property/thambnail/' . $name_gen);
+
+    // 保存処理をするため、$save_url作成
+    $save_url = 'upload/property/thambnail/' . $name_gen;
+  } // End Method 
+
+    // IdGeneratorを使用
+    $pcode = IdGenerator::generate([
+      'table' => 'properties',
+      'field' => 'property_code',
+      'length' => 5,
+      'prefix' => 'PC' // PC:property codeの略
+    ]);
+

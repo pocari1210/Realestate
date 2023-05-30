@@ -14,8 +14,8 @@
 
         <div class="card">
           <div class="card-body">
-            <h6 class="card-title">Add Property </h6>
-            <form method="post" action="" id="myForm" enctype="multipart/form-data">
+            <h6 class="card-title">Add Property</h6>
+            <form method="post" action="{{ route('store.property') }}" id="myForm" enctype="multipart/form-data">
               @csrf
 
               <div class="row">
@@ -128,14 +128,9 @@
 
               <div class="row">
                 <div class="col-sm-4">
-                  <div class="form-group mb-3">
+                  <div class="mb-3">
                     <label class="form-label">Property Size</label>
-                    <select name="ptype_id" class="form-select" id="exampleFormControlSelect1">
-                      <option selected="" disabled="">Select Type</option>
-                      @foreach($propertytype as $ptype)
-                      <option value="{{ $ptype->id }}">{{ $ptype->type_name }}</option>
-                      @endforeach
-                    </select>
+                    <input type="text" name="property_size" class="form-control">
                   </div>
                 </div><!-- Col -->
 

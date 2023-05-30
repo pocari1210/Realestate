@@ -162,7 +162,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/all/property', 'AllProperty')
       ->name('all.property');
 
+    // property:新規作成のルート
     Route::get('/add/property', 'AddProperty')
       ->name('add.property');
+
+    // property:保存処理のルート
+    Route::post('/store/property', 'StoreProperty')
+      ->name('store.property');
   });
 }); // End Group Admin Middleware
