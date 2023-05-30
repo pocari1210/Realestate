@@ -12,7 +12,6 @@
   Route::get('/property/multiimg/delete/{id}', 'PropertyMultiImageDelete')
     ->name('property.multiimg.delete');
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 ◆ビューの編集(遷移元)◆
@@ -28,10 +27,25 @@
 ◆コントローラーの編集◆
 
 ディレクトリ
-
+\app\Http\Controllers\Backend\PropertyController.php
 
 ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
 
+  public function PropertyMultiImageDelete($id)
+  {
+
+    $oldImg = MultiImage::findOrFail($id);
+    unlink($oldImg->photo_name);
+
+    MultiImage::findOrFail($id)->delete();
+
+    $notification = array(
+      'message' => '画像の削除に成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method 
 
 
 

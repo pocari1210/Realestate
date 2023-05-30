@@ -1,0 +1,90 @@
+
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // Property All Route 
+  Route::controller(PropertyController::class)->group(function () {
+
+    // property:複数画像登録のルート
+    Route::post('/store/new/multiimage', 'StoreNewMultiimage')
+      ->name('store.new.multiimage');
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\property\edit_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+            <form method="post" action="{{ route('store.new.multiimage') }}" id="myForm" enctype="multipart/form-data">
+              @csrf
+              <input type="hidden" name="imageid" value="{{ $property->id }}">
+              <table class="table table-striped">
+                <tbody>
+                  <tr>
+                    <td>
+                      <input type="file" class="form-control" name="multi_img">
+                    </td>
+
+                    <td>
+                      <input type="submit" class="btn btn-info px-4" value="Add Image">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\PropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function StoreNewMultiimage(Request $request)
+  {
+
+    $new_multi = $request->imageid;
+
+    // 遷移元htmlファイルのname属性と紐づいている
+    $image = $request->file('multi_img');
+
+　　// ファイル名を作成し、変数$make_nameに格納
+    $make_name = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+
+    //画像のサイズを横770,縦520に変更し、saveのフォルダに保存
+    Image::make($image)->resize(770, 520)->save('upload/property/multi-image/' . $make_name);
+    $uploadPath = 'upload/property/multi-image/' . $make_name;
+
+    DBにデータを挿入
+    MultiImage::insert([
+      'property_id' => $new_multi,
+      'photo_name' => $uploadPath,
+      'created_at' => Carbon::now(),
+    ]);
+
+    //toastrでフラッシュメッセージを表示
+    $notification = array(
+      'message' => '画像の登録が完了しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method 
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////

@@ -189,5 +189,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // property:画像削除のルート
     Route::get('/property/multiimg/delete/{id}', 'PropertyMultiImageDelete')
       ->name('property.multiimg.delete');
+
+    // property:複数画像登録のルート
+    Route::post('/store/new/multiimage', 'StoreNewMultiimage')
+      ->name('store.new.multiimage');
   });
 }); // End Group Admin Middleware
