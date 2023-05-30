@@ -296,4 +296,20 @@ class PropertyController extends Controller
     return redirect()->back()->with($notification);
   } // End Method 
 
+  public function PropertyMultiImageDelete($id)
+  {
+
+    $oldImg = MultiImage::findOrFail($id);
+    unlink($oldImg->photo_name);
+
+    MultiImage::findOrFail($id)->delete();
+
+    $notification = array(
+      'message' => '画像の削除に成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method 
+
 }
