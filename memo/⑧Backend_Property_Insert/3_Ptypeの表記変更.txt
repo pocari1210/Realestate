@@ -1,0 +1,45 @@
+
+3_Ptypeの表記変更
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\Property.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  protected $guarded = [];
+
+  public function type()
+  {
+    return $this->belongsTo(PropertyType::class, 'ptype_id', 'id');
+  }
+
+★コード解説★
+propertiesテーブルのptype_idとproperty_typesテーブルのidカラム
+を紐づけている
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集◆
+
+ディレクトリ
+\resources\views\backend\property\all_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+変更前
+<td>{{ $item->ptype_id }}</td> 
+
+変更後
+<td>{{ $item['type']['type_name'] }}</td>
+
+//////////////////////////////////////////////////////////////////
+
+★コード解説★
+['type']　⇒ public function type()のtypeを入力
+['type_name'] ⇒ property_typesのtype_nameカラムを入力
+
+Ptypeがtype_nameで登録した名称に変更されていたらOK
+
+

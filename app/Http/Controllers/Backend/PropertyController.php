@@ -51,8 +51,7 @@ class PropertyController extends Controller
   public function StoreProperty(Request $request)
   {
     $amen = $request->amenities_id;
-    $amenites = implode(",", $amen);
-
+    $amenites = implode('`, `', $amen);
 
     // フォームからきた画像を受け取る
     $image = $request->file('property_thambnail');
@@ -154,7 +153,82 @@ class PropertyController extends Controller
     /// 施設追加処理:End ////
 
     $notification = array(
-      'message' => 'Property Inserted Successfully',
+      'message' => 'Property:登録に成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.property')->with($notification);
+  } // End Method 
+
+  public function EditProperty($id)
+  {
+
+    $property = Property::findOrFail($id);
+
+    $type = $property->amenities_id;
+    $property_ami = explode(',', $type);
+    // dd($type);
+    $propertytype = PropertyType::latest()->get();
+    $amenities = Amenities::latest()->get();
+    $activeAgent = User::where('status', 'active')->where('role', 'agent')->latest()->get();
+
+    return view(
+      'backend.property.edit_property',
+      compact(
+        'property',
+        'property_ami',
+        'propertytype',
+        'amenities',
+        'activeAgent'
+      )
+    );
+  } // End Method 
+
+
+  public function UpdateProperty(Request $request)
+  {
+
+    $amen = $request->amenities_id;
+    $amenites = implode(",", $amen);
+
+    $property_id = $request->id;
+
+    Property::findOrFail($property_id)->update([
+
+      'ptype_id' => $request->ptype_id,
+      'amenities_id' => $amenites,
+      'property_name' => $request->property_name,
+      'property_slug' => strtolower(str_replace(' ', '-', $request->property_name)),
+      'property_status' => $request->property_status,
+
+      'lowest_price' => $request->lowest_price,
+      'max_price' => $request->max_price,
+      'short_descp' => $request->short_descp,
+      'long_descp' => $request->long_descp,
+      'bedrooms' => $request->bedrooms,
+      'bathrooms' => $request->bathrooms,
+      'garage' => $request->garage,
+      'garage_size' => $request->garage_size,
+
+      'property_size' => $request->property_size,
+      'property_video' => $request->property_video,
+      'address' => $request->address,
+      'city' => $request->city,
+      'state' => $request->state,
+      'postal_code' => $request->postal_code,
+
+      'neighborhood' => $request->neighborhood,
+      'latitude' => $request->latitude,
+      'longitude' => $request->longitude,
+      'featured' => $request->featured,
+      'hot' => $request->hot,
+      'agent_id' => $request->agent_id,
+      'updated_at' => Carbon::now(),
+
+    ]);
+
+    $notification = array(
+      'message' => 'Propertyの更新が成功しました',
       'alert-type' => 'success'
     );
 

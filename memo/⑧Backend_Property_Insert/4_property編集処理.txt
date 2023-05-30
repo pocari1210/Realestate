@@ -1,0 +1,52 @@
+
+4_property編集処理
+
+propertyの編集ページを作成
+
+◆ルートの編集◆
+
+ディレクトリ
+\Realestate\cms\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // property:編集処理のルート
+  Route::get('/edit/property/{id}', 'EditProperty')
+    ->name('edit.property');
+
+/////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\property\all_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+<td>
+  <a href="{{ route('edit.property',$item->id) }}" class="btn btn-inverse-warning"> 編集 </a>
+  <a href="{{ route('delete.property',$item->id) }}" class="btn btn-inverse-danger" id="delete"> 削除 </a>
+</td>
+
+////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\PropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function EditProperty($id)
+  {
+    $property = Property::findOrFail($id);
+    $propertytype = PropertyType::latest()->get();
+    $amenities = Amenities::latest()->get();
+    $activeAgent = User::where('status', 'active')->where('role', 'agent')->latest()->get();
+
+    return view(
+      'backend.property.edit_property',
+      compact('property', 'propertytype', 'amenities', 'activeAgent')
+    );
+  } // End Method 

@@ -92,7 +92,6 @@ class AdminController extends Controller
     $request->validate([
       'old_password' => 'required',
       'new_password' => 'required|confirmed'
-
     ]);
 
     /// Match The Old Password

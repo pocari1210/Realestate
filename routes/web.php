@@ -169,5 +169,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // property:保存処理のルート
     Route::post('/store/property', 'StoreProperty')
       ->name('store.property');
+
+    // property:編集処理のルート
+    Route::get('/edit/property/{id}', 'EditProperty')
+      ->name('edit.property');
+
+    // property:更新処理のルート
+    Route::post('/update/property', 'UpdateProperty')
+      ->name('update.property');
   });
 }); // End Group Admin Middleware
