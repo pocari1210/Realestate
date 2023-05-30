@@ -50,12 +50,9 @@ class PropertyController extends Controller
 
   public function StoreProperty(Request $request)
   {
-
     $amen = $request->amenities_id;
-
-    // $amenを一つにまとめる
     $amenites = implode(",", $amen);
-    // dd($amen);
+
 
     // フォームからきた画像を受け取る
     $image = $request->file('property_thambnail');
@@ -119,7 +116,49 @@ class PropertyController extends Controller
 
       // Carbonで現在の時間を取得
       'created_at' => Carbon::now(),
+
     ]);
+
+    /// 複数画像保存処理:start ////
+
+    $images = $request->file('multi_img');
+    foreach ($images as $img) {
+
+      $make_name = hexdec(uniqid()) . '.' . $img->getClientOriginalExtension();
+      Image::make($img)->resize(770, 520)->save('upload/property/multi-image/' . $make_name);
+      $uploadPath = 'upload/property/multi-image/' . $make_name;
+
+      MultiImage::insert([
+        'property_id' => $property_id,
+        'photo_name' => $uploadPath,
+        'created_at' => Carbon::now(),
+      ]);
+    } // End Foreach
+
+    /// 複数画像保存処理:End ////
+
+    /// 施設追加処理:start ////
+
+    $facilities = Count($request->facility_name);
+
+    if ($facilities != NULL) {
+      for ($i = 0; $i < $facilities; $i++) {
+        $fcount = new Facility();
+        $fcount->property_id = $property_id;
+        $fcount->facility_name = $request->facility_name[$i];
+        $fcount->distance = $request->distance[$i];
+        $fcount->save();
+      }
+    }
+
+    /// 施設追加処理:End ////
+
+    $notification = array(
+      'message' => 'Property Inserted Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.property')->with($notification);
   } // End Method 
 
 }

@@ -54,7 +54,7 @@
                 <div class="col-sm-6">
                   <div class="form-group mb-3">
                     <label class="form-label">Main Thambnail </label>
-                    <input type="file" name="property_thambnail " class="form-control" onChange="mainThamUrl(this)">
+                    <input type="file" name="property_thambnail" class="form-control" onChange="mainThamUrl(this)">
                     <img src="" id="mainThmb">
                   </div>
                 </div><!-- Col -->
@@ -176,7 +176,12 @@
                 <div class="col-sm-4">
                   <div class="mb-3">
                     <label class="form-label">Property Type </label>
-                    <input type="text" name="property_size" class="form-control">
+                    <select name="ptype_id" class="form-select" id="exampleFormControlSelect1">
+                      <option selected="" disabled="">Select Type</option>
+                      @foreach($propertytype as $ptype)
+                      <option value="{{ $ptype->id }}">{{ $ptype->type_name }}</option>
+                      @endforeach
+                    </select>
                   </div>
                 </div><!-- Col -->
 
