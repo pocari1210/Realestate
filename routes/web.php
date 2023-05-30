@@ -177,5 +177,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // property:更新処理のルート
     Route::post('/update/property', 'UpdateProperty')
       ->name('update.property');
+
+    // property:画像更新のルート 
+    Route::post('/update/property/thambnail', 'UpdatePropertyThambnail')
+      ->name('update.property.thambnail');
+
+    // property:複数画像更新のルート
+    Route::post('/update/property/multiimage', 'UpdatePropertyMultiimage')
+      ->name('update.property.multiimage');
   });
 }); // End Group Admin Middleware

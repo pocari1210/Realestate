@@ -1,0 +1,63 @@
+
+
+
+
+///////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\property\edit_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<form method="post" action="{{ route('update.property.multiimage') }}" id="myForm" enctype="multipart/form-data">
+  @csrf
+
+↓追記↓
+<input type="file" class="form-control" name="multi_img[{{ $img->id }}]">
+↑追記↑
+</td>
+<td>
+
+    <input type="submit" class="btn btn-primary px-4" value="Update Image" >
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\PropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function UpdatePropertyMultiimage(Request $request)
+  {
+
+    $imgs = $request->multi_img;
+
+    foreach ($imgs as $id => $img) {
+      $imgDel = MultiImage::findOrFail($id);
+      unlink($imgDel->photo_name);
+
+      $make_name = hexdec(uniqid()) . '.' . $img->getClientOriginalExtension();
+      Image::make($img)->resize(770, 520)->save('upload/property/multi-image/' . $make_name);
+      $uploadPath = 'upload/property/multi-image/' . $make_name;
+
+      MultiImage::where('id', $id)->update([
+        'photo_name' => $uploadPath,
+        'updated_at' => Carbon::now(),
+      ]);
+    } // End Foreach 
+
+
+    $notification = array(
+      'message' => 'Property 画像の更新が成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method 
+
+
