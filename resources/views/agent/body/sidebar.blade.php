@@ -1,3 +1,9 @@
+@php
+$id = Auth::user()->id;
+$agentId = App\Models\User::find($id);
+$status = $agentId->status;
+@endphp
+
 <nav class="sidebar">
   <div class="sidebar-header">
     <a href="#" class="sidebar-brand">
@@ -18,6 +24,9 @@
           <span class="link-title">Dashboard</span>
         </a>
       </li>
+
+      @if($status === 'active')
+
       <li class="nav-item nav-category">RealEstate</li>
 
       <li class="nav-item">
@@ -82,6 +91,9 @@
           </ul>
         </div>
       </li>
+      @else
+
+      @endif
 
       <li class="nav-item nav-category">Docs</li>
       <li class="nav-item">
