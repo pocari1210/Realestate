@@ -266,5 +266,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Agent:agentを削除するルート
     Route::get('/delete/agent/{id}', 'DeleteAgent')
       ->name('delete.agent');
+
+    // Agent:active/inactiveを変更するルート
+    Route::get('/changeStatus', 'changeStatus');
   });
 }); // End Group Admin Middleware

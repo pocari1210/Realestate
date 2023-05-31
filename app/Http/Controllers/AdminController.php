@@ -201,4 +201,14 @@ class AdminController extends Controller
 
     return redirect()->back()->with($notification);
   } // End Method 
+
+  public function changeStatus(Request $request)
+  {
+
+    $user = User::find($request->user_id);
+    $user->status = $request->status;
+    $user->save();
+
+    return response()->json(['success' => 'Status:変更が成功しました']);
+  } // End Method 
 }

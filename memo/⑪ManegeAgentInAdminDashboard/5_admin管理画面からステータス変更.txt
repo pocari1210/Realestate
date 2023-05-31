@@ -1,0 +1,134 @@
+
+5_admin管理画面からステータス変更
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // Agent All Route from admin 
+  Route::controller(AdminController::class)->group(function () {
+
+    // Agent:active/inactiveを変更するルート
+    Route::get('/changeStatus', 'changeStatus');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集◆
+
+ディレクトリ
+\resources\views\backend\agentuser\all_agent.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+
+<td>
+  @if($item->status == 'active')
+  <span class="badge rounded-pill bg-success">Active</span>
+  @else
+  <span class="badge rounded-pill bg-danger">InActive</span>
+  @endif
+</td>
+↓追記↓
+<td>
+  <input data-id="{{ $item->id }}" class="toggle-class" type="checkbox" data-onstyle="success" 
+    data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="Inactive" {{ $item->status ? 'checked' : '' }}>
+</td>
+↑追記↑
+
+
+↓↓追記↓↓
+
+<script type="text/javascript">
+  $(function() {
+    $('.toggle-class').change(function() {
+      var status = $(this).prop('checked') == true ? 1 : 0;
+      var user_id = $(this).data('id');
+
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: '/changeStatus',
+        data: {
+          'status': status,
+          'user_id': user_id
+        },
+        success: function(data) {
+          // console.log(data.success)
+          // Start Message 
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 3000
+          })
+          if ($.isEmptyObject(data.error)) {
+
+            Toast.fire({
+              type: 'success',
+              title: data.success,
+            })
+          } else {
+
+            Toast.fire({
+              type: 'error',
+              title: data.error,
+            })
+          }
+          // End Message   
+        }
+      });
+    })
+  })
+</script>
+
+↑↑追記↑↑
+
+@endsection
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆テンプレートファイルの編集◆
+
+ディレクトリ
+\resources\views\admin\admin_dashboard.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  ↓↓追記↓↓
+  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+  ↑↑追記↑↑
+
+</body>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\AdminController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function changeStatus(Request $request)
+  {
+
+    $user = User::find($request->user_id);
+    $user->status = $request->status;
+    $user->save();
+
+    return response()->json(['success' => 'Status Change Successfully']);
+  } // End Method 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+ここまで完了したら
+php artisan optimizeを実行し、
+ポップアップが右上にでてくるか確認する
