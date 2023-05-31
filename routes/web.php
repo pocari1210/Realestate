@@ -102,6 +102,14 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
   // agent:プロフィール更新のルート
   Route::post('/agent/profile/store', [AgentController::class, 'AgentProfileStore'])
     ->name('agent.profile.store');
+
+  // agent:パスワード変更(編集)のルート
+  Route::get('/agent/change/password', [AgentController::class, 'AgentChangePassword'])
+    ->name('agent.change.password');
+
+  // agent:パスワード更新のルート
+  Route::post('/agent/update/password', [AgentController::class, 'AgentUpdatePassword'])
+    ->name('agent.update.password');
 }); // End Group Agent Middleware
 
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])->name('agent.login')
