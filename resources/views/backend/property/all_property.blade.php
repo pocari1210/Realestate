@@ -46,8 +46,17 @@
                     @endif
                   </td>
                   <td>
-                    <a href="{{ route('edit.property',$item->id) }}" class="btn btn-inverse-warning"> 編集 </a>
-                    <a href="{{ route('delete.property',$item->id) }}" class="btn btn-inverse-danger" id="delete"> 削除 </a>
+                    <a href="{{ route('details.property',$item->id) }}" class="btn btn-inverse-info" title="Details">
+                      <i data-feather="eye"></i>
+                    </a>
+
+                    <a href="{{ route('edit.property',$item->id) }}" class="btn btn-inverse-warning" title="Edit">
+                      <i data-feather="edit"></i>
+                    </a>
+
+                    <a href="{{ route('delete.property',$item->id) }}" class="btn btn-inverse-danger" id="delete" title="Delete">
+                      <i data-feather="trash-2"></i>
+                    </a>
                   </td>
                 </tr>
                 @endforeach

@@ -1,0 +1,121 @@
+
+
+13_プロパティの詳細
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    // property:詳細ページのルート
+    Route::get('/details/property/{id}', 'DetailsProperty')
+      ->name('details.property');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\property\all_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <td>
+    @if($item->status == 1)
+    <span class="badge rounded-pill bg-success">Active</span>
+    @else
+    <span class="badge rounded-pill bg-danger">InActive</span>
+    @endif
+  </td>
+  <td>
+
+　　↓↓編集と追加↓↓
+    <a href="{{ route('details.property',$item->id) }}" class="btn btn-inverse-info" title="Details">
+      <i data-feather="eye"></i>
+    </a>
+
+    <a href="{{ route('edit.property',$item->id) }}" class="btn btn-inverse-warning" title="Edit">
+      <i data-feather="edit"></i>
+    </a>
+
+    <a href="{{ route('delete.property',$item->id) }}" class="btn btn-inverse-danger" id="delete" title="Delete">
+      <i data-feather="trash-2"></i>
+    </a>
+    ↑↑編集と追加↑↑
+
+  </td>
+</tr>
+@endforeach
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\PropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function DetailsProperty($id)
+  {
+
+    $facilities = Facility::where('property_id', $id)->get();
+    $property = Property::findOrFail($id);
+
+    $type = $property->amenities_id;
+    $property_ami = explode(',', $type);
+
+    $multiImage = MultiImage::where('property_id', $id)->get();
+
+    $propertytype = PropertyType::latest()->get();
+    $amenities = Amenities::latest()->get();
+    $activeAgent = User::where('status', 'active')
+      ->where('role', 'agent')
+      ->latest()
+      ->get();
+
+    return view(
+      'backend.property.details_property',
+
+      compact(
+        'property',
+        'propertytype',
+        'amenities',
+        'activeAgent',
+        'property_ami',
+        'multiImage',
+        'facilities'
+      )
+    );
+  } // End Method
+
+///////////////////////////////////////////////////////////////////////////////////////////////// 
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+///////////////////////////////////////////////////////////////////////////
+
+◆モデルの設定◆
+
+ディレクトリ
+\app\Models\Property.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+     public function user(){
+        return $this->belongsTo(User::class,'agent_id','id');
+    }
+
+★コード解説★
+ユーザーモデルとリレーションをしている
+
+/////////////////////////////////////////////////////////////////////////////////////////////////

@@ -201,5 +201,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // property:削除処理のルート
     Route::get('/delete/property/{id}', 'DeleteProperty')
       ->name('delete.property');
+
+    // property:詳細ページのルート
+    Route::get('/details/property/{id}', 'DetailsProperty')
+      ->name('details.property');
   });
 }); // End Group Admin Middleware
