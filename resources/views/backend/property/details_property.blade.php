@@ -153,16 +153,33 @@
 
                 <tr>
                   <td>Agent </td>
-                  <td>
-                    @if($property->agent_id == NULL)
+                  @if($property->agent_id == NULL)
                   <td><code> Admin </code></td>
                   @else
                   <td><code> {{ $property['user']['name'] }} </code></td>
                   @endif
-                  </td>
                 </tr>
               </tbody>
             </table>
+
+            <br><br>
+            <!-- 非アクティブの場合の表示 -->
+            @if($property->status == 1)
+            <form method="post" action="{{ route('inactive.property') }}">
+              @csrf
+              <input type="hidden" name="id" value="{{ $property->id }}">
+              <button type="submit" class="btn btn-primary">InActive </button>
+            </form>
+
+            <!-- アクティブの場合の表示 -->
+            @else
+            <form method="post" action="{{ route('active.property') }}">
+              @csrf
+              <input type="hidden" name="id" value="{{ $property->id }}">
+              <button type="submit" class="btn btn-primary">Active </button>
+            </form>
+
+            @endif
           </div>
         </div>
       </div>

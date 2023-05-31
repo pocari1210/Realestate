@@ -51,7 +51,7 @@ class PropertyController extends Controller
   public function StoreProperty(Request $request)
   {
     $amen = $request->amenities_id;
-    $amenites = implode('`, `', $amen);
+    $amenites = implode('`, `', (array)$amen);
 
     // フォームからきた画像を受け取る
     $image = $request->file('property_thambnail');
@@ -428,6 +428,37 @@ class PropertyController extends Controller
         'facilities'
       )
     );
+  } // End Method 
+
+  public function InactiveProperty(Request $request)
+  {
+    $pid = $request->id;
+    Property::findOrFail($pid)->update([
+      'status' => 0,
+    ]);
+
+    $notification = array(
+      'message' => 'Propertyを非表示にしました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.property')->with($notification);
+  } // End Method 
+
+  public function ActiveProperty(Request $request)
+  {
+
+    $pid = $request->id;
+    Property::findOrFail($pid)->update([
+      'status' => 1,
+    ]);
+
+    $notification = array(
+      'message' => 'Propertyを表示しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.property')->with($notification);
   } // End Method 
 
 }

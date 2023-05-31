@@ -205,5 +205,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // property:詳細ページのルート
     Route::get('/details/property/{id}', 'DetailsProperty')
       ->name('details.property');
+
+    // property:非アクティブのルート
+    Route::post('/inactive/property', 'InactiveProperty')
+      ->name('inactive.property');
+
+    // property:アクティブのルート
+    Route::post('/active/property', 'ActiveProperty')
+      ->name('active.property');
   });
 }); // End Group Admin Middleware

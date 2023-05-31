@@ -1,0 +1,102 @@
+
+14_アクティブと非アクティブ
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    // property:非アクティブのルート
+    Route::post('/inactive/property', 'InactiveProperty')
+      ->name('inactive.property');
+
+    // property:アクティブのルート
+    Route::post('/active/property', 'ActiveProperty')
+      ->name('active.property');
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\property\details_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+                <tr>
+                  <td>Agent </td>
+                  @if($property->agent_id == NULL)
+                  <td><code> Admin </code></td>
+                  @else
+                  <td><code> {{ $property['user']['name'] }} </code></td>
+                  @endif
+                </tr>
+              </tbody>
+            </table>
+
+            ↓↓追記↓↓
+
+            <br><br>
+            <!-- 非アクティブの場合の表示 -->
+            @if($property->status == 1)
+            <form method="post" action="{{ route('inactive.property') }}">
+              @csrf
+              <input type="hidden" name="id" value="{{ $property->id }}">
+              <button type="submit" class="btn btn-primary">InActive </button>
+            </form>
+
+            <!-- アクティブの場合の表示 -->
+            @else
+            <form method="post" action="{{ route('active.property') }}">
+              @csrf
+              <input type="hidden" name="id" value="{{ $property->id }}">
+              <button type="submit" class="btn btn-primary">Active </button>
+            </form>
+
+            @endif
+
+            ↑↑追記↑↑
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\PropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function InactiveProperty(Request $request)
+  {
+    $pid = $request->id;
+    Property::findOrFail($pid)->update([
+      'status' => 0,
+    ]);
+
+    $notification = array(
+      'message' => 'Propertyを非表示にしました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.property')->with($notification);
+  } // End Method 
+
+  public function ActiveProperty(Request $request)
+  {
+
+    $pid = $request->id;
+    Property::findOrFail($pid)->update([
+      'status' => 1,
+    ]);
+
+    $notification = array(
+      'message' => 'Propertyを表示しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.property')->with($notification);
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
