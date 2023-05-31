@@ -158,4 +158,47 @@ class AdminController extends Controller
 
     return redirect()->route('all.agent')->with($notification);
   } // End Method 
+
+  public function EditAgent($id)
+  {
+    // 編集するUserのidを取得
+    $allagent = User::findOrFail($id);
+
+    return view(
+      'backend.agentuser.edit_agent',
+      compact('allagent')
+    );
+  } // End Method 
+
+  public function UpdateAgent(Request $request)
+  {
+    $user_id = $request->id;
+
+    User::findOrFail($user_id)->update([
+      'name' => $request->name,
+      'email' => $request->email,
+      'phone' => $request->phone,
+      'address' => $request->address,
+    ]);
+
+    $notification = array(
+      'message' => 'Agent:更新が成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.agent')->with($notification);
+  } // End Method 
+
+  public function DeleteAgent($id)
+  {
+
+    User::findOrFail($id)->delete();
+
+    $notification = array(
+      'message' => 'Agent:削除が成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method 
 }

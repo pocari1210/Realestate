@@ -1,0 +1,96 @@
+
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+ 
+   // Agent:agentを編集するルート
+    Route::get('/edit/agent/{id}', 'EditAgent')
+      ->name('edit.agent');
+
+    // Agent:agentを更新するルート
+    Route::post('/update/agent', 'UpdateAgent')
+      ->name('update.agent');
+
+    // Agent:agentを削除するルート
+    Route::get('/delete/agent/{id}', 'DeleteAgent')
+      ->name('delete.agent');
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\agentuser\all_agent.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<td>
+  <a href="{{ route('edit.agent',$item->id) }}" class="btn btn-inverse-warning" title="Edit"> <i data-feather="edit"></i> </a>
+  <a href="{{ route('delete.agent',$item->id) }}" class="btn btn-inverse-danger" id="delete" title="Delete"> <i data-feather="trash-2"></i> </a>
+</td>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\AgentController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function EditAgent($id)
+  {
+    // 編集するUserのidを取得
+    $allagent = User::findOrFail($id);
+
+    return view(
+      'backend.agentuser.edit_agent',
+      compact('allagent')
+    );
+  } // End Method 
+
+  public function UpdateAgent(Request $request)
+  {
+    $user_id = $request->id;
+
+    User::findOrFail($user_id)->update([
+      'name' => $request->name,
+      'email' => $request->email,
+      'phone' => $request->phone,
+      'address' => $request->address,
+    ]);
+
+    $notification = array(
+      'message' => 'Agent:更新が成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.agent')->with($notification);
+  } // End Method 
+
+  public function DeleteAgent($id)
+  {
+
+    User::findOrFail($id)->delete();
+
+    $notification = array(
+      'message' => 'Agent:削除が成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\agentuser\edit_agent.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・

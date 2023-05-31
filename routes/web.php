@@ -254,5 +254,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Agent:agentを保存するルート
     Route::post('/store/agent', 'StoreAgent')
       ->name('store.agent');
+
+    // Agent:agentを編集するルート
+    Route::get('/edit/agent/{id}', 'EditAgent')
+      ->name('edit.agent');
+
+    // Agent:agentを更新するルート
+    Route::post('/update/agent', 'UpdateAgent')
+      ->name('update.agent');
+
+    // Agent:agentを削除するルート
+    Route::get('/delete/agent/{id}', 'DeleteAgent')
+      ->name('delete.agent');
   });
 }); // End Group Admin Middleware
