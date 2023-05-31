@@ -1,0 +1,78 @@
+
+1_propaty_トップページ
+
+php artisan make:controller Agent/AgentPropertyController
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// ★agent権限でログインした場合のルートグループ2★
+Route::middleware(['auth', 'role:agent'])->group(function () {
+
+  // Agent All Property  
+  Route::controller(AgentPropertyController::class)->group(function () {
+    // Agent:プロパティのトップページ
+    Route::get('/agent/all/property', 'AgentAllProperty')
+      ->name('agent.all.property');
+  });
+}); // End Group Agent Middleware
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\agent\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<div class="collapse" id="property">
+  <ul class="nav sub-menu">
+    <li class="nav-item">
+
+      ↓↓追加↓↓
+      <a href="{{ route('agent.all.property') }}" class="nav-link">All Property</a>
+      ↑↑追加↑↑
+
+    </li>
+    <li class="nav-item">
+      <a href="" class="nav-link">Add Property</a>
+    </li>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Agent\AgentPropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use Illuminate\Support\Facades\Auth;
+use App\Models\Property;
+
+  public function AgentAllProperty()
+  {
+    $id = Auth::user()->id;
+    $property = Property::where('agent_id', $id)->latest()->get();
+    return view('agent.property.all_property', compact('property'));
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\agent\property\all_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+propertiesテーブルのagent_idとuserテーブルのidと紐づいている
+
+ログインしたagentと登録されたid情報がマッチしたものが表示される

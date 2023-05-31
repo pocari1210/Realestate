@@ -7,6 +7,7 @@ use App\Http\Controllers\AgentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Backend\PropertyTypeController;
 use App\Http\Controllers\Backend\PropertyController;
+use App\Http\Controllers\Agent\AgentPropertyController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 
 /*
@@ -84,7 +85,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     ->name('admin.update.password');
 }); // End Group Admin Middleware
 
-// ★agent権限でログインした場合のルートグループ★
+// ★agent権限でログインした場合のルートグループ1★
 Route::middleware(['auth', 'role:agent'])->group(function () {
 
   // agent:dashboard
@@ -110,6 +111,17 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
   // agent:パスワード更新のルート
   Route::post('/agent/update/password', [AgentController::class, 'AgentUpdatePassword'])
     ->name('agent.update.password');
+}); // End Group Agent Middleware
+
+// ★agent権限でログインした場合のルートグループ2★
+Route::middleware(['auth', 'role:agent'])->group(function () {
+
+  // Agent All Property  
+  Route::controller(AgentPropertyController::class)->group(function () {
+    // Agent:プロパティのトップページ
+    Route::get('/agent/all/property', 'AgentAllProperty')
+      ->name('agent.all.property');
+  });
 }); // End Group Agent Middleware
 
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])->name('agent.login')
