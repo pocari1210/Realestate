@@ -1,0 +1,85 @@
+
+2_エージェント登録処理
+
+◆ミドルウェアの編集◆
+
+ディレクトリ
+\app\Providers\RouteServiceProvider.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  ↓追記↓
+  public const AGENT = '/agent/dashboard';
+  ↑追記↑
+
+  /**
+   * Define your route model bindings, pattern filters, and other route configuration.
+   */
+
+★コード解説★
+ログインをした後の遷移先を記述
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // エージェント登録ページのルート
+Route::post('/agent/register', [AgentController::class, 'AgentRegister'])
+  ->name('agent.register');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\AgentController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
+use App\Providers\RouteServiceProvider;
+
+  public function AgentRegister(Request $request)
+  {
+    $user = User::create([
+      'name' => $request->name,
+      'email' => $request->email,
+      'phone' => $request->phone,
+      'password' => Hash::make($request->password),
+      'role' => 'agent',
+      'status' => 'inactive',
+    ]);
+
+    event(new Registered($user));
+
+    Auth::login($user);
+
+    return redirect(RouteServiceProvider::AGENT);
+  } // End Method 
+
+
+★コード解説
+\app\Http\Controllers\Auth\RegisteredUserController.phpをベースに
+ログインのコントローラーを作成
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
