@@ -130,6 +130,26 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     // Agent:プロパティの保存処理のルート
     Route::post('/agent/store/property', 'AgentStoreProperty')
       ->name('agent.store.property');
+
+    // Agent:プロパティの編集処理のルート
+    Route::get('/agent/edit/property/{id}', 'AgentEditProperty')
+      ->name('agent.edit.property');
+
+    // Agent:プロパティの更新処理のルート
+    Route::post('/agent/update/property', 'AgentUpdateProperty')
+      ->name('agent.update.property');
+
+    // 画像の更新の更新ルート
+    Route::post('/agent/update/property/thambnail', 'AgentUpdatePropertyThambnail')
+      ->name('agent.update.property.thambnail');
+
+    // 複数画像の更新のルート
+    Route::post('/agent/update/property/multiimage', 'AgentUpdatePropertyMultiimage')
+      ->name('agent.update.property.multiimage');
+
+    // 複数画像の削除のルート
+    Route::get('/agent/property/multiimg/delete/{id}', 'AgentPropertyMultiimgDelete')
+      ->name('agent.property.multiimg.delete');
   });
 }); // End Group Agent Middleware
 
