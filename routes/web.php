@@ -193,5 +193,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // property:複数画像登録のルート
     Route::post('/store/new/multiimage', 'StoreNewMultiimage')
       ->name('store.new.multiimage');
+
+    // Facilities:更新処理のルート
+    Route::post('/update/property/facilities', 'UpdatePropertyFacilities')
+      ->name('update.property.facilities');
+
+    // property:削除処理のルート
+    Route::get('/delete/property/{id}', 'DeleteProperty')
+      ->name('delete.property');
   });
 }); // End Group Admin Middleware

@@ -47,7 +47,7 @@
                   </td>
                   <td>
                     <a href="{{ route('edit.property',$item->id) }}" class="btn btn-inverse-warning"> 編集 </a>
-                    <a href="" class="btn btn-inverse-danger" id="delete"> 削除 </a>
+                    <a href="{{ route('delete.property',$item->id) }}" class="btn btn-inverse-danger" id="delete"> 削除 </a>
                   </td>
                 </tr>
                 @endforeach
