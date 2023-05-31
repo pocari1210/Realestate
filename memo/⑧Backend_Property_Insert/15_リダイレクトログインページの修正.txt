@@ -1,0 +1,61 @@
+
+15_リダイレクトログインページの修正
+
+adminでログインしている状態で、
+admin/loginに遷移しようとしたときに、
+ダッシュボードページにリダイレクトするようにする
+
+◆ミドルウェアの編集◆
+
+ディレクトリ
+\app\Http\Middleware\RedirectIfAuthenticated.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function handle(Request $request, Closure $next, string ...$guards): Response
+  {
+    $guards = empty($guards) ? [null] : $guards;
+
+    foreach ($guards as $guard) {
+      if (Auth::guard($guard)->check()) {
+
+        if (Auth::check() && Auth::user()->role == 'user') {
+          return redirect('/dashboard');
+        }
+        if (Auth::check() && Auth::user()->role == 'agent') {
+          return redirect('/agent/dashboard');
+        }
+        if (Auth::check() && Auth::user()->role == 'admin') {
+          return redirect('/admin/dashboard');
+        }
+      }
+    }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Http\Middleware\RedirectIfAuthenticated;
+
+// adminのログインルート
+Route::get('/admin/login', [AdminController::class, 'AdminLogin'])
+  ->name('admin.login')
+
+  ↓↓追記↓↓
+  ->middleware(RedirectIfAuthenticated::class);
+
+★コード解説★
+RedirectIfAuthenticated.phpで設定した内容が
+適応されている
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+admindeログインしている時に、admin/loginのページに遷移し、
+ダッシュボード画面に理だ入れkとされればOK
+
