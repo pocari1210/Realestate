@@ -14,7 +14,7 @@ php artisan make:middleware Role
 ・・・・・・・・・・・・・・・・・・・・・・・・・・・・
 
 protected $middlewareAliases = [
-  'roles' => \App\Http\Middleware\Role::class, // 追記
+  'role' => \App\Http\Middleware\Role::class, // 追記
 
 
 ///////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ Role.phpでミドルウェアをカーネルに登録をする
 ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
 
 // ★admin権限でログインした場合のルートグループ★
-Route::middleware(['auth', 'roles:admin'])->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
 
   // adminのdashboard
   Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])
@@ -56,7 +56,7 @@ Route::middleware(['auth', 'roles:admin'])->group(function () {
 
 
 // ★agent権限でログインした場合のルートグループ★
-Route::middleware(['auth', 'roles:agent'])->group(function () {
+Route::middleware(['auth', 'role:agent'])->group(function () {
 
   // agentのdashboard
   Route::get('/agent/dashboard', [AgentController::class, 'AgentDashboard'])

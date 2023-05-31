@@ -92,14 +92,10 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     ->name('agent.dashboard');
 }); // End Group Agent Middleware
 
-// エージェントログインページのルート
-Route::get('/agent/login', [AgentController::class, 'AgentLogin'])
-  ->name('agent.login')
+Route::get('/agent/login', [AgentController::class, 'AgentLogin'])->name('agent.login')
   ->middleware(RedirectIfAuthenticated::class);
 
-// エージェント登録ページのルート
-Route::post('/agent/register', [AgentController::class, 'AgentRegister'])
-  ->name('agent.register');
+Route::post('/agent/register', [AgentController::class, 'AgentRegister'])->name('agent.register');
 
 // adminのログインルート
 Route::get('/admin/login', [AdminController::class, 'AdminLogin'])

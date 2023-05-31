@@ -1,0 +1,30 @@
+
+1_雛形作成
+
+下記を参考に、雛形作成
+
+https://github.com/easylearningbd/laravel-property-management-system/commit/03857733f762c1815246067d87881f8b87ffb7c9#diff-8ddfaa01c7b72470af967bd9c0b12490ece42024e16bb5a9ff0edddad1fb1f95
+
+\resources\views\agent\index.blade.php
+\resources\views\agent\body\footer.blade.php
+\resources\views\agent\body\header.blade.php
+\resources\views\agent\body\sidebar.blade.php
+
+\resources\views\agent\agent_dashboard.blade.php
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\AgentController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AgentDashboard()
+  {
+    return view('agent.agent_dashboard');
+  }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////

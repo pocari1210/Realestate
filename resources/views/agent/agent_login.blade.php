@@ -19,7 +19,6 @@
 </section>
 <!--End Page Title-->
 
-
 <!-- ragister-section -->
 <section class="ragister-section centred sec-pad">
   <div class="auto-container">
@@ -72,7 +71,6 @@
                     <label>Agent Company Name</label>
                     <input type="text" name="name" id="name" required="">
                   </div>
-
                   <div class="form-group">
                     <label>Email address</label>
                     <input type="email" name="email" id="email" required="">
@@ -86,11 +84,6 @@
                   <div class="form-group">
                     <label>Password</label>
                     <input type="password" name="password" id="password" required="">
-                  </div>
-
-                  <div class="form-group">
-                    <label>Confirm Password</label>
-                    <input type="password" name="password_confirmation" id="password_confirmation" required="">
                   </div>
 
                   <div class="form-group message-btn">
