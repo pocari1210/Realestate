@@ -1,0 +1,79 @@
+
+3_agentプロフィール編集と更新
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Route::middleware(['auth', 'role:agent'])->group(function () {
+
+  // agent:プロフィール編集のルート
+  Route::get('/agent/profile', [AgentController::class, 'AgentProfile'])
+    ->name('agent.profile');
+
+  // agent:プロフィール更新のルート
+  Route::post('/agent/profile/store', [AgentController::class, 'AgentProfileStore'])
+    ->name('agent.profile.store');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\agent\body\header.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+adminとなっているところをagentに修正
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\AgentController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AgentProfile()
+  {
+    $id = Auth::user()->id;
+    $profileData = User::find($id);
+    return view('agent.agent_profile_view', compact('profileData'));
+  } // End Method 
+
+
+  public function AgentProfileStore(Request $request)
+  {
+    $id = Auth::user()->id;
+    $data = User::find($id);
+    $data->username = $request->username;
+    $data->name = $request->name;
+    $data->email = $request->email;
+    $data->phone = $request->phone;
+    $data->address = $request->address;
+
+    if ($request->file('photo')) {
+      $file = $request->file('photo');
+      @unlink(public_path('upload/agent_images/' . $data->photo));
+      $filename = date('YmdHi') . $file->getClientOriginalName();
+      $file->move(public_path('upload/agent_images'), $filename);
+      $data['photo'] = $filename;
+    }
+
+    $data->save();
+
+    $notification = array(
+      'message' => 'プロフィールの変更が成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////

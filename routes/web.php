@@ -87,13 +87,21 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 // ★agent権限でログインした場合のルートグループ★
 Route::middleware(['auth', 'role:agent'])->group(function () {
 
-  // agentのdashboard
+  // agent:dashboard
   Route::get('/agent/dashboard', [AgentController::class, 'AgentDashboard'])
     ->name('agent.dashboard');
 
-  // agentのログアウト処理のルート
+  // agent:ログアウト処理のルート
   Route::get('/agent/logout', [AgentController::class, 'AgentLogout'])
     ->name('agent.logout');
+
+  // agent:プロフィール編集のルート
+  Route::get('/agent/profile', [AgentController::class, 'AgentProfile'])
+    ->name('agent.profile');
+
+  // agent:プロフィール更新のルート
+  Route::post('/agent/profile/store', [AgentController::class, 'AgentProfileStore'])
+    ->name('agent.profile.store');
 }); // End Group Agent Middleware
 
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])->name('agent.login')
