@@ -8,17 +8,58 @@
 
 ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
 
+  // Agent All Property  
+  Route::controller(AgentPropertyController::class)->group(function () {
 
+    // Agent:プロパティの追加処理のルート
+    Route::get('/agent/add/property', 'AgentAddProperty')
+      ->name('agent.add.property');
 
+    // Agent:プロパティの保存処理のルート
+    Route::post('/agent/store/property', 'AgentStoreProperty')
+      ->name('agent.store.property');
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-◆ビューの編集(遷移元)◆
+◆ビューの編集(遷移元)①◆
 
 ディレクトリ
+\resources\views\agent\body\sidebar.blade.php
 
 ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
 
+<ul class="nav sub-menu">
+  <li class="nav-item">
+    <a href="{{ route('agent.all.property') }}" class="nav-link">All Property</a>
+  </li>
+  <li class="nav-item">
+
+    ↓↓編集↓↓
+    <a href="{{ route('agent.add.property') }}" class="nav-link">Add Property</a>
+    ↑↑編集↑↑
+
+  </li>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+◆ビューの編集(遷移元)②◆
+
+ディレクトリ
+\resources\views\agent\property\all_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<div class="page-content">
+  <nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+
+      ↓↓追記↓↓
+      <a href="{{ route('agent.add.property') }}" class="btn btn-inverse-info">Add Property</a>
+      ↑↑追記↑↑
+
+    </ol>
+  </nav>
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,15 +67,129 @@
 ◆コントローラーの編集◆
 
 ディレクトリ
-
+\app\Http\Controllers\Agent\AgentPropertyController.php
 
 ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
 
+use App\Models\Property;
+use App\Models\MultiImage;
+use App\Models\Facility;
+use App\Models\Amenities;
+use App\Models\PropertyType;
+use App\Models\User;
+use Intervention\Image\Facades\Image;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
+use Carbon\Carbon;
+
+  public function AgentAddProperty()
+  {
+
+    $propertytype = PropertyType::latest()->get();
+    $amenities = Amenities::latest()->get();
+
+    return view('agent.property.add_property', compact('propertytype', 'amenities'));
+  } // End Method 
 
 
+  public function AgentStoreProperty(Request $request)
+  {
+
+    $amen = $request->amenities_id;
+    $amenites = implode(",", $amen);
+    // dd($amenites);
+
+    $pcode = IdGenerator::generate(['table' => 'properties', 'field' => 'property_code', 'length' => 5, 'prefix' => 'PC']);
 
 
+    $image = $request->file('property_thambnail');
+    $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+    Image::make($image)->resize(370, 250)->save('upload/property/thambnail/' . $name_gen);
+    $save_url = 'upload/property/thambnail/' . $name_gen;
 
+    $property_id = Property::insertGetId([
 
+      'ptype_id' => $request->ptype_id,
+      'amenities_id' => $amenites,
+      'property_name' => $request->property_name,
+      'property_slug' => strtolower(str_replace(' ', '-', $request->property_name)),
+      'property_code' => $pcode,
+      'property_status' => $request->property_status,
+
+      'lowest_price' => $request->lowest_price,
+      'max_price' => $request->max_price,
+      'short_descp' => $request->short_descp,
+      'long_descp' => $request->long_descp,
+      'bedrooms' => $request->bedrooms,
+      'bathrooms' => $request->bathrooms,
+      'garage' => $request->garage,
+      'garage_size' => $request->garage_size,
+
+      'property_size' => $request->property_size,
+      'property_video' => $request->property_video,
+      'address' => $request->address,
+      'city' => $request->city,
+      'state' => $request->state,
+      'postal_code' => $request->postal_code,
+
+      'neighborhood' => $request->neighborhood,
+      'latitude' => $request->latitude,
+      'longitude' => $request->longitude,
+      'featured' => $request->featured,
+      'hot' => $request->hot,
+      'agent_id' => Auth::user()->id,
+      'status' => 1,
+      'property_thambnail' => $save_url,
+      'created_at' => Carbon::now(),
+    ]);
+
+    /// Multiple Image Upload From Here ////
+
+    $images = $request->file('multi_img');
+    foreach ($images as $img) {
+
+      $make_name = hexdec(uniqid()) . '.' . $img->getClientOriginalExtension();
+      Image::make($img)->resize(770, 520)->save('upload/property/multi-image/' . $make_name);
+      $uploadPath = 'upload/property/multi-image/' . $make_name;
+
+      MultiImage::insert([
+
+        'property_id' => $property_id,
+        'photo_name' => $uploadPath,
+        'created_at' => Carbon::now(),
+
+      ]);
+    } // End Foreach
+
+    /// End Multiple Image Upload From Here ////
+
+    /// Facilities Add From Here ////
+
+    $facilities = Count($request->facility_name);
+
+    if ($facilities != NULL) {
+      for ($i = 0; $i < $facilities; $i++) {
+        $fcount = new Facility();
+        $fcount->property_id = $property_id;
+        $fcount->facility_name = $request->facility_name[$i];
+        $fcount->distance = $request->distance[$i];
+        $fcount->save();
+      }
+    }
+
+    /// End Facilities  ////
+
+    $notification = array(
+      'message' => 'Property Inserted Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('agent.all.property')->with($notification);
+  } // End Method 
+
+★コード解説★
+\app\Http\Controllers\Backend\PropertyController.phpをもとに
+コードを書く
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
+
+エージェントの管理画面でプロパティを追加できればOK

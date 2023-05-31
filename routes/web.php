@@ -118,9 +118,18 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
 
   // Agent All Property  
   Route::controller(AgentPropertyController::class)->group(function () {
-    // Agent:プロパティのトップページ
+
+    // Agent:プロパティのトップページのルート
     Route::get('/agent/all/property', 'AgentAllProperty')
       ->name('agent.all.property');
+
+    // Agent:プロパティの追加処理のルート
+    Route::get('/agent/add/property', 'AgentAddProperty')
+      ->name('agent.add.property');
+
+    // Agent:プロパティの保存処理のルート
+    Route::post('/agent/store/property', 'AgentStoreProperty')
+      ->name('agent.store.property');
   });
 }); // End Group Agent Middleware
 
