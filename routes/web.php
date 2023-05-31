@@ -240,4 +240,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/active/property', 'ActiveProperty')
       ->name('active.property');
   });
+
+  // Agent All Route from admin 
+  Route::controller(AdminController::class)->group(function () {
+
+    // Agent:admin画面に登録情報表記するルート
+    Route::get('/all/agent', 'AllAgent')->name('all.agent');
+  });
 }); // End Group Admin Middleware

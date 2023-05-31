@@ -81,24 +81,26 @@
         </a>
       </li>
 
-      <li class="nav-item nav-category">Components</li>
+      <li class="nav-item nav-category">User All Function</li>
       <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#uiComponents" role="button" aria-expanded="false" aria-controls="uiComponents">
           <i class="link-icon" data-feather="feather"></i>
-          <span class="link-title">UI Kit</span>
+          <span class="link-title">Manage Agent </span>
           <i class="link-arrow" data-feather="chevron-down"></i>
         </a>
+
         <div class="collapse" id="uiComponents">
           <ul class="nav sub-menu">
             <li class="nav-item">
-              <a href="pages/ui-components/accordion.html" class="nav-link">Accordion</a>
-            </li>
-            <li class="nav-item">
-              <a href="pages/ui-components/alerts.html" class="nav-link">Alerts</a>
+              <a href="{{ route('all.agent') }}" class="nav-link">All Agent </a>
             </li>
 
+            <li class="nav-item">
+              <a href="pages/ui-components/alerts.html" class="nav-link">Add Agent</a>
+            </li>
           </ul>
         </div>
+
       </li>
       <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#advancedUI" role="button" aria-expanded="false" aria-controls="advancedUI">

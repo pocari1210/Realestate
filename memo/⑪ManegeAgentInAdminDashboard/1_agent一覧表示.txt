@@ -1,0 +1,73 @@
+
+1_agent一覧表示
+
+admin画面で登録しているagentの一覧を表記させる
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+  // Agent All Route from admin 
+  Route::controller(AdminController::class)->group(function () {
+
+    // Agent:admin画面に登録情報表記するルート
+    Route::get('/all/agent', 'AllAgent')->name('all.agent');
+  });
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+      <li class="nav-item nav-category">User All Function</li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#uiComponents" role="button" aria-expanded="false" aria-controls="uiComponents">
+          <i class="link-icon" data-feather="feather"></i>
+          <span class="link-title">Manage Agent </span>
+          <i class="link-arrow" data-feather="chevron-down"></i>
+        </a>
+
+        <div class="collapse" id="uiComponents">
+          <ul class="nav sub-menu">
+            <li class="nav-item">
+              <a href="{{ route('all.agent') }}" class="nav-link">All Agent </a>
+            </li>
+
+            <li class="nav-item">
+              <a href="pages/ui-components/alerts.html" class="nav-link">Add Agent</a>
+            </li>
+          </ul>
+        </div>
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\AdminController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AllAgent()
+  {
+    $allagent = User::where('role', 'agent')->get();
+    return view('backend.agentuser.all_agent', compact('allagent'));
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\agentuser\all_agent.blade.php(新規作成)
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+今までつくってきたallページをベースに作成
