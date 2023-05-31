@@ -96,7 +96,7 @@
             </li>
 
             <li class="nav-item">
-              <a href="pages/ui-components/alerts.html" class="nav-link">Add Agent</a>
+              <a href="{{ route('add.agent') }}" class="nav-link">Add Agent</a>
             </li>
           </ul>
         </div>

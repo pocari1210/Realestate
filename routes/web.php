@@ -246,5 +246,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // Agent:admin画面に登録情報表記するルート
     Route::get('/all/agent', 'AllAgent')->name('all.agent');
+
+    // Agent:agentを追加するルート
+    Route::get('/add/agent', 'AddAgent')
+      ->name('add.agent');
+
+    // Agent:agentを保存するルート
+    Route::post('/store/agent', 'StoreAgent')
+      ->name('store.agent');
   });
 }); // End Group Admin Middleware

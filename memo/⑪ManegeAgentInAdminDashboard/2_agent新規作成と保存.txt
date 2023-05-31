@@ -1,0 +1,85 @@
+
+2_agent新規作成と保存
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // Agent All Route from admin 
+  Route::controller(AdminController::class)->group(function () {
+
+    // Agent:agentを追加するルート
+    Route::get('/add/agent', 'AddAgent')
+    ->name('add.agent');
+
+    // Agent:agentを保存するルート
+    Route::post('/store/agent', 'StoreAgent')
+    ->name('store.agent'); 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\agentuser\all_agent.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+      <a href="{{ route('add.agent') }}" class="btn btn-inverse-info"> Add Agent </a>
+    </ol>
+  </nav>
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\AdminController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AddAgent()
+  {
+    return view('backend.agentuser.add_agent');
+  } // End Method 
+
+  public function StoreAgent(Request $request)
+  {
+
+    User::insert([
+      'name' => $request->name,
+      'email' => $request->email,
+      'phone' => $request->phone,
+      'address' => $request->address,
+      'password' => Hash::make($request->password),
+      'role' => 'agent',
+      'status' => 'active',
+    ]);
+
+    $notification = array(
+      'message' => 'Agent Created Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.agent')->with($notification);
+  } // End Method 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\agentuser\add_agent.blade.php(新規作成)
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+add/typeをベースに作成する
+
+新規作成し、保存ができていればOK
