@@ -190,6 +190,10 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     // Agent:professionalパッケージ保存のルート
     Route::post('/store/professional/plan', 'StoreProfessionalPlan')
       ->name('store.professional.plan');
+
+    // 販売履歴のトップページのルート
+    Route::get('/package/history', 'PackageHistory')
+      ->name('package.history');
   });
 }); // End Group Agent Middleware
 

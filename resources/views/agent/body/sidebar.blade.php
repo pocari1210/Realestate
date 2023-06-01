@@ -40,8 +40,6 @@ $status = $agentId->status;
             <li class="nav-item">
               <a href="{{ route('agent.all.property') }}" class="nav-link">All Property</a>
             </li>
-
-
           </ul>
         </div>
       </li>
@@ -50,6 +48,13 @@ $status = $agentId->status;
         <a href="{{ route('buy.package') }}" class="nav-link">
           <i class="link-icon" data-feather="calendar"></i>
           <span class="link-title">Buy Package</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{ route('package.history') }}" class="nav-link">
+          <i class="link-icon" data-feather="calendar"></i>
+          <span class="link-title">Package History </span>
         </a>
       </li>
 

@@ -1,0 +1,73 @@
+
+1_パッケージ購入履歴:トップページ
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    // 販売履歴のトップページのルート
+    Route::get('/package/history', 'PackageHistory')
+      ->name('package.history');
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\agent\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<li class="nav-item">
+  <a href="{{ route('package.history') }}" class="nav-link">
+    <i class="link-icon" data-feather="calendar"></i>
+    <span class="link-title">Package History </span>
+  </a>
+</li>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Agent\AgentPropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function PackageHistory()
+  {
+    $id = Auth::user()->id;
+    $packagehistory = PackagePlan::where('user_id', $id)->get();
+
+    return view(
+      'agent.package.package_history',
+      compact('packagehistory')
+    );
+  } // End Method 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\agent\package\package_history.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+\resources\views\agent\property\all_property.blade.phpを参考に作成
+
+<tbody>
+  @foreach($packagehistory as $key => $item)
+  <tr>
+    <td>{{ $key+1 }}</td>
+    <td><img src="{{ (!empty($item->user->photo)) ? url('upload/agent_images/'.$item->user->photo) : url('upload/no_image.jpg') }}" style="width:70px; height:40px;"> </td>
+    <td>{{ $item->package_name }}</td>
+    <td>{{ $item->invoice }}</td>
+
+★コード解説★
+リレーションでUserモデルの画像情報を取得している
+

@@ -31,7 +31,7 @@
                 <h6 class="text-end mb-5 pb-4"> </h6>
                 <p class="text-end mb-1">Balance Due</p>
                 <h4 class="text-end fw-normal">$ 50</h4>
-                <h6 class="mb-0 mt-3 text-end fw-normal mb-2"><span class="text-muted"> </span> </h6>
+                <h6 class="mt-3 text-end fw-normal mb-2"><span class="text-muted"> </span> </h6>
 
               </div>
             </div>
