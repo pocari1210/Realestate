@@ -1,0 +1,80 @@
+
+②パッケージ購入のモデルとテーブル作成
+
+下記コマンドでモデルとテーブルファイルを作成
+php artisan make:model PackagePlan -m
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\PackagePlan.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class PackagePlan extends Model
+{
+  use HasFactory;
+
+  protected $guarded = [];
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆テーブルの編集◆
+
+ディレクトリ
+\database\migrations\2023_06_01_122753_create_package_plans_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function up(): void
+  {
+    Schema::create('package_plans', function (Blueprint $table) {
+      $table->id();
+
+      ↓↓追記↓↓
+      $table->integer('user_id');
+      $table->string('package_name')->nullable();
+      $table->string('package_credits')->nullable();
+      $table->string('package_amount')->nullable();
+      ↑↑追記↑↑
+
+      $table->timestamps();
+    });
+  }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Agent\AgentPropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use DB;
+
+  public function AgentStoreProperty(Request $request)
+  {
+
+    // ログインしているユーザーのIDを取得
+    $id = Auth::user()->id;
+    
+    // Userモデルの$idを取得
+    $uid = User::findOrFail($id);
+    $nid = $uid->credit;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆phpMyAdminから新規のテーブルを取得◆
+
+サイドバーのuserテーブルを選択し、ナビゲーションの構造を押す
+カラムを追加するの表記の右隣をstatasの後へを選択し、実行を押す
+
+名前:credit
+タイプ:VARCHAR
+長さ/値:255
+デフォルト値:ユーザー定義: 0
+
+保存するボタンを押す

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Agent;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Property;
@@ -39,6 +40,13 @@ class AgentPropertyController extends Controller
 
   public function AgentStoreProperty(Request $request)
   {
+
+    // ログインしているユーザーのIDを取得
+    $id = Auth::user()->id;
+
+    // Userモデルの$idを取得
+    $uid = User::findOrFail($id);
+    $nid = $uid->credit;
 
     $amen = $request->amenities_id;
     $amenites = implode(",", (array)$amen);
@@ -123,6 +131,10 @@ class AgentPropertyController extends Controller
     }
 
     /// End Facilities  ////
+
+    User::where('id', $id)->update([
+      'credit' => DB::raw('1 + ' . $nid),
+    ]);
 
     $notification = array(
       'message' => 'Property Inserted Successfully',
