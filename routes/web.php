@@ -150,6 +150,14 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     // 複数画像の削除のルート
     Route::get('/agent/property/multiimg/delete/{id}', 'AgentPropertyMultiimgDelete')
       ->name('agent.property.multiimg.delete');
+
+    // 複数画像の追加処理のルート
+    Route::post('/agent/store/new/multiimage', 'AgentStoreNewMultiimage')
+      ->name('agent.store.new.multiimage');
+
+    // 施設の更新処理のルート
+    Route::post('/agent/update/property/facilities', 'AgentUpdatePropertyFacilities')
+      ->name('agent.update.property.facilities');
   });
 }); // End Group Agent Middleware
 

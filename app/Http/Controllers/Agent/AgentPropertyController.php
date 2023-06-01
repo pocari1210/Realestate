@@ -281,4 +281,66 @@ class AgentPropertyController extends Controller
 
     return redirect()->back()->with($notification);
   } // End Method 
+
+  public function AgentStoreNewMultiimage(Request $request)
+  {
+
+    // formからきた画像のid情報を取得
+    $new_multi = $request->imageid;
+    $image = $request->file('multi_img');
+
+    // 画像のファイル名作成
+    $make_name = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+    Image::make($image)->resize(770, 520)->save('upload/property/multi-image/' . $make_name);
+    $uploadPath = 'upload/property/multi-image/' . $make_name;
+
+    // MultiImageテーブルにデータを挿入
+    MultiImage::insert([
+      'property_id' => $new_multi,
+      'photo_name' => $uploadPath,
+      'created_at' => Carbon::now(),
+    ]);
+
+    $notification = array(
+      'message' => 'Property Multi Imageの追加が成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method 
+
+
+  public function AgentUpdatePropertyFacilities(Request $request)
+  {
+
+    $pid = $request->id;
+
+
+    // Nullだった場合、処理を行っているページに戻す
+    if ($request->facility_name == NULL) {
+      return redirect()->back();
+    } else {
+      Facility::where('property_id', $pid)->delete();
+
+      // 施設の登録している件数を取得
+      $facilities = Count($request->facility_name);
+
+      // 施設の追加の処理
+      for ($i = 0; $i < $facilities; $i++) {
+        $fcount = new Facility();
+        $fcount->property_id = $pid;
+        $fcount->facility_name = $request->facility_name[$i];
+        $fcount->distance = $request->distance[$i];
+        $fcount->save();
+      } // end for 
+    }
+
+    $notification = array(
+      'message' => 'Property Facilityの更新が成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method 
+
 }
