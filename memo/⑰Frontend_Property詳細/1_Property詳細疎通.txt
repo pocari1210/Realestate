@@ -1,0 +1,81 @@
+
+1_Property詳細疎通
+
+下記コマンドでコントローラー作成
+php artisan make:controller Frontend/IndexController
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// Frontend Property Details All Route 
+
+// Frontend:propertyの詳細のルート
+ Route::get('/property/details/{id}/{slug}', [IndexController::class, 'PropertyDetails']); 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\home\feature.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <ul class="more-details clearfix">
+    <li><i class="icon-14"></i>{{ $item->bedrooms }} Beds</li>
+    <li><i class="icon-15"></i>{{ $item->bathrooms }} Baths</li>
+    <li><i class="icon-16"></i>{{ $item->property_size }} Sq Ft</li>
+  </ul>
+
+  ↓↓追記↓↓
+  <div class="btn-box"><a href="{{ url('property/details/'.$item->id.'/'.$item->property_slug) }}" class="theme-btn btn-two">See Details</a></div>
+  ↑↑追記↑↑
+</div>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Frontend\IndexController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Property;
+use App\Models\MultiImage;
+use App\Models\Facility;
+use App\Models\Amenities;
+use App\Models\PropertyType;
+use App\Models\User;
+use App\Models\PackagePlan;
+
+class IndexController extends Controller
+{
+    public function PropertyDetails($id, $slug)
+    {
+        return view('frontend.property.property_details');
+    } // End Method 
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\frontend\home\feature.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+@extends('frontend.frontend_dashboard')
+@section('main')
+
+
+@endsection

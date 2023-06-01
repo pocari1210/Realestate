@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\PropertyTypeController;
 use App\Http\Controllers\Backend\PropertyController;
 use App\Http\Controllers\Agent\AgentPropertyController;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Controllers\Frontend\IndexController;
 
 /*
 |--------------------------------------------------------------------------
@@ -200,6 +201,11 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
       ->name('agent.package.invoice');
   });
 }); // End Group Agent Middleware
+
+// Frontend Property Details All Route 
+
+// Frontend:propertyの詳細のルート
+Route::get('/property/details/{id}/{slug}', [IndexController::class, 'PropertyDetails']);
 
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])->name('agent.login')
   ->middleware(RedirectIfAuthenticated::class);
