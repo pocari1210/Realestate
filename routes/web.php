@@ -158,6 +158,14 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     // 施設の更新処理のルート
     Route::post('/agent/update/property/facilities', 'AgentUpdatePropertyFacilities')
       ->name('agent.update.property.facilities');
+
+    // Agent:プロパティの詳細のルート
+    Route::get('/agent/details/property/{id}', 'AgentDetailsProperty')
+      ->name('agent.details.property');
+
+    // Agent:プロパティの削除のルート
+    Route::get('/agent/delete/property/{id}', 'AgentDeleteProperty')
+      ->name('agent.delete.property');
   });
 }); // End Group Agent Middleware
 

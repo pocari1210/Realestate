@@ -1,0 +1,113 @@
+
+5_agent_propaty:詳細と削除
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Route::controller(AgentPropertyController::class)->group(function () {
+
+    // Agent:プロパティの詳細のルート
+    Route::get('/agent/details/property/{id}', 'AgentDetailsProperty')
+      ->name('agent.details.property');
+
+    // Agent:プロパティの削除のルート
+    Route::get('/agent/delete/property/{id}', 'AgentDeleteProperty')
+      ->name('agent.delete.property');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\agent\property\all_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<a href="{{ route('agent.details.property',$item->id) }}" class="btn btn-inverse-info" title="Details"> <i data-feather="eye"></i> </a>
+
+<a href="{{ route('agent.delete.property',$item->id) }}" class="btn btn-inverse-danger" id="delete" title="Delete"> <i data-feather="trash-2"></i> </a>
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Agent\AgentPropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AgentDetailsProperty($id)
+  {
+
+    $facilities = Facility::where('property_id', $id)->get();
+    $property = Property::findOrFail($id);
+
+    $type = $property->amenities_id;
+    $property_ami = explode(',', $type);
+
+    $multiImage = MultiImage::where('property_id', $id)->get();
+
+    $propertytype = PropertyType::latest()->get();
+    $amenities = Amenities::latest()->get();
+
+    return view(
+      'agent.property.details_property',
+      compact(
+        'property',
+        'propertytype',
+        'amenities',
+        'property_ami',
+        'multiImage',
+        'facilities'
+      )
+    );
+  } // End Method 
+
+  public function AgentDeleteProperty($id)
+  {
+
+    $property = Property::findOrFail($id);
+    unlink($property->property_thambnail);
+
+    Property::findOrFail($id)->delete();
+
+    $image = MultiImage::where('property_id', $id)->get();
+
+    // フォルダに保存している画像とテーブル内の画像を削除
+    foreach ($image as $img) {
+      unlink($img->photo_name);
+      MultiImage::where('property_id', $id)->delete();
+    }
+
+    $facilitiesData = Facility::where('property_id', $id)->get();
+    foreach ($facilitiesData as $item) {
+      $item->facility_name;
+      Facility::where('property_id', $id)->delete();
+    }
+
+    $notification = array(
+      'message' => 'Propertyの削除が成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method  
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\agent\property\details_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+\resources\views\backend\property\details_property.blade.phpをベースに
+ファイルを作成
