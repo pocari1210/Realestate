@@ -194,6 +194,10 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     // 販売履歴のトップページのルート
     Route::get('/package/history', 'PackageHistory')
       ->name('package.history');
+
+    // 請求書ODF化処理のルート
+    Route::get('/agent/package/invoice/{id}', 'AgentPackageInvoice')
+      ->name('agent.package.invoice');
   });
 }); // End Group Agent Middleware
 

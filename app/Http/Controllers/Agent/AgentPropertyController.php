@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Agent;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -522,6 +523,25 @@ class AgentPropertyController extends Controller
       'agent.package.package_history',
       compact('packagehistory')
     );
+  } // End Method 
+
+  public function AgentPackageInvoice($id)
+  {
+    $packagehistory = PackagePlan::where('id', $id)->first();
+
+    // Pdf::loadViewでPDFに出力したい内容をHTMLで記述することができる
+    $pdf = Pdf::loadView(
+      'agent.package.package_history_invoice',
+      compact('packagehistory')
+
+      // setPaperメソッドでサイズをA4にしている
+    )->setPaper('a4')->setOption([
+      'tempDir' => public_path(),
+      'chroot' => public_path(),
+    ]);
+
+    // ダウンロードした際のPDFのファイル名を指定
+    return $pdf->download('invoice.pdf');
   } // End Method 
 
 }

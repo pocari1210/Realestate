@@ -1,0 +1,90 @@
+
+2_請求書をPDF化
+
+◆ライブラリ導入◆
+
+公式ページ
+https://github.com/barryvdh/laravel-dompdf
+
+ダウンロードコマンド
+composer require barryvdh/laravel-dompdf
+
+php artisan vendor:publish --provider="Barryvdh\DomPDF\ServiceProvider"
+⇒\config\dompdf.phpファイル生成
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    // 請求書ODF化処理のルート
+    Route::get('/agent/package/invoice/{id}', 'AgentPackageInvoice')
+      ->name('agent.package.invoice');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\agent\package\package_history.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+@foreach($packagehistory as $key => $item)
+<tr>
+  <td>{{ $key+1 }}</td>
+  <td><img src="{{ (!empty($item->user->photo)) ? url('upload/agent_images/'.$item->user->photo) : url('upload/no_image.jpg') }}" style="width:70px; height:40px;"> </td>
+  <td>{{ $item->package_name }}</td>
+  <td>{{ $item->invoice }}</td>
+  <td>{{ $item->package_amount }}</td>
+  <td>{{ $item->created_at->format('l d M Y') }}</td>
+  <td>
+
+      ↓追加↓
+      <a href="{{ route('agent.package.invoice',$item->id) }}" class="btn btn-inverse-warning" title="Download"> <i data-feather="download"></i> </a>
+      ↑追加↑
+  </td>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Agent\AgentPropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use Barryvdh\DomPDF\Facade\Pdf;
+
+  public function AgentPackageInvoice($id)
+  {
+    $packagehistory = PackagePlan::where('id', $id)->first();
+
+    // Pdf::loadViewでPDFに出力したい内容をHTMLで記述することができる
+    $pdf = Pdf::loadView(
+      'agent.package.package_history_invoice',
+      compact('packagehistory')
+
+      // setPaperメソッドでサイズをA4にしている
+    )->setPaper('a4')->setOption([
+      'tempDir' => public_path(),
+      'chroot' => public_path(),
+    ]);
+
+    return $pdf->download('invoice.pdf');
+  } // End Method 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\agent\package\package_history_invoice.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+PDFが生成されたらOK
