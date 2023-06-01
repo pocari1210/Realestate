@@ -190,7 +190,7 @@
                     <label class="form-label">Property Amenities </label>
                     <select name="amenities_id[]" class="js-example-basic-multiple form-select" multiple="multiple" data-width="100%">
                       @foreach($amenities as $ameni)
-                      <option value="{{ $ameni->id }}">{{ $ameni->amenitis_name }}</option>
+                      <option value="{{ $ameni->amenitis_name }}">{{ $ameni->amenitis_name }}</option>
                       @endforeach
                     </select>
                   </div>

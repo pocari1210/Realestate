@@ -164,11 +164,9 @@
                   <div class="mb-3">
                     <label class="form-label">Property Amenities </label>
                     <select name="amenities_id[]" class="js-example-basic-multiple form-select" multiple="multiple" data-width="100%">
-
                       @foreach($amenities as $ameni)
-                      <option value="{{ $ameni->id }}" {{ (in_array($ameni->id,$property_ami)) ? 'selected' : '' }}>{{ $ameni->amenitis_name }}</option>
+                      <option value="{{ $ameni->amenitis_name }}" {{ (in_array($ameni->amenitis_name,$property_ami)) ? 'selected' : '' }}>{{ $ameni->amenitis_name }}</option>
                       @endforeach
-
                     </select>
                   </div>
                 </div><!-- Col -->
@@ -183,10 +181,7 @@
                     </select>
                   </div>
                 </div><!-- Col -->
-
-
               </div><!-- Row -->
-
 
               <div class="col-sm-12">
                 <div class="mb-3">
@@ -198,19 +193,15 @@
                 </div>
               </div><!-- Col -->
 
-
-
               <div class="col-sm-12">
                 <div class="mb-3">
                   <label class="form-label">Long Description</label>
 
                   <textarea name="long_descp" class="form-control" name="tinymce" id="tinymceExample" rows="10">
-           {!! $property->long_descp !!} 
-                </textarea>
-
+                    {!! $property->long_descp !!} 
+                  </textarea>
                 </div>
               </div><!-- Col -->
-
 
               <hr>
 
@@ -222,7 +213,6 @@
                   </label>
                 </div>
 
-
                 <div class="form-check form-check-inline">
                   <input type="checkbox" name="hot" value="1" class="form-check-input" id="checkInline" {{ $property->hot == '1' ? 'checked' : '' }}>
                   <label class="form-check-label" for="checkInline">
@@ -230,16 +220,8 @@
                   </label>
                 </div>
 
-
               </div>
-
-
-
-
-
               <button type="submit" class="btn btn-primary">Save Changes </button>
-
-
             </form>
 
           </div>
