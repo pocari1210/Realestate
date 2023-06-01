@@ -1,3 +1,15 @@
+
+1_Frontend_Feature
+
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\home\feature.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
 <!--Propertyテーブルのstatusが1且つfeaturedが1のものを3件取得  -->
 @php
 $property = App\Models\Property::where('status','1')->where('featured','1')->limit(3)->get();

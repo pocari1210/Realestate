@@ -1,5 +1,5 @@
 
-1_frontend_Property
+1_frontend_Frontend_Feature
 
 ◆ビューの編集(遷移元)◆
 
@@ -9,22 +9,3 @@ C:\xampp\htdocs\Realestate\cms\resources\views\frontend\home\category.blade.php
 ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
 
 
-@php
-$ptype = App\Models\PropertyType::latest()->limit(5)->get();
-@endphp
-
-        @foreach($ptype as $item)
-
-        @php
-        $property = App\Models\Property::where('ptype_id',$item->id)->get();
-        @endphp
-        <li>
-          <div class="category-block-one">
-            <div class="inner-box">
-              <div class="icon-box"><i class="{{ $item->type_icon }}"></i></div>
-              <h5><a href="property-details.html">{{ $item->type_name }}</a></h5>
-              <span>{{ count($property) }}</span>
-            </div>
-          </div>
-        </li>
-        @endforeach
