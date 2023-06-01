@@ -1,0 +1,59 @@
+
+①Agent_パッケージ購入_Index
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // Agent:パッケージ購入
+  Route::controller(AgentPropertyController::class)->group(function () {
+
+    // Agent:パッケージ購入のトップページのルート
+    Route::get('/buy/package', 'BuyPackage')
+      ->name('buy.package');
+  });
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\agent\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<li class="nav-item">
+  <a href="{{ route('buy.package') }}" class="nav-link">
+    <i class="link-icon" data-feather="calendar"></i>
+    <span class="link-title">Buy Package</span>
+  </a>
+</li>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Agent\AgentPropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function BuyPackage()
+  {
+    return view('agent.package.buy_package');
+  } // End Method  
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\agent\package\buy_package.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Main/pages/general/pricing.htmlをベースに作成する
