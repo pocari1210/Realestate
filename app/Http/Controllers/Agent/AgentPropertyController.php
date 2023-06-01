@@ -471,4 +471,46 @@ class AgentPropertyController extends Controller
     return redirect()->route('agent.all.property')->with($notification);
   } // End Method 
 
+  public function BuyProfessionalPlan()
+  {
+
+    $id = Auth::user()->id;
+    $data = User::find($id);
+
+    return view(
+      'agent.package.professional_plan',
+      compact('data')
+    );
+  } // End Method  
+
+
+  public function StoreProfessionalPlan(Request $request)
+  {
+
+    $id = Auth::user()->id;
+    $uid = User::findOrFail($id);
+    $nid = $uid->credit;
+
+    PackagePlan::insert([
+
+      'user_id' => $id,
+      'package_name' => 'Professional',
+      'package_credits' => '10',
+      'invoice' => 'ERS' . mt_rand(10000000, 99999999),
+      'package_amount' => '50',
+      'created_at' => Carbon::now(),
+    ]);
+
+    User::where('id', $id)->update([
+      'credit' => DB::raw('10 + ' . $nid),
+    ]);
+
+    $notification = array(
+      'message' => 'Professional Packageの購入が成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('agent.all.property')->with($notification);
+  } // End Method 
+
 }

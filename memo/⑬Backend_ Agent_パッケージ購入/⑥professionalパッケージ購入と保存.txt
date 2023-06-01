@@ -1,0 +1,82 @@
+
+⑥professionalパッケージ購入と保存
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    // Agent:professionalパッケージ購入のルート
+    Route::get('/buy/professional/plan', 'BuyProfessionalPlan')
+      ->name('buy.professional.plan');
+
+    // Agent:professionalパッケージ保存のルート
+    Route::post('/store/professional/plan', 'StoreProfessionalPlan')
+      ->name('store.professional.plan');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\agent\package\buy_package.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<a href="{{ route('buy.professional.plan') }}" class="btn btn-primary mt-4">Start Now </a>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Agent\AgentPropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function BuyProfessionalPlan()
+  {
+
+    $id = Auth::user()->id;
+    $data = User::find($id);
+
+    return view(
+      'agent.package.professional_plan',
+      compact('data')
+    );
+  } // End Method  
+
+
+  public function StoreProfessionalPlan(Request $request)
+  {
+
+    $id = Auth::user()->id;
+    $uid = User::findOrFail($id);
+    $nid = $uid->credit;
+
+    PackagePlan::insert([
+
+      'user_id' => $id,
+      'package_name' => 'Professional',
+      'package_credits' => '10',
+      'invoice' => 'ERS' . mt_rand(10000000, 99999999),
+      'package_amount' => '50',
+      'created_at' => Carbon::now(),
+    ]);
+
+    User::where('id', $id)->update([
+      'credit' => DB::raw('10 + ' . $nid),
+    ]);
+
+    $notification = array(
+      'message' => 'Professional Packageの購入が成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('agent.all.property')->with($notification);
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////

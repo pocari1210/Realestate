@@ -182,6 +182,14 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     // Agent:パッケージ保存のルート
     Route::post('/store/business/plan', 'StoreBusinessPlan')
       ->name('store.business.plan');
+
+    // Agent:professionalパッケージ購入のルート
+    Route::get('/buy/professional/plan', 'BuyProfessionalPlan')
+      ->name('buy.professional.plan');
+
+    // Agent:professionalパッケージ保存のルート
+    Route::post('/store/professional/plan', 'StoreProfessionalPlan')
+      ->name('store.professional.plan');
   });
 }); // End Group Agent Middleware
 
