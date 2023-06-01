@@ -21,8 +21,9 @@ return new class extends Migration
             $table->string('photo')->nullable(); //追記
             $table->string('phone')->nullable(); //追記
             $table->text('address')->nullable(); //追記
-            $table->enum('role',['admin','agent','user'])->default('user'); //追記
-            $table->enum('status',['active','inactive'])->default('active'); //追記
+            $table->integer('credit')->default(0); //追記
+            $table->enum('role', ['admin', 'agent', 'user'])->default('user'); //追記
+            $table->enum('status', ['active', 'inactive'])->default('active'); //追記
             $table->rememberToken();
             $table->timestamps();
         });

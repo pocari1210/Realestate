@@ -178,6 +178,10 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     // Agent:パッケージ購入のルート
     Route::get('/buy/business/plan', 'BuyBusinessPlan')
       ->name('buy.business.plan');
+
+    // Agent:パッケージ保存のルート
+    Route::post('/store/business/plan', 'StoreBusinessPlan')
+      ->name('store.business.plan');
   });
 }); // End Group Agent Middleware
 

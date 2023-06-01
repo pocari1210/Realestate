@@ -1,0 +1,72 @@
+
+④パッケージ購入_保存処理
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    // Agent:パッケージ保存のルート
+    Route::post('/store/business/plan', 'StoreBusinessPlan')
+      ->name('store.business.plan');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\agent\package\business_plan.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+フォーマットを調整
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Agent\AgentPropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    public function BuyBusinessPlan(){
+
+        $id = Auth::user()->id;
+        $data = User::find($id);
+        return view('agent.package.business_plan',compact('data'));
+
+    }// End Method  
+
+
+  public function StoreBusinessPlan(Request $request)
+  {
+    $id = Auth::user()->id;
+    $uid = User::findOrFail($id);
+    $nid = $uid->credit;
+
+    PackagePlan::insert([
+      'user_id' => $id,
+      'package_name' => 'Business',
+      'package_credits' => '3',
+      // mt_randで第一引数と第二引数の間の乱数を取得
+      'invoice' => 'ERS' . mt_rand(10000000, 99999999),
+      'package_amount' => '20',
+      'created_at' => Carbon::now(),
+    ]);
+
+    User::where('id', $id)->update([
+      'credit' => DB::raw('3 + ' . $nid),
+    ]);
+
+    $notification = array(
+      'message' => 'パッケージの購入に成功しました',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('agent.all.property')->with($notification);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
