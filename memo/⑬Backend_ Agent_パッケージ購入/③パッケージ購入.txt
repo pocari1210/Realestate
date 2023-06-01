@@ -1,0 +1,74 @@
+
+③パッケージ購入
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    // Agent:パッケージ購入のルート
+    Route::get('/buy/business/plan', 'BuyBusinessPlan')
+      ->name('buy.business.plan');
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\agent\package\buy_package.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<div class="d-grid">
+  <a href="{{ route('buy.business.plan') }}" class="btn btn-success mt-4">Start Now </a>
+</div>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Agent\AgentPropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AgentAddProperty()
+  {
+
+    $id = Auth::user()->id;
+    $property = User::where('role', 'agent')->where('id', $id)->first();
+    $pcount = $property->credit;
+    // dd($pcount);
+
+    if ($pcount == 1) {
+      return redirect()->route('buy.package');
+    } else {
+
+      return view(
+        'agent.property.add_property',
+        compact(
+          'propertytype',
+          'amenities'
+        )
+      );
+    }
+
+  public function BuyBusinessPlan()
+  {
+    $id = Auth::user()->id;
+    return view('agent.package.business_plan', compact('id'));
+  } // End Method  
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\agent\package\buy_package.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+/Main/pages/general/invoice.htmlを元に
+作成する

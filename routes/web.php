@@ -174,6 +174,10 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     // Agent:パッケージ購入のトップページのルート
     Route::get('/buy/package', 'BuyPackage')
       ->name('buy.package');
+
+    // Agent:パッケージ購入のルート
+    Route::get('/buy/business/plan', 'BuyBusinessPlan')
+      ->name('buy.business.plan');
   });
 }); // End Group Agent Middleware
 
