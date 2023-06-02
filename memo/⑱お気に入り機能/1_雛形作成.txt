@@ -53,12 +53,17 @@ class Wishlist extends Model
 
   <h4>${{ $item->lowest_price }}</h4>
 </div>
-<ul class="other-option pull-right clearfix">
-  <li><a href="property-details.html"><i class="icon-12"></i></a></li>
 
-  ↓追記↓
-  <li><a aria-label="Add To Wishlist" class="action-btn" id="{{ $item->id }}" onclick="addToWishList(this.id)">
-  ↑追記↑
+
+  
+<ul class="other-option pull-right clearfix">
+   <li><a href="property-details.html"><i class="icon-12"></i></a></li>
+
+    ↓追記↓
+    <li><a aria-label="Add To Wishlist" class="action-btn" id="{{ $item->id }}" onclick="addToWishList(this.id)">
+      <i class="icon-13"></i>
+    </a> </li>              
+    ↑追記↑
 
 </ul>
 

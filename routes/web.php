@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\PropertyController;
 use App\Http\Controllers\Agent\AgentPropertyController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Controllers\Frontend\IndexController;
+use App\Http\Controllers\Frontend\WishlistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +55,12 @@ Route::middleware('auth')->group(function () {
   // パスワード更新のルート
   Route::post('/user/password/update', [UserController::class, 'UserPasswordUpdate'])
     ->name('user.password.update');
+
+  // User WishlistAll Route 
+  Route::controller(WishlistController::class)->group(function () {
+
+    Route::get('/user/wishlist', 'UserWishlist')->name('user.wishlist');
+  });
 });
 
 require __DIR__ . '/auth.php';
@@ -206,6 +213,9 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
 
 // Frontend:propertyの詳細のルート
 Route::get('/property/details/{id}/{slug}', [IndexController::class, 'PropertyDetails']);
+
+// お気に入り登録のルート
+Route::post('/add-to-wishList/{property_id}', [WishlistController::class, 'AddToWishList']);
 
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])->name('agent.login')
   ->middleware(RedirectIfAuthenticated::class);

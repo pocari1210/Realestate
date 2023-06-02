@@ -123,6 +123,9 @@
     @endif
   </script>
 
+  <!-- SweetAlert2ライブラリ -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
   <!-- お気に入り機能追加のJS -->
   <script type="text/javascript">
     // $.ajaxSetup内で、ajaxの初期共通設定を行う
@@ -135,7 +138,50 @@
     })
 
     // Add To Wishlist 
-    function addToWishList(property_id) {}
+    function addToWishList(property_id) {
+      $.ajax({
+        // Post通信を行う
+        type: "POST",
+
+        // JSON データを転送するための ajax リクエスト
+        dataType: 'json',
+
+        // Post先のURL
+        url: "/add-to-wishList/" + property_id,
+
+        success: function(data) {
+
+          // Start Message 
+
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+
+            showConfirmButton: false,
+            timer: 3000
+          })
+          if ($.isEmptyObject(data.error)) {
+
+            Toast.fire({
+              type: 'success',
+              icon: 'success',
+              title: data.success,
+            })
+
+          } else {
+
+            Toast.fire({
+              type: 'error',
+              icon: 'error',
+              title: data.error,
+            })
+          }
+
+          // End Message  
+
+        }
+      })
+    }
   </script>
 
 </body><!-- End of .page_wrapper -->
