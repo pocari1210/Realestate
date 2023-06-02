@@ -1,0 +1,106 @@
+
+①雛形作成
+
+下記コマンドでモデルとテーブル作成
+php artisan make:model Wishlist -m
+
+下記コマンドでコンロトーラー作成
+php artisan make:controller Frontend/WishlistController
+
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\Wishlist.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class Wishlist extends Model
+{
+    use HasFactory;
+
+    ↓追記↓
+    protected $guarded = [];
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\database\migrations\2023_06_02_125547_create_wishlists_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function up(): void
+  {
+    Schema::create('wishlists', function (Blueprint $table) {
+      $table->id();
+      $table->unsignedBigInteger('user_id');
+      $table->unsignedBigInteger('property_id');
+      $table->timestamps();
+    });
+  }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\home\feature.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <h4>${{ $item->lowest_price }}</h4>
+</div>
+<ul class="other-option pull-right clearfix">
+  <li><a href="property-details.html"><i class="icon-12"></i></a></li>
+
+  ↓追記↓
+  <li><a aria-label="Add To Wishlist" class="action-btn" id="{{ $item->id }}" onclick="addToWishList(this.id)">
+  ↑追記↑
+
+</ul>
+
+★コード解説★
+
+クリックをすると
+frontend_dashboard.blade.php(テンプレートファイル)に記載の
+addToWishListメソッドがよばれ、ajaxでPOST通信が行われる
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆テンプレートファイルの編集◆
+
+ディレクトリ
+\resources\views\frontend\frontend_dashboard.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <!-- お気に入り機能:メタデータ取得 -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
+  <!-- お気に入り機能追加 -->
+  <script type="text/javascript">
+    $.ajaxSetup({
+      headers: {
+
+	// headerに記載したmetaタグのname情報と紐づけている
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    })
+
+    // Add To Wishlist 
+    function addToWishList(property_id) {}
+  </script>
+
+★コード解説★
+
+AjaxでPOST送信するとき
+LaravelではCSRFトークンというものを追加する必要がある
+⇒記述がないと419エラーが出る
+
+metaタグのcontent="{{ csrf_token() }}は.attr('content')と紐づく
+
+/////////////////////////////////////////////////////////////////////////////////////////////////

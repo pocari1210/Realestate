@@ -11,6 +11,9 @@
   <!-- Fav Icon -->
   <link rel="icon" href="{{ asset('frontend/assets/images/favicon.ico') }}" type="image/x-icon">
 
+  <!-- お気に入り機能:メタデータ取得 -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
@@ -118,6 +121,21 @@
         break;
     }
     @endif
+  </script>
+
+  <!-- お気に入り機能追加のJS -->
+  <script type="text/javascript">
+    // $.ajaxSetup内で、ajaxの初期共通設定を行う
+    $.ajaxSetup({
+      headers: {
+
+        // headerに記載したmetaタグのname情報と紐づけている
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    })
+
+    // Add To Wishlist 
+    function addToWishList(property_id) {}
   </script>
 
 </body><!-- End of .page_wrapper -->
