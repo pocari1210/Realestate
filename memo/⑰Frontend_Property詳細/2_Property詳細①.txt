@@ -1,0 +1,68 @@
+
+2_Property詳細
+
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Frontend\IndexController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+	public function PropertyDetails($id, $slug)
+	{
+		$property = Property::findOrFail($id);
+		$multiImage = MultiImage::where('property_id', $id)->get();
+
+		$amenities = $property->amenities_id;
+		$property_amen = explode(',', $amenities);
+		$facility = Facility::where('property_id', $id)->get();
+
+		return view(
+			'frontend.property.property_details',
+			compact(
+				'property',
+				'multiImage',
+				'property_amen',
+				'facility'
+			)
+		);
+	} // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆テンプレートファイル編集◆
+
+map scriptを追加
+
+ディレクトリ
+\resources\views\frontend\frontend_dashboard.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <!-- map script -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-CE0deH3Jhj6GN4YvdCFZS7DpbXexzGU"></script>
+  <script src="{{ asset('frontend/assets/js/gmaps.js') }}"></script>
+  <script src="{{ asset('frontend/assets/js/map-helper.js') }}"></script>
+
+★コード解説★
+
+main.jsの上に記述をする
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\frontend\home\feature.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+@extends('frontend.frontend_dashboard')
+@section('main')
+
+~~~中身を記載~~~~
+
+@endsection
