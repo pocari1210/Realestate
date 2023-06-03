@@ -1,0 +1,133 @@
+
+3_プロパティ比較取得
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // User Compare All Route 
+  Route::controller(CompareController::class)->group(function () {
+
+    // プロパティ比較取得処理のルート
+    Route::get('/get-compare-property', 'GetCompareProperty');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\Compare.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function property()
+  {
+    return $this->belongsTo(Property::class, 'property_id', 'id');
+  }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\frontend_dashboard.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <script type="text/javascript">
+    function compare() {
+      $.ajax({
+        type: "GET",
+        dataType: 'json',
+        url: "/get-compare-property/",
+
+        success: function(response) {
+
+          var rows = ""
+          $.each(response, function(key, value) {
+            rows +=
+              `<tr>
+                <th>Property Info</th>
+                <th?>
+                  <figure class="image-box"><img src="/${value.property.property_thambnail}" alt=""></figure>
+                  <div class="title">${value.property.property_name}</div>
+                  <div class="price">$${value.property.lowest_price}</div>
+                </th>
+              </tr>    
+            
+              <tr>
+                <td>
+                  <p>City</p>
+                </td>
+                <td>
+                  <p>${value.property.city}</p>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <p>Area</p>
+                </td>
+                <td>
+                  <p>${value.property.property_size} Sq Ft</p>
+                </td>
+              </tr>
+            
+              <tr>
+                <td>
+                  <p>Rooms</p>
+                </td>
+                <td>
+                  <p>${value.property.bedrooms}</p>
+                </td>
+              </tr>
+              
+              <tr>
+                <td>
+                    <p>Bathrooms</p>
+                </td>
+                <td>
+                    <p>${value.property.bathrooms}</p>
+                </td>
+              </tr>`
+          });
+          $('#compare').html(rows);
+        }
+      })
+    }
+    compare();
+  </script>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Frontend\CompareController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function GetCompareProperty()
+  {
+    $compare = Compare::with('property')
+      ->where('user_id', Auth::id())->latest()->get();
+
+    return response()->json($compare);
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\frontend\dashboard\compare.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<tbody id="compare">
+
+</tbody>

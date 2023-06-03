@@ -74,6 +74,9 @@ Route::middleware('auth')->group(function () {
   Route::controller(CompareController::class)->group(function () {
     // プロパティ比較のルート
     Route::get('/user/compare', 'UserCompare')->name('user.compare');
+
+    // プロパティ比較取得処理のルート
+    Route::get('/get-compare-property', 'GetCompareProperty');
   });
 });
 
