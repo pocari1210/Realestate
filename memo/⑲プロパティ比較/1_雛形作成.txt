@@ -1,0 +1,168 @@
+
+1_雛形作成
+
+下記コマンドでコントローラー作成
+php artisan make:controller Frontend/CompareController
+
+下記コマンドでモデルとテーブル作成
+php artisan make:model Compare -m
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Route::middleware('auth')->group(function () {
+
+  // User Compare All Route 
+  Route::controller(CompareController::class)->group(function () {
+    // プロパティ比較のルート
+    Route::get('/user/compare', 'UserCompare')->name('user.compare');
+  });
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\Compare.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class Compare extends Model
+{
+  use HasFactory;
+
+  protected $guarded = [];
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆テーブルの編集◆
+
+ディレクトリ
+\database\migrations\2023_06_04_045914_create_compares_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function up(): void
+  {
+    Schema::create('compares', function (Blueprint $table) {
+      $table->id();
+      $table->unsignedBigInteger('user_id');
+      $table->unsignedBigInteger('property_id');
+      $table->timestamps();
+    });
+  }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\home\feature.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<ul class="other-option pull-right clearfix">
+  <li>
+    <a aria-label="Compare" class="action-btn" id="{{ $item->id }}" onclick="addToCompare(this.id)">
+      <i class="icon-12"></i>
+    </a>
+  </li>
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Frontend\CompareController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\User;
+use App\Models\Compare;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+
+  public function AddToCompare(Request $request, $property_id)
+  {
+
+    if (Auth::check()) {
+
+      $exists = Compare::where('user_id', Auth::id())->where('property_id', $property_id)->first();
+
+      if (!$exists) {
+        Compare::insert([
+          'user_id' => Auth::id(),
+          'property_id' => $property_id,
+          'created_at' => Carbon::now()
+        ]);
+        return response()->json(['success' => 'Successfully Added On Your Compare']);
+      } else {
+        return response()->json(['error' => 'This Property Has Already in your CompareList']);
+      }
+    } else {
+      return response()->json(['error' => 'At First Login Your Account']);
+    }
+  } // End Method 
+
+★コード解説★
+
+お気に入りリストで作成した時のコードをベースに記述
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆テンプレートファイル編集◆
+
+ディレクトリ
+\resources\views\frontend\frontend_dashboard.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <!-- /// Add to Carepage  -->
+  <script type="text/javascript">
+    function addToCompare(property_id) {
+      $.ajax({
+        type: "POST",
+        dataType: 'json',
+        url: "/add-to-compare/" + property_id,
+        success: function(data) {
+
+          // Start Message 
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+
+            showConfirmButton: false,
+            timer: 3000
+          })
+          if ($.isEmptyObject(data.error)) {
+
+            Toast.fire({
+              type: 'success',
+              icon: 'success',
+              title: data.success,
+            })
+          } else {
+
+            Toast.fire({
+              type: 'error',
+              icon: 'error',
+              title: data.error,
+            })
+          }
+          // End Message  
+        }
+      })
+    }
+  </script>
+
+★コード解説★
+
+お気に入りリストで作成した時のコードをベースに記述

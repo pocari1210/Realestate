@@ -68,6 +68,12 @@ Route::middleware('auth')->group(function () {
     // お気に入り削除処理のルート
     Route::get('/wishlist-remove/{id}', 'WishlistRemove');
   });
+
+  // User Compare All Route 
+  Route::controller(CompareController::class)->group(function () {
+    // プロパティ比較のルート
+    Route::get('/user/compare', 'UserCompare')->name('user.compare');
+  });
 });
 
 require __DIR__ . '/auth.php';
