@@ -1,0 +1,57 @@
+
+2_プロパティの比較疎通
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Route::middleware('auth')->group(function () {
+
+  // User Compare All Route 
+  Route::controller(CompareController::class)->group(function () {
+    // プロパティ比較のルート
+    Route::get('/user/compare', 'UserCompare')->name('user.compare');
+  });
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\dashboard\dashboard_sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<li>
+<a href="{{ route('user.compare') }}">
+<i class="fa fa-list-alt" aria-hidden="true"></i> 
+Compare </a>
+</li>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Frontend\CompareController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function UserCompare()
+  {
+    return view('frontend.dashboard.compare');
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\frontend\dashboard\compare.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Compare Propertiesのページに遷移されたらOK

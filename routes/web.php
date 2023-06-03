@@ -11,6 +11,7 @@ use App\Http\Controllers\Agent\AgentPropertyController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\WishlistController;
+use App\Http\Controllers\Frontend\CompareController;
 
 /*
 |--------------------------------------------------------------------------
@@ -229,6 +230,9 @@ Route::get('/property/details/{id}/{slug}', [IndexController::class, 'PropertyDe
 
 // お気に入り登録のルート
 Route::post('/add-to-wishList/{property_id}', [WishlistController::class, 'AddToWishList']);
+
+// プロパティの比較のルート
+Route::post('/add-to-compare/{property_id}', [CompareController::class, 'AddToCompare']);
 
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])->name('agent.login')
   ->middleware(RedirectIfAuthenticated::class);
