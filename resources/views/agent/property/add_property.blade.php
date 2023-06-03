@@ -234,7 +234,7 @@
                 <div class="mb-3">
                   <label class="form-label">Long Description</label>
 
-                  <textarea name="long_descp" class="form-control" name="tinymce" id="tinymceExample" rows="10"></textarea>
+                  <textarea name="long_descp" class="form-control" name="" id="t" rows="10"></textarea>
 
                 </div>
               </div><!-- Col -->

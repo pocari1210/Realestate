@@ -144,13 +144,6 @@
   <!-- tinymce -->
   <script src="{{ asset('backend/assets/vendors/tinymce/tinymce.min.js') }}"></script>
   <script src="{{ asset('backend/assets/js/tinymce.js') }}"></script>
-
-  <script>
-    tinymce.init({
-      selector: "#foo",
-      language: "ja", // 言語 = 日本語
-    });
-  </script>
   <!-- tinymce -->
 
   <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>

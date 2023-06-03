@@ -66,7 +66,7 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
 ★コード解説★
 adminとagentの権限でログインした際の、ルートのグループを作成
 
-adminでagentのダッシュボードを開こうとしたら、
+adminでagentのダッシュボードに遷移しようとしたら、
 dashboardにリダイレクトされたらOK
 
 

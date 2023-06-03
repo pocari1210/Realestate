@@ -23,11 +23,11 @@
 
 ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
 
-Route::middleware(['auth', 'roles:admin'])->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
 
-  // dashboardからログアウトするルート
-  Route::get('/admin/logout', [AdminController::class, 'AdminLogout'])
-    ->name('admin.logout');
+  // プロフィールのルート
+  Route::get('/admin/profile', [AdminController::class, 'AdminProfile'])
+    ->name('admin.profile');
 
 //////////////////////////////////////////////////////////////////////////////
 

@@ -102,6 +102,8 @@ addToWishListメソッドがよばれ、ajaxでPOST通信が行われる
 
 ★コード解説★
 
+headerに付与する場合は、X-CSRF-TOKENと記載する
+
 AjaxでPOST送信するとき
 LaravelではCSRFトークンというものを追加する必要がある
 ⇒記述がないと419エラーが出る

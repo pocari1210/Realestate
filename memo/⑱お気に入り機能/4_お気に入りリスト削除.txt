@@ -1,0 +1,102 @@
+
+4_お気に入りリスト削除
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // User WishlistAll Route 
+  Route::controller(WishlistController::class)->group(function () {
+
+    // お気に入り削除処理のルート
+    Route::get('/wishlist-remove/{id}', 'WishlistRemove');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集◆
+
+ディレクトリ
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<div class="other-info-box clearfix">
+    <ul class="other-option pull-right clearfix">
+
+      ↓↓追記↓↓
+      <li><a type="submit" class="text-body" id="${value.id}" onclick="wishlistRemove(this.id)" ><i class="fa fa-trash"></i></a></li>
+      ↑↑追記↑↑
+
+    </ul>
+</div>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Frontend\WishlistController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function WishlistRemove($id)
+  {
+    Wishlist::where('user_id', Auth::id())
+      ->where('id', $id)->delete();
+
+    return response()->json([
+      'success' => 'Successfully Property Remove'
+    ]);
+  } // End Method 
+
+    // ★Wishlist Remove Start ★
+
+    function wishlistRemove(id) {
+      $.ajax({
+        type: "GET",
+        dataType: 'json',
+        url: "/wishlist-remove/" + id,
+
+        success: function(data) {
+
+　　　　　//直下に書くことでリアルタイムで削除される
+          wishlist();
+
+          // Start Message 
+
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+
+            showConfirmButton: false,
+            timer: 3000
+          })
+          if ($.isEmptyObject(data.error)) {
+
+            Toast.fire({
+              type: 'success',
+              icon: 'success',
+              title: data.success,
+            })
+
+          } else {
+
+            Toast.fire({
+              type: 'error',
+              icon: 'error',
+              title: data.error,
+            })
+          }
+
+          // End Message  
+
+        }
+      })
+    }
+    /// End Wishlist Remove 
+  </script>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////

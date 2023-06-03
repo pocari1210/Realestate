@@ -1,7 +1,6 @@
 @extends('frontend.frontend_dashboard')
 @section('main')
 
-
 <!--Page Title-->
 <section class="page-title-two bg-color-1 centred">
   <div class="pattern-layer">
@@ -19,7 +18,6 @@
   </div>
 </section>
 <!--End Page Title-->
-
 
 <!-- property-page-section -->
 <section class="property-page-section property-list">
@@ -51,7 +49,6 @@
             <div class="widget-title">
             </div>
             @include('frontend.dashboard.dashboard_sidebar')
-
           </div>
         </div>
       </div>
@@ -61,36 +58,9 @@
           <div class="wrapper list">
             <div class="deals-list-content list-item">
 
-              <div class="deals-block-one">
-                <div class="inner-box">
-                  <div class="image-box">
-                    <figure class="image"><img src="assets/images/resource/deals-3.jpg" alt=""></figure>
-                    <div class="batch"><i class="icon-11"></i></div>
-                    <span class="category">Featured</span>
-                    <div class="buy-btn"><a href="property-details.html">For Buy</a></div>
-                  </div>
-                  <div class="lower-content">
-                    <div class="title-text">
-                      <h4><a href="property-details.html">Villa on Grand Avenue</a></h4>
-                    </div>
-                    <div class="price-box clearfix">
-                      <div class="price-info pull-left">
-                        <h6>Start From</h6>
-                        <h4>$30,000.00</h4>
-                      </div>
-                    </div>
-                    <ul class="more-details clearfix">
-                      <li><i class="icon-14"></i>3 Beds</li>
-                      <li><i class="icon-15"></i>2 Baths</li>
-                      <li><i class="icon-16"></i>600 Sq Ft</li>
-                    </ul>
-                    <div class="other-info-box clearfix">
-                      <ul class="other-option pull-right clearfix">
-                        <li><a href="property-details.html"><i class="icon-13"></i></a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
+              <!-- start load Wishlist Dataのメソッドを使用 -->
+              <div id="wishlist">
+
               </div>
             </div>
           </div>

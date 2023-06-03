@@ -62,4 +62,31 @@ class WishlistController extends Controller
       compact('userData')
     );
   } // End Method 
+
+  public function GetWishlistProperty()
+  {
+
+    // withメソッドでリレーション先のPropertyを取得
+    // ※Wishlist.phpで作成したメソッドがwithの中に入る
+    $wishlist = Wishlist::with('property')->where('user_id', Auth::id())
+      ->latest()->get();
+
+    // wishlistの件数を取得している
+    $wishQty = wishlist::count();
+
+    return response()->json([
+      'wishlist' => $wishlist,
+      'wishQty' => $wishQty
+    ]);
+  } // End Method 
+
+  public function WishlistRemove($id)
+  {
+    Wishlist::where('user_id', Auth::id())
+      ->where('id', $id)->delete();
+
+    return response()->json([
+      'success' => 'Successfully Property Remove'
+    ]);
+  } // End Method 
 }

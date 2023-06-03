@@ -1,0 +1,154 @@
+
+3_お気に入りリスト登録処理
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // User WishlistAll Route 
+  Route::controller(WishlistController::class)->group(function () {
+
+    // 
+    Route::get('/get-wishlist-property', 'GetWishlistProperty');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\Wishlist.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function property()
+  {
+    return $this->belongsTo(Property::class, 'property_id', 'id');
+  }
+
+★コード解説★
+
+Propertyモデルとidを紐づけている(リレーション)
+
+//////////////////////////////////////////////////////////////////////////
+
+◆テンプレートファイル◆
+
+ディレクトリ
+\resources\views\frontend\frontend_dashboard.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+        コントローラーに記載したreturn response()と紐づく
+        success: function(response) {
+
+          $('#wishQty').text(response.wishQty);
+
+          var rows = ""
+          $.each(response.wishlist, function(key, value) {
+
+            rows += `<div class="deals-block-one">
+        <div class="inner-box">
+            <div class="image-box">
+
+		//foreachのvalueを表示している
+                //propertyテーブルのproperty_thambnailカラムを表示
+                <figure class="image">
+		   <img src="/${value.property.property_thambnail}" alt="">
+                </figure>
+                <div class="batch"><i class="icon-11"></i></div>
+                <span class="category">Featured</span>
+                <div class="buy-btn"><a href="#">For ${value.property.property_status}</a></div>
+            </div>
+            <div class="lower-content">
+                <div class="title-text"><h4><a href="">${value.property.property_name}</a></h4></div>
+                <div class="price-box clearfix">
+                    <div class="price-info pull-left">
+                        <h6>Start From</h6>
+                        <h4>$${value.property.lowest_price}</h4>
+                    </div>
+                  
+                </div>
+              
+                <ul class="more-details clearfix">
+                    <li><i class="icon-14"></i>${value.property.bedrooms} Beds</li>
+                    <li><i class="icon-15"></i>${value.property.bathrooms} Baths</li>
+                    <li><i class="icon-16"></i>${value.property.property_size} Sq Ft</li>
+                </ul>
+                <div class="other-info-box clearfix">
+                    <ul class="other-option pull-right clearfix">
+                      <li><a type="submit" class="text-body" id="${value.id}" onclick="wishlistRemove(this.id)" ><i class="fa fa-trash"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div> `
+          });
+
+          $('#wishlist').html(rows);
+        }
+      })
+    }
+
+    wishlist();
+
+★コード解説★
+ $.each(response.wishlist, function(key, value)
+⇒URL確認 https://www.sejuku.net/blog/33609
+
+$('#wishlist').html(rows);のコードで保存処理をおこなっている
+
+wishlist();のコードで
+\resources\views\frontend\dashboard\wishlist.blade.phpのファイルに、
+データを表示させている
+
+↓↓ここにrowsに追加されたものが表示される
+<!-- start load Wishlist Dataのメソッドを使用 -->
+<div id="wishlist">
+
+</div>
+
+${value.id}は、response.wishlistのvalue(お気に入りリストに追加したid)
+をさす
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Frontend\WishlistController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function GetWishlistProperty()
+  {
+
+    // withメソッドでリレーション先のPropertyを取得
+    // ※Wishlist.phpで作成したメソッドがwithの中に入る
+    $wishlist = Wishlist::with('property')->where('user_id', Auth::id())
+      ->latest()->get();
+
+    // wishlistの件数を取得している
+    $wishQty = wishlist::count();
+
+    //JSON形式で
+    return response()->json([
+      'wishlist' => $wishlist,
+      'wishQty' => $wishQty
+    ]);
+  } // End Method 
+
+
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////

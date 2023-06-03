@@ -59,7 +59,14 @@ Route::middleware('auth')->group(function () {
   // User WishlistAll Route 
   Route::controller(WishlistController::class)->group(function () {
 
+    // お気に入りリストページのルート
     Route::get('/user/wishlist', 'UserWishlist')->name('user.wishlist');
+
+    // お気に入り取得処理のルート
+    Route::get('/get-wishlist-property', 'GetWishlistProperty');
+
+    // お気に入り削除処理のルート
+    Route::get('/wishlist-remove/{id}', 'WishlistRemove');
   });
 });
 
