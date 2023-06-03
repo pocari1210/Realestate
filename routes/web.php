@@ -77,6 +77,9 @@ Route::middleware('auth')->group(function () {
 
     // プロパティ比較取得処理のルート
     Route::get('/get-compare-property', 'GetCompareProperty');
+
+    // プロパティ比較削除処理のルート
+    Route::get('/compare-remove/{id}', 'CompareRemove');
   });
 });
 
