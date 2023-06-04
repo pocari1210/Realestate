@@ -1,6 +1,7 @@
 @extends('frontend.frontend_dashboard')
 @section('main')
 
+
 <!--Page Title-->
 <section class="page-title-two bg-color-1 centred">
   <div class="pattern-layer">
@@ -19,6 +20,7 @@
 </section>
 <!--End Page Title-->
 
+
 <!-- property-details -->
 <section class="property-details property-details-one">
   <div class="auto-container">
@@ -36,6 +38,8 @@
             <h6>{{ $property->user->name }}</h6>
 
             @endif
+
+
 
           </div>
           <ul class="rating clearfix pull-left">
@@ -135,6 +139,7 @@
             </div>
             <div class="inner-box">
 
+
               <div class="single-item">
                 <div class="icon-box"><i class="fas fa-book-reader"></i></div>
                 <div class="inner">
@@ -156,6 +161,9 @@
                   @endforeach
                 </div>
               </div>
+
+
+
 
             </div>
           </div>
@@ -224,7 +232,7 @@
             <div class="author-box">
 
               @if($property->agent_id == Null)
-              <figure class="author-thumb"><img src="{{ url('upload/ariyan.jpg') }}" alt=""></figure>
+              <figure class="author-thumb"><img src="{{ url('upload/nologin.jpg') }}" alt=""></figure>
               <div class="inner">
                 <h4>Admin </h4>
                 <ul class="info clearfix">
@@ -250,15 +258,32 @@
             </div>
 
             <div class="form-inner">
-              <form action="property-details.html" method="post" class="default-form">
+              @auth
+
+              @php
+              $id = Auth::user()->id;
+              $userData = App\Models\User::find($id);
+              @endphp
+
+              <form action="{{ route('property.message') }}" method="post" class="default-form">
+                @csrf
+
+                <input type="hidden" name="property_id" value="{{ $property->id }}">
+
+                @if($property->agent_id == Null)
+                <input type="hidden" name="agent_id" value="">
+                @else
+                <input type="hidden" name="agent_id" value="{{ $property->agent_id }}">
+                @endif
+
                 <div class="form-group">
-                  <input type="text" name="name" placeholder="Your name" required="">
+                  <input type="text" name="msg_name" placeholder="Your name" value="{{ $userData->name }}">
                 </div>
                 <div class="form-group">
-                  <input type="email" name="email" placeholder="Your Email" required="">
+                  <input type="email" name="msg_email" placeholder="Your Email" value="{{ $userData->email }}">
                 </div>
                 <div class="form-group">
-                  <input type="text" name="phone" placeholder="Phone" required="">
+                  <input type="text" name="msg_phone" placeholder="Phone" value="{{ $userData->phone }}">
                 </div>
                 <div class="form-group">
                   <textarea name="message" placeholder="Message"></textarea>
@@ -267,8 +292,41 @@
                   <button type="submit" class="theme-btn btn-one">Send Message</button>
                 </div>
               </form>
+
+              @else
+
+              <form action="{{ route('property.message') }}" method="post" class="default-form">
+                @csrf
+
+                <input type="hidden" name="property_id" value="{{ $property->id }}">
+
+                @if($property->agent_id == Null)
+                <input type="hidden" name="agent_id" value="">
+
+                @else
+                <input type="hidden" name="agent_id" value="{{ $property->agent_id }}">
+                @endif
+
+                <div class="form-group">
+                  <input type="text" name="msg_name" placeholder="Your name" required="">
+                </div>
+                <div class="form-group">
+                  <input type="email" name="msg_email" placeholder="Your Email" required="">
+                </div>
+                <div class="form-group">
+                  <input type="text" name="msg_phone" placeholder="Phone" required="">
+                </div>
+                <div class="form-group">
+                  <textarea name="message" placeholder="Message"></textarea>
+                </div>
+                <div class="form-group message-btn">
+                  <button type="submit" class="theme-btn btn-one">Send Message</button>
+                </div>
+              </form>
+              @endauth
             </div>
           </div>
+
           <div class="calculator-widget sidebar-widget">
             <div class="calculate-inner">
               <div class="widget-title">
@@ -328,12 +386,9 @@
                 <div class="author-info clearfix">
                   <div class="author pull-left">
                     @if($item->agent_id == Null)
-
-                    <figure class="author-thumb"><img src="{{ url('upload/avatar-1.png') }}" alt=""></figure>
+                    <figure class="author-thumb"><img src="{{ url('upload/ariyan.jpg') }}" alt=""></figure>
                     <h6>Admin </h6>
-
                     @else
-
                     <figure class="author-thumb"><img src="{{ (!empty($item->user->photo)) ? url('upload/agent_images/'.$item->user->photo) : url('upload/no_image.jpg') }}" alt=""></figure>
                     <h6>{{ $item->user->name }}</h6>
                     @endif
@@ -371,6 +426,7 @@
   </div>
 </section>
 <!-- property-details end -->
+
 <!-- subscribe-section -->
 <section class="subscribe-section bg-color-3">
   <div class="pattern-layer" style="background-image: url({{ asset('frontend/assets/images/shape/shape-2.png') }});"></div>

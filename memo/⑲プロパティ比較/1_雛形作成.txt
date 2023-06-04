@@ -5,7 +5,7 @@
 php artisan make:controller Frontend/CompareController
 
 下記コマンドでモデルとテーブル作成
-php artisan make:model Compare -m
+php artisan make:model PropertyMessage -m
 
 ◆ルートの編集◆
 

@@ -1,0 +1,191 @@
+
+1_詳細ページからメッセージ送信
+
+下記コマンドでモデルとテーブル作成
+php artisan make:model PropertyMessage -m
+
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\PropertyMessage.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class PropertyMessage extends Model
+{
+  use HasFactory;
+
+  protected $guarded = [];
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆テーブルの編集◆
+
+ディレクトリ
+\database\migrations\2023_06_04_083322_create_property_messages_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function up(): void
+  {
+    Schema::create('property_messages', function (Blueprint $table) {
+      $table->id();
+      $table->integer('user_id')->nullable();
+      $table->string('agent_id')->nullable();
+      $table->integer('property_id')->nullable();
+      $table->string('msg_name')->nullable();
+      $table->string('msg_email')->nullable();
+      $table->string('msg_phone')->nullable();
+      $table->text('message')->nullable();
+      $table->timestamps();
+    });
+  }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// Send Message from Property Details Page 
+Route::post('/property/message', [IndexController::class, 'PropertyMessage'])
+  ->name('property.message');
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Frontend\IndexController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+	public function PropertyMessage(Request $request)
+	{
+
+		$pid = $request->property_id;
+		$aid = $request->agent_id;
+
+		if (Auth::check()) {
+
+			PropertyMessage::insert([
+
+				'user_id' => Auth::user()->id,
+				'agent_id' => $aid,
+				'property_id' => $pid,
+				'msg_name' => $request->msg_name,
+				'msg_email' => $request->msg_email,
+				'msg_phone' => $request->msg_phone,
+				'message' => $request->message,
+				'created_at' => Carbon::now(),
+
+			]);
+
+			$notification = array(
+				'message' => 'Send Message Successfully',
+				'alert-type' => 'success'
+			);
+
+			return redirect()->back()->with($notification);
+		} else {
+
+			$notification = array(
+				'message' => 'Plz Login Your Account First',
+				'alert-type' => 'error'
+			);
+
+			return redirect()->back()->with($notification);
+		}
+	} // End Method 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集◆
+
+ディレクトリ
+\resources\views\frontend\property\property_details.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+            <div class="form-inner">
+              @auth
+
+              @php
+              $id = Auth::user()->id;
+              $userData = App\Models\User::find($id);
+              @endphp
+
+              <form action="{{ route('property.message') }}" method="post" class="default-form">
+                @csrf
+
+                <input type="hidden" name="property_id" value="{{ $property->id }}">
+
+                @if($property->agent_id == Null)
+                <input type="hidden" name="agent_id" value="">
+
+                @else
+                <input type="hidden" name="agent_id" value="{{ $property->agent_id }}">
+                @endif
+
+                <div class="form-group">
+                  <input type="text" name="msg_name" placeholder="Your name" value="{{ $userData->name }}">
+                </div>
+                <div class="form-group">
+                  <input type="email" name="msg_email" placeholder="Your Email" value="{{ $userData->email }}">
+                </div>
+                <div class="form-group">
+                  <input type="text" name="msg_phone" placeholder="Phone" value="{{ $userData->phone }}">
+                </div>
+                <div class="form-group">
+                  <textarea name="message" placeholder="Message"></textarea>
+                </div>
+                <div class="form-group message-btn">
+                  <button type="submit" class="theme-btn btn-one">Send Message</button>
+                </div>
+              </form>
+
+              @else
+
+              <form action="{{ route('property.message') }}" method="post" class="default-form">
+                @csrf
+
+                <input type="hidden" name="property_id" value="{{ $property->id }}">
+
+                @if($property->agent_id == Null)
+                <input type="hidden" name="agent_id" value="">
+
+                @else
+                <input type="hidden" name="agent_id" value="{{ $property->agent_id }}">
+                @endif
+
+                <div class="form-group">
+                  <input type="text" name="msg_name" placeholder="Your name" required="">
+                </div>
+                <div class="form-group">
+                  <input type="email" name="msg_email" placeholder="Your Email" required="">
+                </div>
+                <div class="form-group">
+                  <input type="text" name="msg_phone" placeholder="Phone" required="">
+                </div>
+                <div class="form-group">
+                  <textarea name="message" placeholder="Message"></textarea>
+                </div>
+                <div class="form-group message-btn">
+                  <button type="submit" class="theme-btn btn-one">Send Message</button>
+                </div>
+              </form>
+              @endauth
+            </div>
+          </div>
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+formに入力し、データベースに内容が登録されていたらOK
