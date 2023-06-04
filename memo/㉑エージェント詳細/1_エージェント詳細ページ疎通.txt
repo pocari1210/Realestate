@@ -1,0 +1,54 @@
+
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+// エージェント詳細のルート
+Route::get('/agent/details/{id}', [IndexController::class, 'AgentDetails'])
+  ->name('agent.details');
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Frontend\IndexController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+	public function AgentDetails($id)
+	{
+	  $agent = User::findOrFail($id);
+          $property = Property::where('agent_id', $id)->get();
+          $featured = Property::where('featured','1')->limit(3)->get();
+
+        return view('frontend.agent.agent_details',compact('agent','property','featured'));
+	} // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\frontend\agent\agent_details.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+エージェントの詳細ページのひな形をひょうじできればOK

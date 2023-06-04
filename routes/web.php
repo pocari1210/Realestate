@@ -252,6 +252,10 @@ Route::post('/add-to-compare/{property_id}', [CompareController::class, 'AddToCo
 Route::post('/property/message', [IndexController::class, 'PropertyMessage'])
   ->name('property.message');
 
+// エージェント詳細のルート
+Route::get('/agent/details/{id}', [IndexController::class, 'AgentDetails'])
+  ->name('agent.details');
+
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])->name('agent.login')
   ->middleware(RedirectIfAuthenticated::class);
 
