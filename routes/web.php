@@ -198,6 +198,10 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     // Agent:メッセージのルート
     Route::get('/agent/property/message/', 'AgentPropertyMessage')
       ->name('agent.property.message');
+
+    // Agent:メッセージ詳細のルート
+    Route::get('/agent/message/details/{id}', 'AgentMessageDetails')
+      ->name('agent.message.details');
   });
 
   // Agent:パッケージ購入

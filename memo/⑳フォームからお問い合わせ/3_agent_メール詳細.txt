@@ -1,0 +1,66 @@
+
+3_agent_メール詳細
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// ★agent権限でログインした場合のルートグループ2★
+Route::middleware(['auth', 'role:agent'])->group(function () {
+
+  // Agent All Property  
+  Route::controller(AgentPropertyController::class)->group(function () {
+
+    // Agent:メッセージ詳細のルート
+    Route::get('/agent/message/details/{id}', 'AgentMessageDetails')
+      ->name('agent.message.details');
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\agent\message\all_message.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<!-- email list item -->
+@foreach($usermsg as $msg)
+<div class="email-list-item">
+
+  <a href="{{ route('agent.message.details',$msg->id) }}" class="email-list-detail">
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Agent\AgentPropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AgentMessageDetails($id)
+  {
+    $uid = Auth::user()->id;
+    $usermsg = PropertyMessage::where('agent_id', $uid)->get();
+
+    $msgdetails = PropertyMessage::findOrFail($id);
+
+    return view(
+      'agent.message.message_details',
+      compact('usermsg', 'msgdetails')
+    );
+  } // End Method
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\agent\message\message_details.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
