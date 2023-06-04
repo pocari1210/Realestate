@@ -1,0 +1,67 @@
+
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// エージェント詳細からお問い合わせのルート
+Route::post('/agent/details/message', [IndexController::class, 'AgentDetailsMessage'])
+  ->name('agent.details.message');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Frontend\IndexController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+	public function AgentDetailsMessage(Request $request)
+	{
+
+		$aid = $request->agent_id;
+
+		if (Auth::check()) {
+
+			PropertyMessage::insert([
+				'user_id' => Auth::user()->id,
+				'agent_id' => $aid,
+				'msg_name' => $request->msg_name,
+				'msg_email' => $request->msg_email,
+				'msg_phone' => $request->msg_phone,
+				'message' => $request->message,
+				'created_at' => Carbon::now(),
+			]);
+
+			$notification = array(
+				'message' => 'お問い合わせ完了しました',
+				'alert-type' => 'success'
+			);
+
+			return redirect()->back()->with($notification);
+		} else {
+
+			$notification = array(
+				'message' => 'ログインしてください',
+				'alert-type' => 'error'
+			);
+
+			return redirect()->back()->with($notification);
+		}
+	} // End Method 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\agent\agent_details.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・

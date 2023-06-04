@@ -256,6 +256,10 @@ Route::post('/property/message', [IndexController::class, 'PropertyMessage'])
 Route::get('/agent/details/{id}', [IndexController::class, 'AgentDetails'])
   ->name('agent.details');
 
+// エージェント詳細からお問い合わせのルート
+Route::post('/agent/details/message', [IndexController::class, 'AgentDetailsMessage'])
+  ->name('agent.details.message');
+
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])->name('agent.login')
   ->middleware(RedirectIfAuthenticated::class);
 

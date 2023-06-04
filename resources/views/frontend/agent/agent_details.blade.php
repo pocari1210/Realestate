@@ -143,26 +143,59 @@
         <div class="default-sidebar agent-sidebar">
           <div class="agents-contact sidebar-widget">
             <div class="widget-title">
-              <h5>Contact To Michael</h5>
+              <h5>Contact To {{ $agent->name }}</h5>
             </div>
             <div class="form-inner">
-              <form action="contact.html" method="post" class="default-form">
+              @auth
+
+              @php
+              $id = Auth::user()->id;
+              $userData = App\Models\User::find($id);
+              @endphp
+
+              <form action="{{ route('agent.details.message') }}" method="post" class="default-form">
+                @csrf
+
+                <input type="hidden" name="agent_id" value="{{ $agent->id }}">
+
                 <div class="form-group">
-                  <input type="text" name="name" placeholder="Your Name" required="">
+                  <input type="text" name="msg_name" placeholder="Your name" value="{{ $userData->name }}">
                 </div>
                 <div class="form-group">
-                  <input type="email" name="email" placeholder="Email Address" required="">
+                  <input type="email" name="msg_email" placeholder="Your Email" value="{{ $userData->email }}">
                 </div>
                 <div class="form-group">
-                  <input type="tel" name="phone" placeholder="Phone" required="">
+                  <input type="text" name="msg_phone" placeholder="Phone" value="{{ $userData->phone }}">
                 </div>
                 <div class="form-group">
-                  <textarea name="message" placeholder="Your Message"></textarea>
+                  <textarea name="message" placeholder="Message"></textarea>
                 </div>
-                <div class="form-group">
+                <div class="form-group message-btn">
                   <button type="submit" class="theme-btn btn-one">Send Message</button>
                 </div>
               </form>
+              @else
+              <form action="{{ route('agent.details.message') }}" method="post" class="default-form">
+                @csrf
+                <input type="hidden" name="agent_id" value="{{ $agent->id }}">
+
+                <div class="form-group">
+                  <input type="text" name="msg_name" placeholder="Your name" required="">
+                </div>
+                <div class="form-group">
+                  <input type="email" name="msg_email" placeholder="Your Email" required="">
+                </div>
+                <div class="form-group">
+                  <input type="text" name="msg_phone" placeholder="Phone" required="">
+                </div>
+                <div class="form-group">
+                  <textarea name="message" placeholder="Message"></textarea>
+                </div>
+                <div class="form-group message-btn">
+                  <button type="submit" class="theme-btn btn-one">Send Message</button>
+                </div>
+              </form>
+              @endauth
             </div>
           </div>
           <div class="category-widget sidebar-widget">
@@ -206,9 +239,6 @@
               </div>
               @endforeach
 
-
-
-
             </div>
           </div>
         </div>
@@ -221,7 +251,7 @@
 
 <!-- subscribe-section -->
 <section class="subscribe-section bg-color-3">
-  <div class="pattern-layer" style="background-image: url(assets/images/shape/shape-2.png);"></div>
+  <div class="pattern-layer" style="background-image:url({{ asset('assets/images/shape/shape-2.png') }});"></div>
   <div class="auto-container">
     <div class="row clearfix">
       <div class="col-lg-6 col-md-6 col-sm-12 text-column">
