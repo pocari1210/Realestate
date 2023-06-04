@@ -231,7 +231,7 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     Route::get('/package/history', 'PackageHistory')
       ->name('package.history');
 
-    // 請求書ODF化処理のルート
+    // 請求書PDF化処理のルート
     Route::get('/agent/package/invoice/{id}', 'AgentPackageInvoice')
       ->name('agent.package.invoice');
   });
@@ -379,6 +379,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // property:アクティブのルート
     Route::post('/active/property', 'ActiveProperty')
       ->name('active.property');
+
+    // admin:メッセージのルート
+    Route::get('/admin/property/message/', 'AdminPropertyMessage')
+      ->name('admin.property.message');
   });
 
   // Agent All Route from admin 

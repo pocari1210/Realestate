@@ -20,7 +20,7 @@ php artisan vendor:publish --provider="Barryvdh\DomPDF\ServiceProvider"
 ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
 
     // 請求書ODF化処理のルート
-    Route::get('/agent/package/invoice/{id}', 'AgentPackageInvoice')
+    Route::get('/agent/package/invoice/{id}', 'PackageInvoice')
       ->name('agent.package.invoice');
 
 
@@ -59,7 +59,7 @@ php artisan vendor:publish --provider="Barryvdh\DomPDF\ServiceProvider"
 
 use Barryvdh\DomPDF\Facade\Pdf;
 
-  public function AgentPackageInvoice($id)
+  public function PackageInvoice($id)
   {
     $packagehistory = PackagePlan::where('id', $id)->first();
 

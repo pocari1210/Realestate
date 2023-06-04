@@ -63,7 +63,7 @@
       <td align="right">
         <pre class="font">
               Testshop Head Offices
-              Email:support@easylearningbd.com <br>
+              Email:test@housemanage.com <br>
               Mob: 1245454545 <br>
               Dhaka 1207,Dhanmondi:#4 <br>
         </pre>

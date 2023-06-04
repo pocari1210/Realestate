@@ -85,6 +85,13 @@
         </a>
       </li>
 
+      <li class="nav-item">
+        <a href="{{ route('admin.property.message') }}" class="nav-link">
+          <i class="link-icon" data-feather="calendar"></i>
+          <span class="link-title">Property Message</span>
+        </a>
+      </li>
+
       <li class="nav-item nav-category">User All Function</li>
       <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#uiComponents" role="button" aria-expanded="false" aria-controls="uiComponents">
@@ -100,9 +107,9 @@
             <li class="nav-item">
               <a href="pages/ui-components/alerts.html" class="nav-link">Add Agent</a>
             </li>
-
           </ul>
         </div>
+
       </li>
       <li class="nav-item">
         <a class="nav-link" data-bs-toggle="collapse" href="#advancedUI" role="button" aria-expanded="false" aria-controls="advancedUI">

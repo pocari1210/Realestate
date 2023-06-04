@@ -10,6 +10,7 @@ use App\Models\Facility;
 use App\Models\Amenities;
 use App\Models\PropertyType;
 use App\Models\User;
+use App\Models\PropertyMessage;
 use Intervention\Image\Facades\Image;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Carbon\Carbon;
@@ -460,5 +461,15 @@ class PropertyController extends Controller
 
     return redirect()->route('all.property')->with($notification);
   } // End Method 
+
+  public function AdminPropertyMessage()
+  {
+    $usermsg = PropertyMessage::latest()->get();
+
+    return view(
+      'backend.message.all_message',
+      compact('usermsg')
+    );
+  } // End Method  
 
 }

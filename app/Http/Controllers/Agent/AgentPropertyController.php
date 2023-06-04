@@ -526,7 +526,7 @@ class AgentPropertyController extends Controller
     );
   } // End Method 
 
-  public function AgentPackageInvoice($id)
+  public function PackageInvoice($id)
   {
     $packagehistory = PackagePlan::where('id', $id)->first();
 
