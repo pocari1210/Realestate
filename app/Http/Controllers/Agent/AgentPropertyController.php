@@ -13,6 +13,7 @@ use App\Models\Amenities;
 use App\Models\PropertyType;
 use App\Models\User;
 use App\Models\PackagePlan;
+use App\Models\PropertyMessage;
 use Intervention\Image\Facades\Image;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Carbon\Carbon;
@@ -543,5 +544,16 @@ class AgentPropertyController extends Controller
     // ダウンロードした際のPDFのファイル名を指定
     return $pdf->download('invoice.pdf');
   } // End Method 
+
+  public function AgentPropertyMessage()
+  {
+    $id = Auth::user()->id;
+    $usermsg = PropertyMessage::where('agent_id', $id)->get();
+
+    return view(
+      'agent.message.all_message',
+      compact('usermsg')
+    );
+  } // End Method  
 
 }

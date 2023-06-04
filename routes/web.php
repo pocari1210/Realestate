@@ -194,6 +194,10 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     // Agent:プロパティの削除のルート
     Route::get('/agent/delete/property/{id}', 'AgentDeleteProperty')
       ->name('agent.delete.property');
+
+    // Agent:メッセージのルート
+    Route::get('/agent/property/message/', 'AgentPropertyMessage')
+      ->name('agent.property.message');
   });
 
   // Agent:パッケージ購入
