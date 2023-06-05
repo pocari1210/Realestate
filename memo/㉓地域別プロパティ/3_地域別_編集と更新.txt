@@ -1,0 +1,98 @@
+
+3_地域別_編集と更新
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // State  All Route 
+  Route::controller(StateController::class)->group(function () {
+
+    Route::get('/edit/state/{id}', 'EditState')
+      ->name('edit.state');
+
+    Route::post('/update/state', 'UpdateState')
+      ->name('update.state');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\state\all_state.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<td>
+  <a href="{{ route('edit.state',$item->id) }}" class="btn btn-inverse-warning"> Edit </a>
+  <a href="{{ route('delete.type',$item->id) }}" class="btn btn-inverse-danger" id="delete">
+</td>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\StateController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+	public function EditState($id)
+	{
+
+		$state = State::findOrFail($id);
+		return view('backend.state.edit_state', compact('state'));
+	} // End Method 
+
+
+	public function UpdateState(Request $request)
+	{
+
+		$state_id = $request->id;
+
+		if ($request->file('state_image')) {
+			$image = $request->file('state_image');
+			$name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+			Image::make($image)->resize(370, 275)->save('upload/state/' . $name_gen);
+			$save_url = 'upload/state/' . $name_gen;
+
+			State::findOrFail($state_id)->update([
+				'state_name' => $request->state_name,
+				'state_image' => $save_url,
+			]);
+
+			$notification = array(
+				'message' => '画像の更新に成功しました',
+				'alert-type' => 'success'
+			);
+
+			return redirect()->route('all.state')->with($notification);
+		} else {
+
+			State::findOrFail($state_id)->update([
+				'state_name' => $request->state_name,
+			]);
+
+			$notification = array(
+				'message' => 'State Updated without Image Successfully',
+				'alert-type' => 'success'
+			);
+
+			return redirect()->route('all.state')->with($notification);
+		}
+	} // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\state\all_state.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+編集をし、更新をされていたらOK

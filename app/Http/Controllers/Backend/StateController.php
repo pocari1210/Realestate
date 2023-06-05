@@ -46,4 +46,49 @@ class StateController extends Controller
 
 		return redirect()->route('all.state')->with($notification);
 	} // End Method 
+
+	public function EditState($id)
+	{
+
+		$state = State::findOrFail($id);
+		return view('backend.state.edit_state', compact('state'));
+	} // End Method 
+
+
+	public function UpdateState(Request $request)
+	{
+
+		$state_id = $request->id;
+
+		if ($request->file('state_image')) {
+			$image = $request->file('state_image');
+			$name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+			Image::make($image)->resize(370, 275)->save('upload/state/' . $name_gen);
+			$save_url = 'upload/state/' . $name_gen;
+
+			State::findOrFail($state_id)->update([
+				'state_name' => $request->state_name,
+				'state_image' => $save_url,
+			]);
+
+			$notification = array(
+				'message' => '画像の更新に成功しました',
+				'alert-type' => 'success'
+			);
+
+			return redirect()->route('all.state')->with($notification);
+		} else {
+
+			State::findOrFail($state_id)->update([
+				'state_name' => $request->state_name,
+			]);
+
+			$notification = array(
+				'message' => 'State Updated without Image Successfully',
+				'alert-type' => 'success'
+			);
+
+			return redirect()->route('all.state')->with($notification);
+		}
+	} // End Method 
 }

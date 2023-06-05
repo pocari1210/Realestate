@@ -32,8 +32,12 @@
                   <td>{{ $item->state_name }}</td>
                   <td><img src="{{ asset($item->state_image) }}" style="width:70px;height: 40px;"> </td>
                   <td>
-                    <a href="{{ route('edit.type',$item->id) }}" class="btn btn-inverse-warning"> Edit </a>
-                    <a href="{{ route('delete.type',$item->id) }}" class="btn btn-inverse-danger" id="delete"> Delete </a>
+                    <a href="{{ route('edit.state',$item->id) }}" class="btn btn-inverse-warning">
+                      <i data-feather="edit"></i>
+                    </a>
+                    <a href="{{ route('delete.type',$item->id) }}" class="btn btn-inverse-danger" id="delete">
+                      <i data-feather="trash-2"></i>
+                    </a>
                   </td>
                 </tr>
                 @endforeach
