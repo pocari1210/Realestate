@@ -260,6 +260,15 @@ Route::get('/agent/details/{id}', [IndexController::class, 'AgentDetails'])
 Route::post('/agent/details/message', [IndexController::class, 'AgentDetailsMessage'])
   ->name('agent.details.message');
 
+// 賃貸リスト表示のルート
+Route::get('/rent/property', [IndexController::class, 'RentProperty'])
+  ->name('rent.property');
+
+// 購入リストの表示のルート
+Route::get('/buy/property', [IndexController::class, 'BuyProperty'])
+  ->name('buy.property');
+
+
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])->name('agent.login')
   ->middleware(RedirectIfAuthenticated::class);
 

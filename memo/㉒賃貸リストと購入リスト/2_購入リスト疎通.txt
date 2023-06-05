@@ -1,0 +1,69 @@
+
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// 購入リストの表示のルート
+Route::get('/buy/property', [IndexController::class, 'BuyProperty'])
+  ->name('buy.property');
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\property\rent_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<div class="category-widget sidebar-widget">
+  <div class="widget-title">
+    <h5>Status Of Property</h5>
+  </div>
+  <ul class="category-list clearfix">
+
+    ↓↓追加↓↓
+    <li><a href="{{ route('rent.property') }}">For Rent <span>(200)</span></a></li>
+    <li><a href="{{ route('buy.property') }}">For Buy <span>(700)</span></a></li>
+    ↑↑追加↑↑
+
+  </ul>
+</div>
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Frontend\IndexController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+	public function BuyProperty()
+	{
+		$property = Property::where('status', '1')->where('property_status', 'buy')->get();
+
+		return view(
+			'frontend.property.buy_property',
+			compact('property')
+		);
+	} // End Method 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\frontend\property\buy_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+購入リストが疎通されていればOK

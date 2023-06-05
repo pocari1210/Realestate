@@ -1,0 +1,85 @@
+
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// 賃貸リスト表示のルート
+Route::get('/rent/property', [IndexController::class, 'RentProperty'])
+  ->name('rent.property');
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\agent\agent_details.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<div class="category-widget sidebar-widget">
+  <div class="widget-title">
+    <h5>Status Of Property</h5>
+  </div>
+  <ul class="category-list clearfix">
+    <li><a href="{{ route('rent.property') }}">For Rent <span>({{ count($rentproperty) }})</span></a></li>
+    <li><a href="agents-details.html">For Buy <span>({{ count($buyproperty) }})</span></a></li>
+  </ul>
+</div>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Frontend\IndexController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+public function AgentDetails($id)
+{
+	$agent = User::findOrFail($id);
+	$property = Property::where('agent_id', $id)->get();
+	$featured = Property::where('featured', '1')->limit(3)->get();
+	$rentproperty = Property::where('property_status', 'rent')->get();
+	$buyproperty = Property::where('property_status', 'buy')->get();
+
+	view(
+	'frontend.agent.agent_details',
+	compact(
+	'agent',
+	'property',
+	'featured',
+	'rentproperty',
+	'buyproperty'
+	)
+	);
+	} // End Method 
+
+
+	public function RentProperty()
+	{
+		$property = Property::where('status', '1')
+			->where('property_status', 'rent')->get();
+
+		return view(
+			'frontend.property.rent_property',
+			compact('property')
+		);
+	} // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・

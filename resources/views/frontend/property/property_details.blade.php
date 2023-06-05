@@ -1,7 +1,6 @@
 @extends('frontend.frontend_dashboard')
 @section('main')
 
-
 <!--Page Title-->
 <section class="page-title-two bg-color-1 centred">
   <div class="pattern-layer">
@@ -20,7 +19,6 @@
 </section>
 <!--End Page Title-->
 
-
 <!-- property-details -->
 <section class="property-details property-details-one">
   <div class="auto-container">
@@ -38,9 +36,6 @@
             <h6>{{ $property->user->name }}</h6>
 
             @endif
-
-
-
           </div>
           <ul class="rating clearfix pull-left">
             <li><i class="icon-39"></i></li>
@@ -127,8 +122,7 @@
             </ul>
             <div class="google-map-area">
               <div class="google-map" id="contact-google-map" data-map-lat="{{ $property->latitude }}" data-map-lng="{{ $property->longitude }}" data-icon-path="{{ asset('frontend/assets/images/icons/map-marker.png') }}" data-map-title="Brooklyn, New York, United Kingdom" data-map-zoom="12" data-markers='{
-            "marker-1": [40.712776, -74.005974, "<h4>Branch Office</h4><p>77/99 New York</p>","{{ asset('frontend/assets/images/icons/map-marker.png') }}"]
-        }'>
+            "marker-1": [40.712776, -74.005974, "<h4>Branch Office</h4><p>77/99 New York</p>","{{ asset('frontend/assets/images/icons/map-marker.png') }}"]}'>
 
               </div>
             </div>
@@ -138,7 +132,6 @@
               <h4>What’s Nearby?</h4>
             </div>
             <div class="inner-box">
-
 
               <div class="single-item">
                 <div class="icon-box"><i class="fas fa-book-reader"></i></div>
@@ -161,9 +154,6 @@
                   @endforeach
                 </div>
               </div>
-
-
-
 
             </div>
           </div>
@@ -232,7 +222,7 @@
             <div class="author-box">
 
               @if($property->agent_id == Null)
-              <figure class="author-thumb"><img src="{{ url('upload/nologin.jpg') }}" alt=""></figure>
+              <figure class="author-thumb"><img src="{{ url('upload/ariyan.jpg') }}" alt=""></figure>
               <div class="inner">
                 <h4>Admin </h4>
                 <ul class="info clearfix">
@@ -255,6 +245,7 @@
                 <div class="btn-box"><a href="agents-details.html">View Listing</a></div>
               </div>
               @endif
+
             </div>
 
             <div class="form-inner">
@@ -272,6 +263,7 @@
 
                 @if($property->agent_id == Null)
                 <input type="hidden" name="agent_id" value="">
+
                 @else
                 <input type="hidden" name="agent_id" value="{{ $property->agent_id }}">
                 @endif
@@ -426,6 +418,7 @@
   </div>
 </section>
 <!-- property-details end -->
+
 
 <!-- subscribe-section -->
 <section class="subscribe-section bg-color-3">
