@@ -1,0 +1,25 @@
+
+4_headerの編集
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// agentのroleでログインしていなかった場合、login画面に遷移
+Route::get('/agent/login', [AgentController::class, 'AgentLogin'])
+  ->name('agent.login')
+  ->middleware(RedirectIfAuthenticated::class);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\home\header.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+headerのレイアウトを崩さず編集ができていたらOK

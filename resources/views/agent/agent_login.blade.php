@@ -105,7 +105,7 @@
 
 <!-- subscribe-section -->
 <section class="subscribe-section bg-color-3">
-  <div class="pattern-layer" style="background-image: url(assets/images/shape/shape-2.png);"></div>
+  <div class="pattern-layer" style="background-image: url({{ asset('frontend/assets/images/shape/shape-2.png') }});"></div>
   <div class="auto-container">
     <div class="row clearfix">
       <div class="col-lg-6 col-md-6 col-sm-12 text-column">
