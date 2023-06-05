@@ -1,0 +1,98 @@
+
+2_地域別_新規作成と保存
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    Route::get('/add/state', 'AddState')
+      ->name('add.state');
+
+    Route::post('/store/state', 'StoreState')
+      ->name('store.state');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<li class="nav-item">
+  <a href="{{ route('add.state') }}" class="nav-link">Add State</a>
+</li>
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\state\all_state.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+      <a href="{{ route('add.state') }}" class="btn btn-inverse-info"> Add State </a>
+    </ol>
+  </nav>
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\StateController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use Intervention\Image\Facades\Image;
+
+	public function AddState()
+	{
+		return view('backend.state.add_state');
+	} // End Method 
+
+
+	public function StoreState(Request $request)
+	{
+
+		$image = $request->file('state_image');
+		$name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+		Image::make($image)->resize(370, 275)->save('upload/state/' . $name_gen);
+		$save_url = 'upload/state/' . $name_gen;
+
+		State::insert([
+			'state_name' => $request->state_name,
+			'state_image' => $save_url,
+		]);
+
+		$notification = array(
+			'message' => 'State Inserted Successfully',
+			'alert-type' => 'success'
+		);
+
+		return redirect()->route('all.state')->with($notification);
+	} // End Method 
+
+★コード解説★
+Intervention Imageで画像のサイズを指定している
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\state\add_state.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+新規登録をし、all_state画面に保存ができていればOK
