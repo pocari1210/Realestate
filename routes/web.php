@@ -7,6 +7,7 @@ use App\Http\Controllers\AgentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Backend\PropertyTypeController;
 use App\Http\Controllers\Backend\PropertyController;
+use App\Http\Controllers\Backend\StateController;
 use App\Http\Controllers\Agent\AgentPropertyController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Controllers\Frontend\IndexController;
@@ -435,5 +436,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // Agent:active/inactiveを変更するルート
     Route::get('/changeStatus', 'changeStatus');
+  });
+
+  // State  All Route 
+  Route::controller(StateController::class)->group(function () {
+
+    Route::get('/all/state', 'AllState')
+      ->name('all.state');
+
+    Route::get('/add/state', 'AddState')
+      ->name('add.state');
+
+    Route::post('/store/state', 'StoreState')
+      ->name('store.state');
   });
 }); // End Group Admin Middleware

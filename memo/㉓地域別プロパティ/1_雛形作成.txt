@@ -1,0 +1,137 @@
+
+①雛形作成
+
+下記コマンドでモデルとテーブル作成
+php artisan make:model State -m
+
+下記コマンドでコンロトーラー作成
+php artisan make:controller Backend/StateController
+
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\State.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class State extends Model
+{
+  use HasFactory;
+
+  protected $guarded = [];
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆テーブルの編集◆
+
+ディレクトリ
+\database\migrations\2023_06_05_144446_create_states_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Schema::create('states', function (Blueprint $table) {
+	$table->id();
+	$table->string('state_name');
+	$table->string('state_image')->nullable();
+	$table->timestamps();
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // State  All Route 
+  Route::controller(StateController::class)->group(function () {
+
+    Route::get('/all/state', 'AllState')
+      ->name('all.state');
+
+    Route::get('/add/type', 'AddType')
+      ->name('add.type');
+
+    Route::post('/store/type', 'StoreType')
+      ->name('store.type');
+
+    Route::get('/edit/type/{id}', 'EditType')
+      ->name('edit.type');
+
+    Route::post('/update/type', 'UpdateType')
+      ->name('update.type');
+
+    Route::get('/delete/type/{id}', 'DeleteType')
+      ->name('delete.type');
+  });
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#state" role="button" aria-expanded="false" aria-controls="emails">
+          <i class="link-icon" data-feather="mail"></i>
+          <span class="link-title">Property State </span>
+          <i class="link-arrow" data-feather="chevron-down"></i>
+        </a>
+        <div class="collapse" id="state">
+          <ul class="nav sub-menu">
+            <li class="nav-item">
+              <a href="{{ route('all.state') }}" class="nav-link">All State</a>
+            </li>
+
+            <li class="nav-item">
+              <a href="pages/email/read.html" class="nav-link">Add State</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+
+★コード解説★
+
+adminの管理画面のサイドバーに地域別のプロパティのリスト作成
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\StateController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+public function AllState()
+{
+	$state = State::latest()->get();
+
+	return view(
+		'backend.state.all_state',
+		compact('state')
+		);
+} // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\state\all_state.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+画面の疎通が確認できたらOK
+
