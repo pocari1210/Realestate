@@ -1,0 +1,71 @@
+
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// 賃貸リストと購入リストをcaegryに反映させるルート
+Route::get('/property/type/{id}', [IndexController::class, 'PropertyType'])
+  ->name('property.type');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\home\category.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+        @php
+        $property = App\Models\Property::where('ptype_id',$item->id)->get();
+        @endphp
+        <li>
+          <div class="category-block-one">
+            <div class="inner-box">
+              <div class="icon-box"><i class="{{ $item->type_icon }}"></i></div>
+
+              ↓↓追加↓↓
+              <h5><a href="{{ route('property.type',$item->id) }}">{{ $item->type_name }}</a></h5>
+              ↑↑追加↑↑
+
+              <span>{{ count($property) }}</span>
+            </div>
+          </div>
+        </li>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Frontend\IndexController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+	public function PropertyType($id)
+	{
+		$property = Property::where('status', '1')->where('ptype_id', $id)->get();
+		$pbread = PropertyType::where('id', $id)->first();
+
+		return view(
+			'frontend.property.property_type',
+			compact('property', 'pbread')
+		);
+	} // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\frontend\property\property_type.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+property/typeで疎通されたらOK

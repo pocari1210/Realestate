@@ -152,4 +152,15 @@ class IndexController extends Controller
 			compact('property')
 		);
 	} // End Method 
+
+	public function PropertyType($id)
+	{
+		$property = Property::where('status', '1')->where('ptype_id', $id)->get();
+		$pbread = PropertyType::where('id', $id)->first();
+
+		return view(
+			'frontend.property.property_type',
+			compact('property', 'pbread')
+		);
+	} // End Method 
 }

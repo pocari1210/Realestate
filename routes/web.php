@@ -268,6 +268,10 @@ Route::get('/rent/property', [IndexController::class, 'RentProperty'])
 Route::get('/buy/property', [IndexController::class, 'BuyProperty'])
   ->name('buy.property');
 
+// 賃貸リストと購入リストをcaegryに反映させるルート
+Route::get('/property/type/{id}', [IndexController::class, 'PropertyType'])
+  ->name('property.type');
+
 
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])->name('agent.login')
   ->middleware(RedirectIfAuthenticated::class);
