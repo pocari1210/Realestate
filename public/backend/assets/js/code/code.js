@@ -13,7 +13,7 @@ $(function () {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: '削除します'
+      confirmButtonText: 'OK'
     }).then((result) => {
       if (result.isConfirmed) {
         window.location.href = link

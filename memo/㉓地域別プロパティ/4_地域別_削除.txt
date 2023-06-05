@@ -1,0 +1,62 @@
+
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // State  All Route 
+  Route::controller(StateController::class)->group(function () {
+
+    Route::get('/delete/state/{id}', 'DeleteState')
+      ->name('delete.state');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\state\all_state.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<a href="{{ route('delete.state',$item->id) }}" class="btn btn-inverse-danger" id="delete">
+  <i data-feather="trash-2"></i>
+</a>
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\StateController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+	public function DeleteState($id)
+	{
+		$state = State::findOrFail($id);
+		$img = $state->state_image;
+		unlink($img);
+
+		State::findOrFail($id)->delete();
+
+		$notification = array(
+			'message' => 'Stateの削除に成功しました',
+			'alert-type' => 'success'
+		);
+
+		return redirect()->back()->with($notification);
+	} // End Method
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////

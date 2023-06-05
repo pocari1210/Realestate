@@ -91,4 +91,20 @@ class StateController extends Controller
 			return redirect()->route('all.state')->with($notification);
 		}
 	} // End Method 
+
+	public function DeleteState($id)
+	{
+		$state = State::findOrFail($id);
+		$img = $state->state_image;
+		unlink($img);
+
+		State::findOrFail($id)->delete();
+
+		$notification = array(
+			'message' => 'Stateの削除に成功しました',
+			'alert-type' => 'success'
+		);
+
+		return redirect()->back()->with($notification);
+	} // End Method
 }

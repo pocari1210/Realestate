@@ -35,7 +35,7 @@
                     <a href="{{ route('edit.state',$item->id) }}" class="btn btn-inverse-warning">
                       <i data-feather="edit"></i>
                     </a>
-                    <a href="{{ route('delete.type',$item->id) }}" class="btn btn-inverse-danger" id="delete">
+                    <a href="{{ route('delete.state',$item->id) }}" class="btn btn-inverse-danger" id="delete">
                       <i data-feather="trash-2"></i>
                     </a>
                   </td>

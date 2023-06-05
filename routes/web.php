@@ -455,5 +455,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::post('/update/state', 'UpdateState')
       ->name('update.state');
+
+    Route::get('/delete/state/{id}', 'DeleteState')
+      ->name('delete.state');
   });
 }); // End Group Admin Middleware
