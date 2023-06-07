@@ -18,4 +18,19 @@ class BlogCategoryController extends Controller
       compact('category')
     );
   } // End Method 
+
+  public function StoreBlogCategory(Request $request)
+  {
+    BlogCategory::insert([
+      'category_name' => $request->category_name,
+      'category_slug' => strtolower(str_replace(' ', '-', $request->category_name)),
+    ]);
+
+    $notification = array(
+      'message' => 'BlogCategory Create Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.blog.category')->with($notification);
+  } // End Method 
 }

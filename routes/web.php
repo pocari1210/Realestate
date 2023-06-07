@@ -508,6 +508,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
   Route::controller(BlogCategoryController::class)->group(function () {
 
     // ブログ一覧のルート
-    Route::get('/all/blog/category', 'AllBlogCategory')->name('all.blog.category');
+    Route::get('/all/blog/category', 'AllBlogCategory')
+      ->name('all.blog.category');
+
+    // ブログ保存のルート
+    Route::post('/store/blog/category', 'StoreBlogCategory')
+      ->name('store.blog.category');
   });
 }); // End Group Admin Middleware
