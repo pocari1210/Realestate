@@ -9,7 +9,7 @@
 ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
 
 // 購入用物件のルート
-Route::post('/buy/property/search', [IndexController::class, 'BuyPropertySeach'])
+Route::post('/buy/property/search', [IndexController::class, 'BuyPropertySearch'])
   ->name('buy.property.search');
 
 // 賃貸用物件のルート
@@ -35,7 +35,7 @@ Route::post('/rent/property/search', [IndexController::class, 'RentPropertySeach
 \app\Http\Controllers\Frontend\IndexController.php
 
 ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
-  public function BuyPropertySeach(Request $request)
+  public function BuyPropertySearch(Request $request)
   {
 
     $request->validate(['search' => 'required']);

@@ -1,0 +1,64 @@
+
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// 賃貸用物件のルート
+Route::post('/all/property/search', [IndexController::class, 'AllPropertySeach'])
+  ->name('all.property.search');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\property\rent_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AllPropertySeach(Request $request)
+  {
+
+    $property_status = $request->property_status;
+    $stype = $request->ptype_id;
+    $sstate = $request->state;
+    $bedrooms = $request->bedrooms;
+    $bathrooms = $request->bathrooms;
+
+    $property = Property::where('status', '1')
+      ->where('bedrooms', $bedrooms)
+      ->where('bathrooms', 'like', '%' . $bathrooms . '%')
+      ->where('property_status', $property_status)
+      ->with('type', 'pstate')
+      ->whereHas('pstate', function ($q) use ($sstate) {
+        $q->where('state_name', 'like', '%' . $sstate . '%');
+      })
+      ->whereHas('type', function ($q) use ($stype) {
+        $q->where('type_name', 'like', '%' . $stype . '%');
+      })
+      ->get();
+
+    return view('frontend.property.property_search', compact('property'));
+  } // End Method 
+
+https://itsakura.com/sql-select-like#sa1
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////

@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Backend\PropertyTypeController;
 use App\Http\Controllers\Backend\PropertyController;
 use App\Http\Controllers\Backend\StateController;
+use App\Http\Controllers\Backend\TestimonialController;
 use App\Http\Controllers\Agent\AgentPropertyController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Controllers\Frontend\IndexController;
@@ -277,13 +278,17 @@ Route::get('/property/type/{id}', [IndexController::class, 'PropertyType'])
 Route::get('/state/details/{id}', [IndexController::class, 'StateDetails'])
   ->name('state.details');
 
-// 購入用物件のルート
-Route::post('/buy/property/search', [IndexController::class, 'BuyPropertySeach'])
+// 購入用物件の検索用ルート
+Route::post('/buy/property/search', [IndexController::class, 'BuyPropertySearch'])
   ->name('buy.property.search');
 
-// 賃貸用物件のルート
+// 賃貸用物件の検索用ルート
 Route::post('/rent/property/search', [IndexController::class, 'RentPropertySeach'])
   ->name('rent.property.search');
+
+// 賃貸用物件のルート
+Route::post('/all/property/search', [IndexController::class, 'AllPropertySeach'])
+  ->name('all.property.search');
 
 // agentのroleでログインしていなかった場合、login画面に遷移
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])
@@ -470,5 +475,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/delete/state/{id}', 'DeleteState')
       ->name('delete.state');
+  });
+
+  Route::controller(TestimonialController::class)->group(function () {
+
+    // スタッフの声一覧のルート
+    Route::get('/all/testimonials', 'AllTestimonials')
+      ->name('all.testimonials');
   });
 }); // End Group Admin Middleware

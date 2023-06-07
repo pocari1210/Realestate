@@ -1,0 +1,120 @@
+
+1_雛形作成
+
+下記コマンドでモデルとテーブル作成
+php artisan make:model Testimonial -m
+
+下記コマンドでコンロトーラー作成
+php artisan make:controller Backend/TestimonialController -m
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+/// Admin Group Middleware 
+Route::middleware(['auth', 'role:admin'])->group(function () {
+
+  Route::controller(TestimonialController::class)->group(function () {
+
+    // スタッフの声一覧のルート
+    Route::get('/all/testimonials', 'AllTestimonials')
+      ->name('all.testimonials');
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\Testimonial.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class Testimonial extends Model
+{
+  use HasFactory;
+
+  protected $guarded = [];
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆テーブルの編集◆
+
+ディレクトリ
+\database\migrations\2023_06_07_145546_create_testimonials_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function up(): void
+  {
+    Schema::create('testimonials', function (Blueprint $table) {
+      $table->id();
+      $table->string('name');
+      $table->string('position')->nullable();
+      $table->string('image');
+      $table->text('message')->nullable();
+      $table->timestamps();
+    });
+  }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+C:\xampp\htdocs\Realestate\cms\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+admin管理画面のサイドバーにメニューを追加
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\TestimonialController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AllTestimonials()
+  {
+    $testimonial = Testimonial::latest()->get();
+
+    return view(
+      'backend.testimonial.all_testimonial',
+      compact('testimonial')
+    );
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\TestimonialController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+画面の疎通ができていればOK
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
