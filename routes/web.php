@@ -514,5 +514,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // ブログ保存のルート
     Route::post('/store/blog/category', 'StoreBlogCategory')
       ->name('store.blog.category');
+
+    // ブログ編集のルート
+    Route::get('/blog/category/{id}', 'EditBlogCategory');
+
+    // ブログ更新のルート
+    Route::post('/update/blog/category', 'UpdateBlogCategory')
+      ->name('update.blog.category');
+
+    // ブログ削除のルート
+    Route::get('/delete/blog/category/{id}', 'DeleteBlogCategory')
+      ->name('delete.blog.category');
   });
 }); // End Group Admin Middleware

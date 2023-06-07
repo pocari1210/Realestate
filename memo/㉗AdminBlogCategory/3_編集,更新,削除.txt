@@ -1,0 +1,105 @@
+
+3_編集,更新,削除
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Route::controller(BlogCategoryController::class)->group(function () {
+
+    // ブログ編集のルート
+    Route::get('/blog/category/{id}', 'EditBlogCategory');
+
+    // ブログ更新のルート
+    Route::post('/update/blog/category', 'UpdateBlogCategory')
+      ->name('update.blog.category');
+
+    // ブログ削除のルート
+    Route::get('/delete/blog/category/{id}', 'DeleteBlogCategory')
+      ->name('delete.blog.category');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\category\blog_category.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<input type="hidden" name="cat_id" id="cat_id">
+<div class="form-group mb-3">
+  <label for="exampleInputEmail1" class="form-label">Blog Category Name </label>
+  <input type="text" name="category_name" class="form-control" id="cat">
+</div>
+
+<script type="text/javascript">
+  function categoryEdit(id) {
+    $.ajax({
+      type: 'GET',
+      url: '/blog/category/' + id,
+      dataType: 'json',
+
+      success: function(data) {
+        // console.log(data)
+        $('#cat').val(data.category_name);
+        $('#cat_id').val(data.id);
+      }
+    })
+  }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\BlogCategoryController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function EditBlogCategory($id)
+  {
+    $categories = BlogCategory::findOrFail($id);
+    return response()->json($categories);
+  } // End Method 
+
+  public function UpdateBlogCategory(Request $request)
+  {
+
+    $cat_id = $request->cat_id;
+
+    BlogCategory::findOrFail($cat_id)->update([
+
+      'category_name' => $request->category_name,
+      'category_slug' => strtolower(str_replace(' ', '-', $request->category_name)),
+    ]);
+
+    $notification = array(
+      'message' => 'BlogCategory Updated Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.blog.category')->with($notification);
+  } // End Method 
+
+
+  public function DeleteBlogCategory($id)
+  {
+
+    BlogCategory::findOrFail($id)->delete();
+
+    $notification = array(
+      'message' => 'BlogCategory Deleted Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+編集,更新,削除ができたらOK
