@@ -14,6 +14,7 @@ use App\Models\PropertyType;
 use App\Models\User;
 use App\Models\PackagePlan;
 use App\Models\PropertyMessage;
+use App\Models\State;
 use Intervention\Image\Facades\Image;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Carbon\Carbon;
@@ -37,6 +38,7 @@ class AgentPropertyController extends Controller
 
     $propertytype = PropertyType::latest()->get();
     $amenities = Amenities::latest()->get();
+    $pstate = State::latest()->get();
 
     $id = Auth::user()->id;
     $property = User::where('role', 'agent')->where('id', $id)->first();
@@ -51,7 +53,8 @@ class AgentPropertyController extends Controller
         'agent.property.add_property',
         compact(
           'propertytype',
-          'amenities'
+          'amenities',
+          'pstate',
         )
       );
     }
@@ -174,6 +177,7 @@ class AgentPropertyController extends Controller
 
     $multiImage = MultiImage::where('property_id', $id)->get();
 
+    $pstate = State::latest()->get();
     $propertytype = PropertyType::latest()->get();
     $amenities = Amenities::latest()->get();
 
@@ -186,7 +190,8 @@ class AgentPropertyController extends Controller
         'amenities',
         'property_ami',
         'multiImage',
-        'facilities'
+        'facilities',
+        'pstate'
       )
     );
   } // End Method 

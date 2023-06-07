@@ -133,7 +133,12 @@
                 <div class="col-sm-3">
                   <div class="mb-3">
                     <label class="form-label">State</label>
-                    <input type="text" name="state" class="form-control">
+                    <select name="state" class="form-select" id="exampleFormControlSelect1">
+                      <option selected="" disabled="">Select State</option>
+                      @foreach($pstate as $state)
+                      <option value="{{ $state->id }}">{{ $state->state_name }}</option>
+                      @endforeach
+                    </select>
                   </div>
                 </div><!-- Col -->
 
@@ -214,32 +219,21 @@
                     </select>
                   </div>
                 </div><!-- Col -->
-
-
-
               </div><!-- Row -->
-
 
               <div class="col-sm-12">
                 <div class="mb-3">
                   <label class="form-label">Short Description</label>
                   <textarea name="short_descp" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-
                 </div>
               </div><!-- Col -->
-
-
 
               <div class="col-sm-12">
                 <div class="mb-3">
                   <label class="form-label">Long Description</label>
-
                   <textarea name="long_descp" class="form-control" name="" id="t" rows="10"></textarea>
-
                 </div>
               </div><!-- Col -->
-
-
               <hr>
 
               <div class="mb-3">

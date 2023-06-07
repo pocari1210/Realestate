@@ -1,0 +1,101 @@
+
+7_agent画面にstate疎通
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Agent\AgentPropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\State;
+
+  public function AgentAddProperty()
+  {
+
+    $pstate = State::latest()->get();
+
+      return view(
+        'agent.property.add_property',
+        compact(
+          'pstate',
+        )
+      );
+
+  public function AgentEditProperty($id)
+  {
+
+    $pstate = State::latest()->get();
+
+    return view(
+      'agent.property.edit_property',
+
+      compact(
+        'pstate'
+      )
+    );
+
+★コード解説★
+addとeditにpstateを追加
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(追加)◆
+
+ディレクトリ
+\resources\views\agent\property\add_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<div class="mb-3">
+  <label class="form-label">State</label>
+  <select name="state" class="form-select" id="exampleFormControlSelect1">
+    <option selected="" disabled="">Select State</option>
+    @foreach($pstate as $state)
+    <option value="{{ $state->id }}">{{ $state->state_name }}</option>
+    @endforeach
+  </select>
+</div>
+
+★コード解説★
+stateの項目がinputからselectで選択できるようになっていたらOK
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(編集)◆
+
+ディレクトリ
+\resources\views\agent\property\edit_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<div class="mb-3">
+  <label class="form-label">State</label>
+  <select name="state" class="form-select" id="exampleFormControlSelect1">
+    <option selected="" disabled="">Select State</option>
+    @foreach($pstate as $state)
+    <option value="{{ $state->id }}" {{ $state->id == $property->state ? 'selected' : '' }}>{{ $state->state_name }}</option>
+    @endforeach
+  </select>
+</div>
+
+★コード解説★
+stateの項目がinputからselectで選択できるようになっていたらOK
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(詳細)◆
+
+ディレクトリ
+\resources\views\agent\property\details_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<tr>
+  <td>State </td>
+  <td><code>{{ $property['pstate']['state_name'] }}</code></td>
+</tr>
+
+★コード解説★
+エラーがでず、stateの項目が表示されていたらOK
