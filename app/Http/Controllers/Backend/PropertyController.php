@@ -10,6 +10,7 @@ use App\Models\Facility;
 use App\Models\Amenities;
 use App\Models\PropertyType;
 use App\Models\User;
+use App\Models\State;
 use App\Models\PropertyMessage;
 use Intervention\Image\Facades\Image;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
@@ -33,6 +34,8 @@ class PropertyController extends Controller
     // PropertyTypeの最新のデータを取得
     $propertytype = PropertyType::latest()->get();
 
+    $pstate = State::latest()->get();
+
     // Amenitiesの最新のデータを取得
     $amenities = Amenities::latest()->get();
 
@@ -45,7 +48,13 @@ class PropertyController extends Controller
 
     return view(
       'backend.property.add_property',
-      compact('propertytype', 'amenities', 'activeAgent')
+
+      compact(
+        'propertytype',
+        'amenities',
+        'activeAgent',
+        'pstate'
+      )
     );
   } // End Method 
 
@@ -172,6 +181,7 @@ class PropertyController extends Controller
     // dd($type);
     $multiImage = MultiImage::where('property_id', $id)->get();
 
+    $pstate = State::latest()->get();
     $propertytype = PropertyType::latest()->get();
     $amenities = Amenities::latest()->get();
     $activeAgent = User::where('status', 'active')->where('role', 'agent')->latest()->get();
@@ -185,7 +195,8 @@ class PropertyController extends Controller
         'activeAgent',
         'property_ami',
         'multiImage',
-        'facilities'
+        'facilities',
+        'pstate'
       )
     );
   } // End Method 

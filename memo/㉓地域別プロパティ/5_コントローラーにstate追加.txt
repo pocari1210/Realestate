@@ -1,0 +1,81 @@
+
+5_コントローラーにstate追加
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\PropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\State;
+
+  public function AddProperty()
+  {
+
+    $pstate = State::latest()->get();
+
+      compact(
+        'propertytype',
+        'amenities',
+        'activeAgent',
+        'pstate'
+      )
+
+  public function EditProperty($id)
+  {
+
+    $pstate = State::latest()->get();
+
+    return view(
+      'backend.property.edit_property',
+      compact(
+        'property',
+        'propertytype',
+        'amenities',
+        'activeAgent',
+        'property_ami',
+        'multiImage',
+        'facilities',
+        'pstate'
+      )
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集①(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\property\add_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<label class="form-label">State</label>
+<select name="state" class="form-select" id="exampleFormControlSelect1">
+  <option selected="" disabled="">Select State</option>
+  @foreach($pstate as $state)
+  <option value="{{ $state->id }}">{{ $state->state_name }}</option>
+  @endforeach
+</select>
+
+★コード解説★
+
+入力フォームをselectに変更
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集②(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\property\edit_property.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<label class="form-label">State</label>
+<select name="state" class="form-select" id="exampleFormControlSelect1">
+  <option selected="" disabled="">Select State</option>
+  @foreach($pstate as $state)
+  <option value="{{ $state->id }}" {{ $state->id == $property->state ? 'selected' : '' }}>{{ $state->state_name }}</option>
+  @endforeach
+</select>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////

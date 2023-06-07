@@ -53,7 +53,7 @@
 
                     <a href="{{ route('agent.edit.property',$item->id) }}" class="btn btn-inverse-warning" title="Edit"> <i data-feather="edit"></i> </a>
 
-                    <a href="{{ route('delete.property',$item->id) }}" class="btn btn-inverse-danger" id="delete" title="Delete"> <i data-feather="trash-2"></i> </a>
+                    <a href="{{ route('agent.delete.property',$item->id) }}" class="btn btn-inverse-danger" id="delete" title="Delete"> <i data-feather="trash-2"></i> </a>
                   </td>
                 </tr>
                 @endforeach
