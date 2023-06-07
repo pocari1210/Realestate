@@ -482,5 +482,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // スタッフの声一覧のルート
     Route::get('/all/testimonials', 'AllTestimonials')
       ->name('all.testimonials');
+
+    // スタッフの声の追加のルート
+    Route::get('/add/testimonials', 'AddTestimonials')
+      ->name('add.testimonials');
+
+    // スタッフの声の保存のルート
+    Route::post('/store/testimonials', 'StoreTestimonials')
+      ->name('store.testimonials');
   });
 }); // End Group Admin Middleware

@@ -124,7 +124,7 @@
             </li>
 
             <li class="nav-item">
-              <a href="{{ route('add.state') }}" class="nav-link">Add Testimonials</a>
+              <a href="{{ route('add.testimonials') }}" class="nav-link">Add Testimonials</a>
             </li>
           </ul>
         </div>

@@ -1,0 +1,122 @@
+
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+
+  Route::controller(TestimonialController::class)->group(function () {
+
+    // スタッフの声の追加のルート
+    Route::get('/add/testimonials', 'AddTestimonials')
+      ->name('add.testimonials');
+
+    // スタッフの声の保存のルート
+    Route::post('/store/testimonials', 'StoreTestimonials')
+      ->name('store.testimonials');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<ul class="nav sub-menu">
+  <li class="nav-item">
+    <a href="{{ route('all.testimonials') }}" class="nav-link">All Testimonials</a>
+  </li>
+
+  <li class="nav-item">
+
+    ↓↓追加↓↓
+    <a href="{{ route('add.testimonials') }}" class="nav-link">Add Testimonials</a>
+    ↑↑追加↑↑
+
+  </li>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\testimonial\all_testimonial.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<nav class="page-breadcrumb">
+  <ol class="breadcrumb">
+
+    ↓↓追加↓↓
+    <a href="{{ route('add.testimonials') }}" class="btn btn-inverse-info"> Add Testimonials </a>
+  </ol>
+</nav>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\TestimonialController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  //追加のコントローラー
+  public function AddTestimonials()
+  {
+    return view('backend.testimonial.add_testimonial');
+  } // End Method 
+
+
+  //保存のコントローラー
+  public function StoreTestimonials(Request $request)
+  {
+
+    $image = $request->file('image');
+    $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+    Image::make($image)->resize(100, 100)->save('upload/testimonial/' . $name_gen);
+    $save_url = 'upload/testimonial/' . $name_gen;
+
+    Testimonial::insert([
+      'name' => $request->name,
+      'position' => $request->position,
+      'message' => $request->message,
+      'image' => $save_url,
+    ]);
+
+    $notification = array(
+      'message' => 'Testimonial Inserted Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.testimonials')->with($notification);
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\testimonial\all_testimonial.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+adminの管理画面に保存ができていればOK
+
+
+
+
+
+
+
+
+
+
