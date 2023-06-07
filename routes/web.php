@@ -490,5 +490,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // スタッフの声の保存のルート
     Route::post('/store/testimonials', 'StoreTestimonials')
       ->name('store.testimonials');
+
+    // スタッフの声の編集のルート
+    Route::get('/edit/testimonials/{id}', 'EditTestimonials')
+      ->name('edit.testimonials');
+
+    // スタッフの声の更新のルート
+    Route::post('/update/testimonials', 'UpdateTestimonials')
+      ->name('update.testimonials');
+
+    // スタッフの声の削除のルート
+    Route::get('/delete/testimonials/{id}', 'DeleteTestimonials')
+      ->name('delete.testimonials');
   });
 }); // End Group Admin Middleware

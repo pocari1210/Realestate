@@ -1,0 +1,133 @@
+
+3_testimonials_編集と更新と削除
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  Route::controller(TestimonialController::class)->group(function () {
+
+    // スタッフの声の編集のルート
+    Route::get('/edit/testimonials/{id}', 'EditTestimonials')
+      ->name('edit.testimonials');
+
+    // スタッフの声の更新のルート
+    Route::post('/update/testimonials', 'UpdateTestimonials')
+      ->name('update.testimonials');
+
+    // スタッフの声の削除のルート
+    Route::get('/delete/testimonials/{id}', 'DeleteTestimonials')
+      ->name('delete.testimonials');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\testimonial\all_testimonial.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<td>{{ $item->position }}</td>
+<td><img src="{{ asset($item->image) }}" style="width:70px;height: 40px;"> </td>
+<td>
+
+  ↓↓追記↓↓
+  <a href="{{ route('edit.testimonials',$item->id) }}" class="btn btn-inverse-warning"> Edit </a>
+  <a href="{{ route('delete.testimonials',$item->id) }}" class="btn btn-inverse-danger" id="delete"> Delete </a>
+  ↑↑追記↑↑
+
+</td>
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\TestimonialController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function EditTestimonials($id)
+  {
+
+    $testimonial = Testimonial::findOrFail($id);
+    return view('backend.testimonial.edit_testimonial', compact('testimonial'));
+  } // End Method 
+
+  public function UpdateTestimonials(Request $request)
+  {
+
+    $test_id = $request->id;
+
+    // 画像を含め編集する場合の処理
+    if ($request->file('image')) {
+
+      $image = $request->file('image');
+      $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+      Image::make($image)->resize(100, 100)->save('upload/testimonial/' . $name_gen);
+      $save_url = 'upload/testimonial/' . $name_gen;
+
+      Testimonial::findOrFail($test_id)->update([
+        'name' => $request->name,
+        'position' => $request->position,
+        'message' => $request->message,
+        'image' => $save_url,
+      ]);
+
+      $notification = array(
+        'message' => 'Testimonial Updated Successfully',
+        'alert-type' => 'success'
+      );
+
+      return redirect()->route('all.testimonials')->with($notification);
+    } else {
+
+      Testimonial::findOrFail($test_id)->update([
+        'name' => $request->name,
+        'position' => $request->position,
+        'message' => $request->message,
+      ]);
+
+      $notification = array(
+        'message' => 'Testimonial Updated Successfully',
+        'alert-type' => 'success'
+      );
+
+      return redirect()->route('all.testimonials')->with($notification);
+    }
+  } // End Method 
+
+  public function DeleteTestimonials($id)
+  {
+
+    $test = Testimonial::findOrFail($id);
+    $img = $test->image;
+    unlink($img);
+
+    Testimonial::findOrFail($id)->delete();
+
+    $notification = array(
+      'message' => 'Testimonial Deleted Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\testimonial\edit_testimonial.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+editページで更新ができ、deleteボタンで削除ができたらOK
+
