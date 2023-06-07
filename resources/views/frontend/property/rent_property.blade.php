@@ -159,7 +159,7 @@
                       @if($item->agent_id == Null)
                       <div class="author-box pull-right">
                         <figure class="author-thumb">
-                          <img src="{{ url('upload/ariyan.jpg') }}" alt="">
+                          <img src="{{ url('upload/avatar-1.png') }}" alt="">
                           <span>Admin</span>
                         </figure>
                       </div>

@@ -1,0 +1,68 @@
+
+1_雛形作成
+
+
+◆ビューの編集◆
+
+ディレクトリ
+\resources\views\frontend\home\place.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+@php
+$skip_state_0 = App\Models\State::skip(0)->first();
+$property_0 = App\Models\Property::where('state',$skip_state_0->id)->get();
+@endphp
+
+★コード解説★
+0番目のデータから1件取得している
+
+skip(0)の場合が、Stateのidが1のものが表示される
+
+参考URL
+https://blog.capilano-fw.com/?p=665
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// 人気のある地域の詳細のルート
+Route::get('/state/details/{id}', [IndexController::class, 'StateDetails'])
+  ->name('state.details');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Frontend\IndexController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+	public function StateDetails($id)
+	{
+		$property = Property::where('status', '1')
+			->where('state', $id)->get();
+
+		$bstate = State::where('id', $id)->first();
+
+		return view(
+			'frontend.property.state_property',
+			compact('property', 'bstate')
+		);
+	} // End Method 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・

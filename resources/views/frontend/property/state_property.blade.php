@@ -1,7 +1,6 @@
 @extends('frontend.frontend_dashboard')
 @section('main')
 
-
 <!--Page Title-->
 <section class="page-title-two bg-color-1 centred">
   <div class="pattern-layer">
@@ -10,16 +9,15 @@
   </div>
   <div class="auto-container">
     <div class="content-box clearfix">
-      <h1>Buy Property </h1>
+      <h1>{{ $bstate->state_name }} Property </h1>
       <ul class="bread-crumb clearfix">
         <li><a href="index.html">Home</a></li>
-        <li>Buy Property List</li>
+        <li>{{ $bstate->state_name }} Property List</li>
       </ul>
     </div>
   </div>
 </section>
 <!--End Page Title-->
-
 
 <!-- property-page-section -->
 <section class="property-page-section property-list">
@@ -40,7 +38,6 @@
                   <option value="3">Residential</option>
                 </select>
               </div>
-
               <div class="select-box">
                 <select class="wide">
                   <option data-display="Select Location">Select Location</option>
@@ -50,7 +47,6 @@
                   <option value="4">Maxico</option>
                 </select>
               </div>
-
               <div class="select-box">
                 <select class="wide">
                   <option data-display="This Area Only">This Area Only</option>
@@ -60,7 +56,6 @@
                   <option value="4">Maxico</option>
                 </select>
               </div>
-
               <div class="select-box">
                 <select class="wide">
                   <option data-display="All Type">Max Rooms</option>
@@ -70,7 +65,6 @@
                   <option value="4">5+ Rooms</option>
                 </select>
               </div>
-
               <div class="select-box">
                 <select class="wide">
                   <option data-display="Most Popular">Most Popular</option>
@@ -79,7 +73,6 @@
                   <option value="3">Residential</option>
                 </select>
               </div>
-
               <div class="select-box">
                 <select class="wide">
                   <option data-display="All Type">Select Floor</option>
@@ -88,11 +81,9 @@
                   <option value="3">4x Floor</option>
                 </select>
               </div>
-
               <div class="filter-btn">
                 <button type="submit" class="theme-btn btn-one"><i class="fas fa-filter"></i>&nbsp;Filter</button>
               </div>
-
             </div>
           </div>
           <div class="price-filter sidebar-widget">
@@ -127,6 +118,7 @@
               <h5>Search Reasults: <span>Showing {{ count($property) }} Listings</span></h5>
             </div>
             <div class="right-column pull-right clearfix">
+
             </div>
           </div>
           <div class="wrapper list">
@@ -184,7 +176,6 @@
                       <div class="btn-box pull-left"><a href="{{ url('property/details/'.$item->id.'/'.$item->property_slug) }}" class="theme-btn btn-two">See Details</a></div>
                       <ul class="other-option pull-right clearfix">
                         <li><a aria-label="Compare" class="action-btn" id="{{ $item->id }}" onclick="addToCompare(this.id)"><i class="icon-12"></i></a></li>
-
                         <li><a aria-label="Add To Wishlist" class="action-btn" id="{{ $item->id }}" onclick="addToWishList(this.id)"><i class="icon-13"></i></a></li>
                       </ul>
                     </div>
@@ -192,16 +183,11 @@
                 </div>
               </div>
               @endforeach
-            </div>
 
+            </div>
           </div>
           <div class="pagination-wrapper">
-            <ul class="pagination clearfix">
-              <li><a href="property-list.html" class="current">1</a></li>
-              <li><a href="property-list.html">2</a></li>
-              <li><a href="property-list.html">3</a></li>
-              <li><a href="property-list.html"><i class="fas fa-angle-right"></i></a></li>
-            </ul>
+
           </div>
         </div>
       </div>

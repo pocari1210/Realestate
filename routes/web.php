@@ -273,6 +273,10 @@ Route::get('/buy/property', [IndexController::class, 'BuyProperty'])
 Route::get('/property/type/{id}', [IndexController::class, 'PropertyType'])
   ->name('property.type');
 
+// 人気のある地域の詳細のルート
+Route::get('/state/details/{id}', [IndexController::class, 'StateDetails'])
+  ->name('state.details');
+
 // agentのroleでログインしていなかった場合、login画面に遷移
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])
   ->name('agent.login')
