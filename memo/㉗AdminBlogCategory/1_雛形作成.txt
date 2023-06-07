@@ -1,0 +1,109 @@
+
+1_雛形作成
+
+下記コマンドでモデルとテーブル作成
+php artisan make:model BlogCategory -m
+
+下記コマンドでコンロトーラー作成
+php artisan make:controller Backend/BlogCategory
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\Testimonial.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class Testimonial extends Model
+{
+  use HasFactory;
+
+  protected $guarded = [];
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆テーブルの編集◆
+
+ディレクトリ
+\database\migrations\2023_06_07_220840_create_blog_categories_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function up(): void
+  {
+    Schema::create('blog_categories', function (Blueprint $table) {
+      $table->id();
+      $table->string('category_name');
+      $table->string('category_slug');
+      $table->timestamps();
+    });
+  }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+/// Admin Group Middleware 
+Route::middleware(['auth', 'role:admin'])->group(function () {
+
+  Route::controller(BlogController::class)->group(function () {
+
+    // ブログ一覧のルート
+    Route::get('/all/blog/category', 'AllBlogCategory')->name('all.blog.category');
+  });
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#blogcategory" role="button" aria-expanded="false" aria-controls="uiComponents">
+          <i class="link-icon" data-feather="feather"></i>
+          <span class="link-title">Blog Category </span>
+          <i class="link-arrow" data-feather="chevron-down"></i>
+        </a>
+        <div class="collapse" id="blogcategory">
+          <ul class="nav sub-menu">
+            <li class="nav-item">
+              <a href="{{ route('all.blog.category') }}" class="nav-link">All Blog Category </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\BlogCategory.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AllBlogCategory()
+  {
+    $category = BlogCategory::latest()->get();
+
+    return view(
+      'backend.category.blog_category',
+      compact('category')
+    );
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+疎通の確認がとれたらOK

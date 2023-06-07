@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\PropertyTypeController;
 use App\Http\Controllers\Backend\PropertyController;
 use App\Http\Controllers\Backend\StateController;
 use App\Http\Controllers\Backend\TestimonialController;
+use App\Http\Controllers\Backend\BlogCategoryController;
 use App\Http\Controllers\Agent\AgentPropertyController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Controllers\Frontend\IndexController;
@@ -502,5 +503,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // スタッフの声の削除のルート
     Route::get('/delete/testimonials/{id}', 'DeleteTestimonials')
       ->name('delete.testimonials');
+  });
+
+  Route::controller(BlogCategoryController::class)->group(function () {
+
+    // ブログ一覧のルート
+    Route::get('/all/blog/category', 'AllBlogCategory')->name('all.blog.category');
   });
 }); // End Group Admin Middleware
