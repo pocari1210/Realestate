@@ -1,0 +1,97 @@
+
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// 購入用物件のルート
+Route::post('/buy/property/search', [IndexController::class, 'BuyPropertySeach'])
+  ->name('buy.property.search');
+
+// 賃貸用物件のルート
+Route::post('/rent/property/search', [IndexController::class, 'RentPropertySeach'])
+  ->name('rent.property.search');
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\home\banner.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Frontend\IndexController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+  public function BuyPropertySeach(Request $request)
+  {
+
+    $request->validate(['search' => 'required']);
+    $item = $request->search;
+    $sstate = $request->state;
+    $stype = $request->ptype_id;
+
+    $property = Property::where('property_name', 'like', '%' . $item . '%')
+      ->where('property_status', 'buy')
+      ->with('type', 'pstate')
+      ->whereHas('pstate', function ($q) use ($sstate) {
+        $q->where('state_name', 'like', '%' . $sstate . '%');
+      })
+      ->whereHas('type', function ($q) use ($stype) {
+        $q->where('type_name', 'like', '%' . $stype . '%');
+      })
+      ->get();
+
+    return view(
+      'frontend.property.property_search',
+      compact('property')
+    );
+  } // End Method 
+
+  public function RentPropertySeach(Request $request)
+  {
+
+    $request->validate(['search' => 'required']);
+    $item = $request->search;
+    $sstate = $request->state;
+    $stype = $request->ptype_id;
+
+    $property = Property::where('property_name', 'like', '%' . $item . '%')
+      ->where('property_status', 'rent')
+      ->with('type', 'pstate')
+      ->whereHas('pstate', function ($q) use ($sstate) {
+        $q->where('state_name', 'like', '%' . $sstate . '%');
+      })
+      ->whereHas('type', function ($q) use ($stype) {
+        $q->where('type_name', 'like', '%' . $stype . '%');
+      })
+      ->get();
+
+    return view(
+      'frontend.property.property_search',
+      compact('property')
+    );
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\frontend\property\property_search.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+検索結果が表示されたらOK
