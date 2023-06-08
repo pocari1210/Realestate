@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\BlogCategory;
+use App\Models\BlogPost;
 use Carbon\Carbon;
 
 class BlogCategoryController extends Controller
@@ -71,5 +72,15 @@ class BlogCategoryController extends Controller
     );
 
     return redirect()->back()->with($notification);
+  } // End Method 
+
+  public function AllPost()
+  {
+    $post = BlogPost::latest()->get();
+
+    return view(
+      'backend.post.all_post',
+      compact('post')
+    );
   } // End Method 
 }

@@ -526,4 +526,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/delete/blog/category/{id}', 'DeleteBlogCategory')
       ->name('delete.blog.category');
   });
+
+  Route::controller(BlogCategoryController::class)->group(function () {
+
+    Route::get('/all/post', 'AllPost')->name('all.post');
+  });
 }); // End Group Admin Middleware
