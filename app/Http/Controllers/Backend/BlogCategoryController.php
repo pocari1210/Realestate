@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\BlogCategory;
+use App\Models\Comment;
 use App\Models\BlogPost;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -258,5 +259,28 @@ class BlogCategoryController extends Controller
         'dpost'
       )
     );
+  } // End Method
+
+  public function StoreComment(Request $request)
+  {
+
+    $pid = $request->post_id;
+
+    Comment::insert([
+      'user_id' => Auth::user()->id,
+      'post_id' => $pid,
+      'parent_id' => null,
+      'subject' => $request->subject,
+      'message' => $request->message,
+      'created_at' => Carbon::now(),
+
+    ]);
+
+    $notification = array(
+      'message' => 'Comment Inserted Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
   } // End Method
 }

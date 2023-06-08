@@ -301,6 +301,10 @@ Route::get('/blog/cat/list/{id}', [BlogCategoryController::class, 'BlogCatList']
 Route::get('/blog', [BlogCategoryController::class, 'BlogList'])
   ->name('blog.list');
 
+// フロントエンド:Blogのコメントのルート
+Route::post('/store/comment', [BlogCategoryController::class, 'StoreComment'])
+  ->name('store.comment');
+
 // agentのroleでログインしていなかった場合、login画面に遷移
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])
   ->name('agent.login')
