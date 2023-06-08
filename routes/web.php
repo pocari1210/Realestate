@@ -291,6 +291,9 @@ Route::post('/rent/property/search', [IndexController::class, 'RentPropertySeach
 Route::post('/all/property/search', [IndexController::class, 'AllPropertySeach'])
   ->name('all.property.search');
 
+//フロントエンド:Blogのルート
+Route::get('/blog/details/{slug}', [BlogCategoryController::class, 'BlogDetails']);
+
 // agentのroleでログインしていなかった場合、login画面に遷移
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])
   ->name('agent.login')
