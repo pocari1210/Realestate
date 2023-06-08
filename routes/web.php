@@ -294,6 +294,13 @@ Route::post('/all/property/search', [IndexController::class, 'AllPropertySeach']
 //フロントエンド:Blogのルート
 Route::get('/blog/details/{slug}', [BlogCategoryController::class, 'BlogDetails']);
 
+// フロントエンド:Blogのカテゴリーのルート
+Route::get('/blog/cat/list/{id}', [BlogCategoryController::class, 'BlogCatList']);
+
+// フロントエンド:Blogリストのルート
+Route::get('/blog', [BlogCategoryController::class, 'BlogList'])
+  ->name('blog.list');
+
 // agentのroleでログインしていなかった場合、login画面に遷移
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])
   ->name('agent.login')

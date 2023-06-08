@@ -1,0 +1,77 @@
+
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// フロントエンド:Blogのカテゴリーのルート
+Route::get('/blog/cat/list/{id}', [BlogController::class, 'BlogCatList']);
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\blog\blog_details.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+@foreach($bcategory as $cat)
+@php
+$post = App\Models\BlogPost::where('blogcat_id',$cat->id)->get();
+@endphp
+
+<li>
+
+  ↓↓追加↓↓
+  <a href="{{ url('blog/cat/list/'.$cat->id) }}">
+    {{ $cat->category_name }}<span>({{ count($post) }})</span>
+  </a>
+  ↑↑追加↑↑
+
+</li>
+@endforeach
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\BlogCategoryController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function BlogCatList($id)
+  {
+
+    $blog = BlogPost::where('blogcat_id', $id)->get();
+    $breadcat = BlogCategory::where('id', $id)->first();
+    $bcategory = BlogCategory::latest()->get();
+    $dpost = BlogPost::latest()->limit(3)->get();
+
+    return view(
+      'frontend.blog.blog_cat_list',
+      compact(
+        'blog',
+        'breadcat',
+        'bcategory',
+        'dpost'
+      )
+    );
+  } // End Method
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\frontend\blog\blog_cat_list.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+ブログの一覧ページからカテゴリーページに疎通されたらOK

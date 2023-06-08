@@ -224,4 +224,39 @@ class BlogCategoryController extends Controller
       )
     );
   } // End Method
+
+  public function BlogCatList($id)
+  {
+
+    $blog = BlogPost::where('blogcat_id', $id)->get();
+    $breadcat = BlogCategory::where('id', $id)->first();
+    $bcategory = BlogCategory::latest()->get();
+    $dpost = BlogPost::latest()->limit(3)->get();
+
+    return view(
+      'frontend.blog.blog_cat_list',
+      compact(
+        'blog',
+        'breadcat',
+        'bcategory',
+        'dpost'
+      )
+    );
+  } // End Method
+
+  public function BlogList()
+  {
+    $blog = BlogPost::latest()->get();
+    $bcategory = BlogCategory::latest()->get();
+    $dpost = BlogPost::latest()->limit(3)->get();
+
+    return view(
+      'frontend.blog.blog_list',
+      compact(
+        'blog',
+        'bcategory',
+        'dpost'
+      )
+    );
+  } // End Method
 }

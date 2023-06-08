@@ -1,0 +1,73 @@
+
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// フロントエンド:Blogリストのルート
+Route::get('/blog', [BlogController::class, 'BlogList'])
+  ->name('blog.list');
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\home\header.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<li><a href="{{ url('/') }}"><span>Agent </span></a> </li>
+
+↓↓追記↓↓
+<li><a href="{{ route('blog.list') }}"><span>Blog </span></a> </li>
+↑↑追記↑↑
+
+<li><a href="contact.html"><span>Contact</span></a></li>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\BlogCategoryController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function BlogList()
+  {
+    $blog = BlogPost::latest()->get();
+    $bcategory = BlogCategory::latest()->get();
+    $dpost = BlogPost::latest()->limit(3)->get();
+
+    return view(
+      'frontend.blog.blog_list',
+      compact(
+        'blog',
+        'bcategory',
+        'dpost'
+      )
+    );
+  } // End Method
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\blog\blog_list.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+headerのリンクからページ遷移し、登録した情報が疎通できていればOK
+
+
+
+
+
+
+
