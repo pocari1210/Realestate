@@ -529,6 +529,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
   Route::controller(BlogCategoryController::class)->group(function () {
 
-    Route::get('/all/post', 'AllPost')->name('all.post');
+    Route::get('/all/post', 'AllPost')
+      ->name('all.post');
+
+    // ブログ投稿:新規作成のルート
+    Route::get('/add/post', 'AddPost')
+      ->name('add.post');
   });
 }); // End Group Admin Middleware
