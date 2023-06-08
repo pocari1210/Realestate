@@ -1,0 +1,112 @@
+
+3_保存処理
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  Route::controller(BlogCategoryController::class)->group(function () {
+
+    // ブログ投稿:保存処理のルート
+    Route::post('/store/post', 'StorePost')
+      ->name('store.post');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\BlogPost.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class BlogPost extends Model
+{
+  use HasFactory;
+
+  protected $guarded = [];
+
+  public function cat()
+  {
+    return $this->belongsTo(BlogCategory::class, 'blogcat_id', 'id');
+  }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\post\add_post.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<h6 class="card-title">Add Post </h6>
+
+↓↓追記↓↓
+<form method="POST" action="{{ route('store.post') }}" class="forms-sample" enctype="multipart/form-data">
+  @csrf
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\post\all_post.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<tbody>
+  @foreach($post as $key => $item)
+  <tr>
+    <td>{{ $key+1 }}</td>
+    <td>{{ $item->post_title }}</td>
+    <td>{{ $item['cat']['category_name'] }}</td>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\BlogCategoryController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use Illuminate\Support\Facades\Auth;
+use Intervention\Image\Facades\Image;
+
+  public function StorePost(Request $request)
+  {
+
+    $image = $request->file('post_image');
+    $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+    Image::make($image)->resize(370, 250)->save('upload/post/' . $name_gen);
+    $save_url = 'upload/post/' . $name_gen;
+
+    BlogPost::insert([
+      'blogcat_id' => $request->blogcat_id,
+      'user_id' => Auth::user()->id,
+      'post_title' => $request->post_title,
+      'post_slug' => strtolower(str_replace(' ', '-', $request->post_title)),
+      'short_descp' => $request->short_descp,
+      'long_descp' => $request->long_descp,
+      'post_tags' => $request->post_tags,
+      'post_image' => $save_url,
+      'created_at' => Carbon::now(),
+    ]);
+
+    $notification = array(
+      'message' => 'BlogPost Inserted Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.post')->with($notification);
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+Add Postで保存ができたらOK

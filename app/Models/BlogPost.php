@@ -10,4 +10,9 @@ class BlogPost extends Model
   use HasFactory;
 
   protected $guarded = [];
+
+  public function cat()
+  {
+    return $this->belongsTo(BlogCategory::class, 'blogcat_id', 'id');
+  }
 }

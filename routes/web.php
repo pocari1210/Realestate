@@ -535,5 +535,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // ブログ投稿:新規作成のルート
     Route::get('/add/post', 'AddPost')
       ->name('add.post');
+
+    // ブログ投稿:保存処理のルート
+    Route::post('/store/post', 'StorePost')
+      ->name('store.post');
   });
 }); // End Group Admin Middleware

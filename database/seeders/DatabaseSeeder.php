@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     // Seeder実行
     $this->call(UsersTableSeeder::class);
     $this->call(PropertyTypeTableSeeder::class);
+    $this->call(StateTableSeeder::class);
 
     // factories実行
     \App\Models\User::factory(5)->create();
