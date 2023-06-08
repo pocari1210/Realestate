@@ -305,6 +305,16 @@ Route::get('/blog', [BlogCategoryController::class, 'BlogList'])
 Route::post('/store/comment', [BlogCategoryController::class, 'StoreComment'])
   ->name('store.comment');
 
+Route::get('/admin/blog/comment', [BlogCategoryController::class, 'AdminBlogComment'])
+  ->name('admin.blog.comment');
+
+Route::get('/admin/comment/reply/{id}', [BlogCategoryController::class, 'AdminCommentReply'])
+  ->name('admin.comment.reply');
+
+Route::post('/reply/message', [BlogCategoryController::class, 'ReplyMessage'])
+  ->name('reply.message');
+
+
 // agentのroleでログインしていなかった場合、login画面に遷移
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])
   ->name('agent.login')

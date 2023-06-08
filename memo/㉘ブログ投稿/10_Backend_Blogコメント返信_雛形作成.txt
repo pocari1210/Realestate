@@ -1,0 +1,83 @@
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+Route::get('/admin/blog/comment', [BlogController::class, 'AdminBlogComment'])
+  ->name('admin.blog.comment');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\Comment.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function user()
+  {
+    return $this->belongsTo(User::class, 'user_id', 'id');
+  }
+
+  public function post()
+  {
+    return $this->belongsTo(BlogPost::class, 'post_id', 'id');
+  }
+
+★コード解説★
+UserモデルとBlogPostモデルとリレーションしている
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<li class="nav-item">
+  <a href="{{ route('admin.blog.comment') }}" class="nav-link">
+    <i class="link-icon" data-feather="calendar"></i>
+    <span class="link-title">Blog Comment </span>
+  </a>
+</li>
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\BlogCategoryController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AdminBlogComment()
+  {
+    $comment = Comment::where('parent_id', null)
+      ->latest()->get();
+
+    return view(
+      'backend.comment.comment_all',
+      compact('comment')
+    );
+  } // End Method
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\comment\comment_all.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+フロントエンドで書いたコメントが反映されていたらOK
