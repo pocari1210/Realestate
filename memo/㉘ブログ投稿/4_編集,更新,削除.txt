@@ -1,0 +1,148 @@
+
+4_編集,更新,削除
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  Route::controller(BlogCategoryController::class)->group(function () {
+
+    // ブログ投稿:編集処理のルート
+    Route::get('/edit/post/{id}', 'EditPost')
+      ->name('edit.post');
+
+    // ブログ投稿:更新処理のルート
+    Route::post('/update/post', 'UpdatePost')
+      ->name('update.post');
+
+    // ブログ投稿:削除処理のルート
+    Route::get('/delete/post/{id}', 'DeletePost')
+      ->name('delete.post');
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\post\all_post.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+@foreach($post as $key => $item)
+<tr>
+  <td>{{ $key+1 }}</td>
+  <td>{{ $item->post_title }}</td>
+  <td>{{ $item['cat']['category_name'] }}</td>
+  <td><img src="{{ asset($item->post_image) }}" style="width:70px;height: 40px;"> </td>
+  <td>
+
+    ↓↓追記↓↓
+    <a href="{{ route('edit.post',$item->id) }}" class="btn btn-inverse-warning"> Edit </a>
+    <a href="{{ route('delete.post',$item->id) }}" class="btn btn-inverse-danger" id="delete"> Delete </a>
+    ↑↑追記↑↑
+
+  </td>
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\BlogCategoryController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function EditPost($id)
+  {
+
+    $blogcat = BlogCategory::latest()->get();
+    $post = BlogPost::findOrFail($id);
+    return view('backend.post.edit_post', compact('post', 'blogcat'));
+  } // End Method
+
+
+  public function UpdatePost(Request $request)
+  {
+
+    $post_id = $request->id;
+
+    if ($request->file('post_image')) {
+
+      $image = $request->file('post_image');
+      $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+      Image::make($image)->resize(370, 250)->save('upload/post/' . $name_gen);
+      $save_url = 'upload/post/' . $name_gen;
+
+      BlogPost::findOrFail($post_id)->update([
+        'blogcat_id' => $request->blogcat_id,
+        'user_id' => Auth::user()->id,
+        'post_title' => $request->post_title,
+        'post_slug' => strtolower(str_replace(' ', '-', $request->post_title)),
+        'short_descp' => $request->short_descp,
+        'long_descp' => $request->long_descp,
+        'post_tags' => $request->post_tags,
+        'post_image' => $save_url,
+        'created_at' => Carbon::now(),
+      ]);
+
+      $notification = array(
+        'message' => 'BlogPost Updated Successfully',
+        'alert-type' => 'success'
+      );
+
+      return redirect()->route('all.post')->with($notification);
+    } else {
+
+      BlogPost::findOrFail($post_id)->update([
+        'blogcat_id' => $request->blogcat_id,
+        'user_id' => Auth::user()->id,
+        'post_title' => $request->post_title,
+        'post_slug' => strtolower(str_replace(' ', '-', $request->post_title)),
+        'short_descp' => $request->short_descp,
+        'long_descp' => $request->long_descp,
+        'post_tags' => $request->post_tags,
+        'created_at' => Carbon::now(),
+      ]);
+
+      $notification = array(
+        'message' => 'BlogPost Updated Successfully',
+        'alert-type' => 'success'
+      );
+
+      return redirect()->route('all.post')->with($notification);
+    } // end else 
+
+  } // End Method 
+
+  public function DeletePost($id)
+  {
+
+    $post = BlogPost::findOrFail($id);
+    $img = $post->post_image;
+    unlink($img);
+
+    BlogPost::findOrFail($id)->delete();
+
+    $notification = array(
+      'message' => 'BlogPost Deleted Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\post\edit_post.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+all_postぺーじより
+編集、削除、更新ができていればOK
