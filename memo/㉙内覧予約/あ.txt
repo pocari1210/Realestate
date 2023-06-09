@@ -1,0 +1,121 @@
+
+1_雛形作成
+
+下記コマンドで、モデルとテーブルファイル作成
+php artisan make:model Schedule -m
+
+◆モデルの編集(遷移元)◆
+
+ディレクトリ
+\app\Models\Schedule.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class Schedule extends Model
+{
+  use HasFactory;
+  protected $guarded = [];
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆テーブルの編集(遷移元)◆
+
+ディレクトリ
+\database\migrations\2023_06_09_105153_create_schedules_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function up(): void
+  {
+    Schema::create('schedules', function (Blueprint $table) {
+      $table->id();
+      $table->integer('user_id')->nullable();
+      $table->integer('property_id')->nullable();
+      $table->string('agent_id')->nullable();
+      $table->string('tour_date')->nullable();
+      $table->string('tour_time')->nullable();
+      $table->text('message')->nullable();
+      $table->string('status')->default(0);
+      $table->timestamps();
+    });
+  }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// 内覧予約のルート
+Route::post('/store/schedule', [IndexController::class, 'StoreSchedule'])
+  ->name('store.schedule');
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\frontend\property\property_details.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<form action="{{ route('store.schedule') }}" method="post">
+  @csrf
+  <div class="row clearfix">
+    <input type="hidden" name="property_id" value="{{ $property->id }}">
+    @if($property->agent_id == Null)
+    <input type="hidden" name="agent_id" value="">
+    @else
+    <input type="hidden" name="agent_id" value="{{ $property->agent_id }}">
+    @endif
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Frontend\IndexController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function StoreSchedule(Request $request)
+  {
+    $aid = $request->agent_id;
+    $pid = $request->property_id;
+
+    if (Auth::check()) {
+      Schedule::insert([
+        'user_id' => Auth::user()->id,
+        'property_id' => $pid,
+        'agent_id' => $aid,
+        'tour_date' => $request->tour_date,
+        'tour_time' => $request->tour_time,
+        'message' => $request->message,
+        'created_at' => Carbon::now(),
+      ]);
+
+      $notification = array(
+        'message' => 'Send Request Successfully',
+        'alert-type' => 'success'
+      );
+
+      return redirect()->back()->with($notification);
+    } else {
+
+      $notification = array(
+        'message' => 'Plz Login Your Account First',
+        'alert-type' => 'error'
+      );
+
+      return redirect()->back()->with($notification);
+    }
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+DBを確認し、データがはいっていたらOK

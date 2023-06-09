@@ -314,6 +314,9 @@ Route::get('/admin/comment/reply/{id}', [BlogCategoryController::class, 'AdminCo
 Route::post('/reply/message', [BlogCategoryController::class, 'ReplyMessage'])
   ->name('reply.message');
 
+// 内覧予約のルート
+Route::post('/store/schedule', [IndexController::class, 'StoreSchedule'])
+  ->name('store.schedule');
 
 // agentのroleでログインしていなかった場合、login画面に遷移
 Route::get('/agent/login', [AgentController::class, 'AgentLogin'])

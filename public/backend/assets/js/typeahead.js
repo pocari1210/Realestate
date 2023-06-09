@@ -1,10 +1,11 @@
 // npm package: typeahead.js
 // github link: https://github.com/twitter/typeahead.js
+// ★入力補完をすることができる★
 
-$(function() {
+$(function () {
   'use strict'
 
-  var substringMatcher = function(strs) {
+  var substringMatcher = function (strs) {
     return function findMatches(q, cb) {
       var matches, substringRegex;
 

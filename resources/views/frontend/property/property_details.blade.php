@@ -28,7 +28,7 @@
         <div class="author-info clearfix">
           <div class="author-box pull-left">
             @if($property->agent_id == Null)
-            <figure class="author-thumb"><img src="{{ url('upload/avatar-1.png') }}" alt=""></figure>
+            <figure class="author-thumb"><img src="{{ url('upload/ariyan.jpg') }}" alt=""></figure>
             <h6>Admin</h6>
             @else
 
@@ -36,6 +36,7 @@
             <h6>{{ $property->user->name }}</h6>
 
             @endif
+
           </div>
           <ul class="rating clearfix pull-left">
             <li><i class="icon-39"></i></li>
@@ -165,40 +166,34 @@
               <iframe width="700" height="415" src="{{ $property->property_video }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </figure>
           </div>
+
           <div class="schedule-box content-widget">
             <div class="title-box">
               <h4>Schedule A Tour</h4>
             </div>
             <div class="form-inner">
-              <form action="property-details.html" method="post">
+              <form action="{{ route('store.schedule') }}" method="post">
+                @csrf
                 <div class="row clearfix">
+                  <input type="hidden" name="property_id" value="{{ $property->id }}">
+                  @if($property->agent_id == Null)
+                  <input type="hidden" name="agent_id" value="">
+                  @else
+                  <input type="hidden" name="agent_id" value="{{ $property->agent_id }}">
+                  @endif
                   <div class="col-lg-6 col-md-12 col-sm-12 column">
                     <div class="form-group">
                       <i class="far fa-calendar-alt"></i>
-                      <input type="text" name="date" placeholder="Tour Date" id="datepicker">
+                      <input type="text" name="tour_date" placeholder="Tour Date" id="datepicker">
                     </div>
                   </div>
                   <div class="col-lg-6 col-md-12 col-sm-12 column">
                     <div class="form-group">
                       <i class="far fa-clock"></i>
-                      <input type="text" name="time" placeholder="Any Time">
+                      <input type="text" name="tour_time" placeholder="Any Time">
                     </div>
                   </div>
-                  <div class="col-lg-4 col-md-12 col-sm-12 column">
-                    <div class="form-group">
-                      <input type="text" name="name" placeholder="Your Name" required="">
-                    </div>
-                  </div>
-                  <div class="col-lg-4 col-md-12 col-sm-12 column">
-                    <div class="form-group">
-                      <input type="email" name="email" placeholder="Your Email" required="">
-                    </div>
-                  </div>
-                  <div class="col-lg-4 col-md-12 col-sm-12 column">
-                    <div class="form-group">
-                      <input type="tel" name="phone" placeholder="Your Phone" required="">
-                    </div>
-                  </div>
+
                   <div class="col-lg-12 col-md-12 col-sm-12 column">
                     <div class="form-group">
                       <textarea name="message" placeholder="Your message"></textarea>
@@ -222,7 +217,8 @@
             <div class="author-box">
 
               @if($property->agent_id == Null)
-              <figure class="author-thumb"><img src="{{ url('upload/avatar-1.png') }}" alt=""></figure>
+
+              <figure class="author-thumb"><img src="{{ url('upload/ariyan.jpg') }}" alt=""></figure>
               <div class="inner">
                 <h4>Admin </h4>
                 <ul class="info clearfix">
@@ -378,9 +374,12 @@
                 <div class="author-info clearfix">
                   <div class="author pull-left">
                     @if($item->agent_id == Null)
-                    <figure class="author-thumb"><img src="{{ url('upload/avatar-1.png') }}" alt=""></figure>
+
+                    <figure class="author-thumb"><img src="{{ url('upload/ariyan.jpg') }}" alt=""></figure>
                     <h6>Admin </h6>
+
                     @else
+
                     <figure class="author-thumb"><img src="{{ (!empty($item->user->photo)) ? url('upload/agent_images/'.$item->user->photo) : url('upload/no_image.jpg') }}" alt=""></figure>
                     <h6>{{ $item->user->name }}</h6>
                     @endif
@@ -419,7 +418,6 @@
 </section>
 <!-- property-details end -->
 
-
 <!-- subscribe-section -->
 <section class="subscribe-section bg-color-3">
   <div class="pattern-layer" style="background-image: url({{ asset('frontend/assets/images/shape/shape-2.png') }});"></div>
@@ -431,6 +429,7 @@
           <h2>Sign Up To Our Newsletter To Get The Latest News And Offers.</h2>
         </div>
       </div>
+
       <div class="col-lg-6 col-md-6 col-sm-12 form-column">
         <div class="form-inner">
           <form action="contact.html" method="post" class="subscribe-form">
@@ -441,6 +440,7 @@
           </form>
         </div>
       </div>
+
     </div>
   </div>
 </section>

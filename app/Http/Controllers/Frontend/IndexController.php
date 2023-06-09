@@ -10,6 +10,7 @@ use App\Models\Facility;
 use App\Models\Amenities;
 use App\Models\PropertyType;
 use App\Models\User;
+use App\Models\Schedule;
 use App\Models\PackagePlan;
 use App\Models\State;
 use Illuminate\Support\Facades\Auth;
@@ -251,5 +252,38 @@ class IndexController extends Controller
       ->get();
 
     return view('frontend.property.property_search', compact('property'));
+  } // End Method 
+
+  public function StoreSchedule(Request $request)
+  {
+    $aid = $request->agent_id;
+    $pid = $request->property_id;
+
+    if (Auth::check()) {
+      Schedule::insert([
+        'user_id' => Auth::user()->id,
+        'property_id' => $pid,
+        'agent_id' => $aid,
+        'tour_date' => $request->tour_date,
+        'tour_time' => $request->tour_time,
+        'message' => $request->message,
+        'created_at' => Carbon::now(),
+      ]);
+
+      $notification = array(
+        'message' => 'Send Request Successfully',
+        'alert-type' => 'success'
+      );
+
+      return redirect()->back()->with($notification);
+    } else {
+
+      $notification = array(
+        'message' => 'Plz Login Your Account First',
+        'alert-type' => 'error'
+      );
+
+      return redirect()->back()->with($notification);
+    }
   } // End Method 
 }
