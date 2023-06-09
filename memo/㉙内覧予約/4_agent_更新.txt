@@ -1,0 +1,67 @@
+
+4_agent_更新
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// ★agent権限でログインした場合のルートグループ2★
+Route::middleware(['auth', 'role:agent'])->group(function () {
+
+  // Agent All Property  
+  Route::controller(AgentPropertyController::class)->group(function () {
+
+    // Agent:内覧予約更新のルート
+    Route::post('/agent/update/schedule/', 'AgentUpdateSchedule')
+      ->name('agent.update.schedule');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\agent\schedule\schedule_details.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<div class="card">
+  <h6 class="card-title">Schedule Request Details </h6>
+  <form method="post" action="{{ route('agent.update.schedule'') }}">
+    @csrf
+	↓↓追記↓↓
+	<input type="hidden" name="id" value="{{ $schedule->id }}">
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Agent\AgentPropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AgentUpdateSchedule(Request $request)
+  {
+
+    $sid = $request->id;
+
+    Schedule::findOrFail($sid)->update([
+      'status' => '1',
+    ]);
+
+    $notification = array(
+      'message' => 'You have Confirm Schedule Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('agent.schedule.request')->with($notification);
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+showページでconfirmボタンをおしたらステータス更新されるので、
+activeになったらOK

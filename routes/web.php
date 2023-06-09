@@ -213,6 +213,10 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     // Agent:内覧予約詳細のルート
     Route::get('/agent/details/schedule/{id}', 'AgentDetailsSchedule')
       ->name('agent.details.schedule');
+
+    // Agent:内覧予約更新のルート
+    Route::post('/agent/update/schedule/', 'AgentUpdateSchedule')
+      ->name('agent.update.schedule');
   });
 
   // Agent:パッケージ購入
