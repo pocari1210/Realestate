@@ -1,0 +1,97 @@
+
+2_agent_雛形作成
+
+◆モデルの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class Schedule extends Model
+{
+  use HasFactory;
+  protected $guarded = [];
+
+  public function user()
+  {
+    return $this->belongsTo(User::class, 'user_id', 'id');
+  }
+
+  public function property()
+  {
+    return $this->belongsTo(Property::class, 'property_id', 'id');
+  }
+
+★コード解説★
+
+UserモデルとPropertyモデルとリレーションをしている
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// ★agent権限でログインした場合のルートグループ2★
+Route::middleware(['auth', 'role:agent'])->group(function () {
+
+  // Agent All Property  
+  Route::controller(AgentPropertyController::class)->group(function () {
+
+    // Agent:内覧予約一覧のルート
+    Route::get('/agent/schedule/request/', 'AgentScheduleRequest')
+      ->name('agent.schedule.request');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\agent\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<li class="nav-item">
+  <a href="{{ route('agent.schedule.request') }}" class="nav-link">
+    <i class="link-icon" data-feather="calendar"></i>
+    <span class="link-title">Schedule Request </span>
+  </a>
+</li>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Agent\AgentPropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\Schedule;
+  public function AgentScheduleRequest()
+  {
+    $id = Auth::user()->id;
+    $usermsg = Schedule::where('agent_id', $id)->get();
+
+    return view(
+      'agent.schedule.schedule_request',
+      compact('usermsg')
+    );
+  } // End Method  
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\agent\schedule\schedule_request.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+フォームに予約が入った内覧情報が疎通されていればOK

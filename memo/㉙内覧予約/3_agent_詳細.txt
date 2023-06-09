@@ -1,0 +1,68 @@
+
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+// ★agent権限でログインした場合のルートグループ2★
+Route::middleware(['auth', 'role:agent'])->group(function () {
+
+  // Agent All Property  
+  Route::controller(AgentPropertyController::class)->group(function () {
+
+    // Agent:内覧予約詳細のルート
+    Route::get('/agent/details/schedule/{id}', 'AgentDetailsSchedule')
+      ->name('agent.details.schedule');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\agent\schedule\schedule_request.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<a href="{{ route('agent.details.schedule',$item->id) }}" class="btn btn-inverse-info" title="Details"> 
+<i data-feather="eye"></i> 
+</a>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Agent\AgentPropertyController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AgentDetailsSchedule($id)
+  {
+    $schedule = Schedule::findOrFail($id);
+
+    return view(
+      'agent.schedule.schedule_details',
+      compact('schedule')
+    );
+  } // End Method 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\agent\schedule\schedule_details.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+詳細が確認とれたらOK
+
+
+
+

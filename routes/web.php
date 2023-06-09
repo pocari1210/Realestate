@@ -205,6 +205,14 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     // Agent:メッセージ詳細のルート
     Route::get('/agent/message/details/{id}', 'AgentMessageDetails')
       ->name('agent.message.details');
+
+    // Agent:内覧予約一覧のルート
+    Route::get('/agent/schedule/request/', 'AgentScheduleRequest')
+      ->name('agent.schedule.request');
+
+    // Agent:内覧予約詳細のルート
+    Route::get('/agent/details/schedule/{id}', 'AgentDetailsSchedule')
+      ->name('agent.details.schedule');
   });
 
   // Agent:パッケージ購入

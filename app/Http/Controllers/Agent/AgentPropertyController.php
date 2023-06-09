@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Models\PackagePlan;
 use App\Models\PropertyMessage;
 use App\Models\State;
+use App\Models\Schedule;
 use Intervention\Image\Facades\Image;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Carbon\Carbon;
@@ -573,5 +574,27 @@ class AgentPropertyController extends Controller
       compact('usermsg', 'msgdetails')
     );
   } // End Method
+
+  public function AgentScheduleRequest()
+  {
+    $id = Auth::user()->id;
+    $usermsg = Schedule::where('agent_id', $id)->get();
+
+    return view(
+      'agent.schedule.schedule_request',
+      compact('usermsg')
+    );
+  } // End Method 
+
+
+  public function AgentDetailsSchedule($id)
+  {
+    $schedule = Schedule::findOrFail($id);
+
+    return view(
+      'agent.schedule.schedule_details',
+      compact('schedule')
+    );
+  } // End Method 
 
 }
