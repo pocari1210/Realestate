@@ -5,8 +5,7 @@
 php artisan make:model State -m
 
 下記コマンドでコンロトーラー作成
-php artisan make:controller Backend/StateController
-
+php artisan make:controller Backend/SettingController
 
 ◆モデルの編集◆
 

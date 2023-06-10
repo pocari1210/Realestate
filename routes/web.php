@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\PropertyController;
 use App\Http\Controllers\Backend\StateController;
 use App\Http\Controllers\Backend\TestimonialController;
 use App\Http\Controllers\Backend\BlogCategoryController;
+use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Agent\AgentPropertyController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Controllers\Frontend\IndexController;
@@ -590,5 +591,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // ブログ投稿:削除処理のルート
     Route::get('/delete/post/{id}', 'DeletePost')
       ->name('delete.post');
+  });
+
+  // メール関連のルート
+  Route::controller(SettingController::class)->group(function () {
+
+    Route::get('/smtp/setting', 'SmtpSetting')
+      ->name('smtp.setting');
+
+    Route::post('/update/site/setting', 'UpdateSiteSetting')
+      ->name('update.site.setting');
   });
 }); // End Group Admin Middleware

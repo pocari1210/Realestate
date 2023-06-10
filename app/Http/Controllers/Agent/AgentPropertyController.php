@@ -20,6 +20,8 @@ use Intervention\Image\Facades\Image;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ScheduleMail;
 
 class AgentPropertyController extends Controller
 {
@@ -605,6 +607,19 @@ class AgentPropertyController extends Controller
     Schedule::findOrFail($sid)->update([
       'status' => '1',
     ]);
+
+    //// Start Send Email 
+
+    $sendmail = Schedule::findOrFail($sid);
+
+    $data = [
+      'tour_date' => $sendmail->tour_date,
+      'tour_time' => $sendmail->tour_time,
+    ];
+
+    Mail::to($request->email)->send(new ScheduleMail($data));
+
+    /// End Send Email 
 
     $notification = array(
       'message' => 'You have Confirm Schedule Successfully',

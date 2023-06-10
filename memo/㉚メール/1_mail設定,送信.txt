@@ -1,0 +1,155 @@
+
+
+下記コマンドでモデルとテーブル作成
+php artisan make:model SmtpSetting -m
+
+下記コマンドでコンロトーラー作成
+php artisan make:controller Backend/SettingController
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\SmtpSetting.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class SmtpSetting extends Model
+{
+  use HasFactory;
+
+  protected $guarded = [];
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆テーブルの編集◆
+
+ディレクトリ
+\database\migrations\2023_06_10_184910_create_smtp_settings_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function up(): void
+  {
+    Schema::create('smtp_settings', function (Blueprint $table) {
+      $table->id();
+      $table->string('mailer')->nullable();
+      $table->string('host')->nullable();
+      $table->string('post')->nullable();
+      $table->string('username')->nullable();
+      $table->string('password')->nullable();
+      $table->string('encryption')->nullable();
+      $table->string('from_address')->nullable();
+      $table->timestamps();
+    });
+  }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+/// Admin Group Middleware 
+Route::middleware(['auth', 'role:admin'])->group(function () {
+
+  // メール関連のルート
+  Route::controller(SettingController::class)->group(function () {
+
+    Route::get('/smtp/setting', 'SmtpSetting')
+      ->name('smtp.setting');
+  });
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<li class="nav-item">
+  <a href="{{ route('smtp.setting') }}" class="nav-link">
+    <i class="link-icon" data-feather="calendar"></i>
+    <span class="link-title">SMTP Setting </span>
+  </a>
+</li>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆AppServiceProviderの設定◆
+
+ディレクトリ
+\app\Providers\AppServiceProvider.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\SmtpSetting;
+use Config;
+
+  public function boot(): void
+  {
+    if (\Schema::hasTable('smtp_settings')) {
+
+      $smtpsetting = SmtpSetting::first();
+      if ($smtpsetting) {
+        $data = [
+
+          'driver' => $smtpsetting->mailer,
+          'host' => $smtpsetting->host,
+          'port' => $smtpsetting->post,
+          'username' => $smtpsetting->username,
+          'password' => $smtpsetting->password,
+          'encryption' => $smtpsetting->encryption,
+          'from' => [
+            'address' => $smtpsetting->from_address,
+            'name' => 'おうちの管理'
+          ]
+        ];
+        Config::set('mail', $data);
+      }
+    } // End If 
+  }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\SettingController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Http\Controllers\Backend\SettingController;
+
+  public function SmtpSetting()
+  {
+    $setting = SmtpSetting::find(1);
+
+    return view(
+      'backend.setting.smpt_update',
+      compact('setting')
+    );
+  } // End Method 
+
+★コード解説★
+ここまで完了したら、php artisan migrateをコマンドで実行し、
+画面疎通のために、mysqlにダミーデータを挿入する
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\setting\smpt_update.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+.envファイルに記述したメールの情報を入力し、更新する
