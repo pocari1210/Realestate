@@ -16,7 +16,7 @@
 
             <h6 class="card-title">Update Smtp Setting </h6>
 
-            <form id="myForm" method="POST" action="{{ route('update.site.setting') }}" class="forms-sample" enctype="multipart/form-data">
+            <form id="myForm" method="POST" action="{{ route('update.smpt.setting') }}" class="forms-sample" enctype="multipart/form-data">
               @csrf
               <input type="hidden" name="id" value="{{ $setting->id }}">
 

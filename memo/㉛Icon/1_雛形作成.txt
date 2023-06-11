@@ -1,0 +1,99 @@
+
+下記コマンドで、モデルとテーブルファイル作成
+php artisan make:model SiteSetting -m
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\SiteSetting.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+class SiteSetting extends Model
+{
+  use HasFactory;
+
+  protected $guarded = [];
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆テーブルの編集◆
+
+ディレクトリ
+\database\migrations\2023_06_11_020042_create_site_settings_table.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function up(): void
+  {
+    Schema::create('site_settings', function (Blueprint $table) {
+      $table->id();
+      $table->string('logo')->nullable();
+      $table->string('support_phone')->nullable();
+      $table->text('company_address')->nullable();
+      $table->string('email')->nullable();
+      $table->string('facebook')->nullable();
+      $table->string('twitter')->nullable();
+      $table->string('copyright')->nullable();
+      $table->timestamps();
+    });
+  }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+/// Admin Group Middleware 
+Route::middleware(['auth', 'role:admin'])->group(function () {
+
+  // Site Setting  All Route 
+  Route::controller(SettingController::class)->group(function () {
+
+    Route::get('/site/setting', 'SiteSetting')
+      ->name('site.setting');
+      
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<li class="nav-item">
+  <a href="{{ route('site.setting') }}" class="nav-link">
+    <i class="link-icon" data-feather="calendar"></i>
+    <span class="link-title">Site Setting </span>
+  </a>
+</li>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\SettingController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use App\Models\SiteSetting;
+
+  public function SiteSetting()
+  {
+    $sitesetting = SiteSetting::find(1);
+
+    return view(
+      'backend.setting.site_update',
+      compact('sitesetting')
+    );
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////

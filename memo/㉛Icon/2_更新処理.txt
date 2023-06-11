@@ -1,60 +1,45 @@
-<?php
-
-namespace App\Http\Controllers\Backend;
-
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Intervention\Image\Facades\Image;
-use App\Models\SmtpSetting;
-use App\Models\SiteSetting;
-
-class SettingController extends Controller
-{
-  public function SmtpSetting()
-  {
-    $setting = SmtpSetting::find(1);
-
-    return view(
-      'backend.setting.smpt_update',
-      compact('setting')
-    );
-  } // End Method 
-
-  public function UpdateSmptSetting(Request $request)
-  {
-
-    $stmp_id = $request->id;
-
-    SmtpSetting::findOrFail($stmp_id)->update([
-
-      'mailer' => $request->mailer,
-      'host' => $request->host,
-      'post' => $request->post,
-      'username' => $request->username,
-      'password' => $request->password,
-      'encryption' => $request->encryption,
-      'from_address' => $request->from_address,
-    ]);
 
 
-    $notification = array(
-      'message' => 'Smtp Setting Updated Successfully',
-      'alert-type' => 'success'
-    );
 
-    return redirect()->back()->with($notification);
-  } // End Method 
+◆ルートの編集◆
 
-  public function SiteSetting()
-  {
-    $sitesetting = SiteSetting::find(1);
+ディレクトリ
+\routes\web.php
 
-    return view(
-      'backend.setting.site_update',
-      compact('sitesetting')
-    );
-  } // End Method 
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+/// Admin Group Middleware 
+Route::middleware(['auth', 'role:admin'])->group(function () {
+
+  // Site Setting  All Route 
+  Route::controller(SettingController::class)->group(function () {
+
+    Route::post('/update/site/setting', 'UpdateSiteSetting')
+      ->name('update.site.setting');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\setting\site_update.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<h6 class="card-title">Update Site Setting </h6>
+
+<form id="myForm" method="POST" action="{{ route('update.site.setting') }}" class="forms-sample" enctype="multipart/form-data">
+  @csrf
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\SettingController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
 
   public function UpdateSiteSetting(Request $request)
   {
@@ -103,4 +88,5 @@ class SettingController extends Controller
     }
   } // End Method 
 
-}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
