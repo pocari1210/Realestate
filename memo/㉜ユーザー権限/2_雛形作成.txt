@@ -1,0 +1,69 @@
+
+2_雛形作成
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+/// Admin Group Middleware 
+Route::middleware(['auth', 'role:admin'])->group(function () {
+
+  Route::controller(RoleController::class)->group(function () {
+
+    Route::get('/all/permission', 'AllPermission')
+      ->name('all.permission');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+<div class="collapse" id="advancedUI">
+  <ul class="nav sub-menu">
+    <li class="nav-item">
+      <a href="{{ route('all.permission') }}" class="nav-link">All Permission</a>
+    </li>
+
+★コード解説★
+遷移先のルートを記述
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\RoleController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
+  public function AllPermission()
+  {
+    $permissions = Permission::all();
+
+    return view(
+      'backend.pages.permission.all_permission',
+      compact('permissions')
+    );
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\pages\permission\all_permission.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+all_permissionのページが疎通されればOK

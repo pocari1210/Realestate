@@ -1,0 +1,107 @@
+
+4_permisson_編集,更新,削除
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // Roles All Route 
+  Route::controller(RoleController::class)->group(function () {
+
+    // permission:編集のルート
+    Route::get('/edit/permission/{id}', 'EditPermission')
+      ->name('edit.permission');
+
+    // permission:更新のルート
+    Route::post('/update/permission', 'UpdatePermission')
+      ->name('update.permission');
+
+    // permission:削除のルート
+    Route::get('/delete/permission/{id}', 'DeletePermission')
+      ->name('delete.permission');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\pages\permission\all_permission.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+@foreach($permissions as $key => $item)
+<tr>
+  <td>{{ $key+1 }}</td>
+  <td>{{ $item->name }}</td>
+  <td>{{ $item->group_name }}</td>
+  <td>
+    <a href="{{ route('edit.permission',$item->id) }}" class="btn btn-inverse-warning"> Edit </a>
+    <a href="{{ route('delete.permission',$item->id) }}" class="btn btn-inverse-danger" id="delete"> Delete </a>
+  </td>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\RoleController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function EditPermission($id)
+  {
+    $permission = Permission::findOrFail($id);
+
+    return view(
+      'backend.pages.permission.edit_permission',
+      compact('permission')
+    );
+  } // End Method 
+
+  public function UpdatePermission(Request $request)
+  {
+    $per_id = $request->id;
+
+    Permission::findOrFail($per_id)->update([
+      'name' => $request->name,
+      'group_name' => $request->group_name,
+    ]);
+
+    $notification = array(
+      'message' => 'Permission Updated Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.permission')->with($notification);
+  } // End Method 
+
+
+  public function DeletePermission($id)
+  {
+    Permission::findOrFail($id)->delete();
+
+    $notification = array(
+      'message' => 'Permission Deleted Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method 
+
+★コード解説★
+Permissionの編集、更新、削除のコントローラーを作成
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\pages\permission\edit_permission.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+編集画面に遷移し、更新、削除ができたらOK

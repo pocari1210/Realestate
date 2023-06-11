@@ -1,0 +1,43 @@
+
+1_spatie設定
+
+composer require spatie/laravel-permission
+
+◆config/app編集◆
+
+ディレクトリ
+\config\app.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+'providers' => ServiceProvider::defaultProviders()->merge([
+
+    Spatie\Permission\PermissionServiceProvider::class,
+
+
+\config\appの設定が完了したら下記コマンドを実行する
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+
+下記コマンドで最適化する
+php artisan optimize:clear
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\User.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use Spatie\Permission\Traits\HasRoles;
+
+class User extends Authenticatable
+{
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+
+★コード解説★
+HasRolesを追記する
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+

@@ -1,0 +1,127 @@
+
+1_role_一覧,新規作成,保存
+
+下記コマンドでコンロトーラー作成
+php artisan make:controller Backend/RoleController
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+/// Admin Group Middleware 
+Route::middleware(['auth', 'role:admin'])->group(function () {
+
+  // Roles All Route 
+  Route::controller(RoleController::class)->group(function () {
+
+    // Roles:Rolesの一覧のルート
+    Route::get('/all/roles', 'AllRoles')
+      ->name('all.roles');
+
+    // Roles:Rolesの新規作成のルート 
+    Route::get('/add/roles', 'AddRoles')
+      ->name('add.roles');
+
+    // Roles:Rolesの保存のルート 
+    Route::post('/store/roles', 'StoreRoles')
+      ->name('store.roles');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+      <li class="nav-item nav-category">Role & Permission</li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#advancedUI" role="button" aria-expanded="false" aria-controls="advancedUI">
+          <i class="link-icon" data-feather="anchor"></i>
+          <span class="link-title">Role & Permission</span>
+          <i class="link-arrow" data-feather="chevron-down"></i>
+        </a>
+
+        <div class="collapse" id="advancedUI">
+          <ul class="nav sub-menu">
+            <li class="nav-item">
+              <a href="{{ route('all.permission') }}" class="nav-link">All Permission</a>
+            </li>
+
+            <li class="nav-item">
+              <a href="pages/advanced-ui/owl-carousel.html" class="nav-link">Owl carousel</a>
+              <a href="{{ route('all.roles') }}" class="nav-link">All Roles </a>
+            </li>
+          </ul>
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\RoleController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+use Spatie\Permission\Models\Role;
+
+class RoleController extends Controller
+{
+  public function AllRoles()
+  {
+    $roles = Role::all();
+
+    return view(
+      'backend.pages.roles.all_roles',
+      compact('roles')
+    );
+  } // End Method 
+
+  public function AddRoles()
+  {
+    return view('backend.pages.roles.add_roles');
+  } // End Method 
+
+  public function StoreRoles(Request $request)
+  {
+    Role::create([
+      'name' => $request->name,
+    ]);
+
+    $notification = array(
+      'message' => 'Role Create Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.roles')->with($notification);
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////

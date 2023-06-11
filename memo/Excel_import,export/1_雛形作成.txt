@@ -1,0 +1,97 @@
+
+Laravel excel importをインストール
+
+公式サイト
+https://laravel-excel.com/
+
+Getting StartedからInstallationを設定し、
+インストールを行う
+
+コマンド
+composer require maatwebsite/excel:*
+
+
+◆app/config◆
+
+ディレクトリ
+\config\app.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+'providers' => ServiceProvider::defaultProviders()->merge([
+     Maatwebsite\Excel\ExcelServiceProvider::class,
+
+'aliases' => Facade::defaultAliases()->merge([
+    'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+
+ここまで設定が完了したら下記コマンド実行
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // Roles All Route 
+  Route::controller(RoleController::class)->group(function () {
+
+    Route::get('/import/permission', 'ImportPermission')
+      ->name('import.permission');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\pages\permission\all_permission.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+      <a href="{{ route('add.permission') }}" class="btn btn-inverse-info"> Add Permission </a>
+
+      ↓↓追記↓↓
+      &nbsp; &nbsp; &nbsp;
+      <a href="{{ route('import.permission') }}" class="btn btn-inverse-warning"> Import </a>
+      &nbsp; &nbsp; &nbsp;
+      <a href="{{ route('add.permission') }}" class="btn btn-inverse-danger"> Export </a>
+      ↑↑追記↑↑
+    </ol>
+  </nav>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\RoleController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function ImportPermission()
+  {
+    return view('backend.pages.permission.import_permission');
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\pages\permission\all_permission.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+◆Exportsファイル作成◆
+
+ディレクトリ
+\app\Exports\PermissionExport.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・

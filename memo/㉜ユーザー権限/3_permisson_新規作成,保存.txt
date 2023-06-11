@@ -1,0 +1,74 @@
+
+3_permisson_新規作成,保存
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // Roles All Route 
+  Route::controller(RoleController::class)->group(function () {
+
+    // permission:新規作成のルート
+    Route::get('/add/permission', 'AddPermission')
+      ->name('add.permission');
+
+    // permission:保存のルート
+    Route::post('/store/permission', 'StorePermission')
+      ->name('store.permission');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\pages\permission\all_permission.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <nav class="page-breadcrumb">
+    <ol class="breadcrumb">
+      <a href="{{ route('add.permission') }}" class="btn btn-inverse-info"> Add Permission </a>
+    </ol>
+  </nav>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\RoleController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AddPermission()
+  {
+    return view('backend.pages.permission.add_permission');
+  } // End Method 
+
+  public function StorePermission(Request $request)
+  {
+    $permission = Permission::create([
+      'name' => $request->name,
+      'group_name' => $request->group_name,
+    ]);
+
+    $notification = array(
+      'message' => 'Permission Create Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.permission')->with($notification);
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\pages\permission\all_permission.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
