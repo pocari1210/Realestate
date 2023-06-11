@@ -1,6 +1,10 @@
 @extends('frontend.frontend_dashboard')
 @section('main')
 
+@section('title')
+おうちの管理
+@endsection
+
 <!-- banner-section -->
 @include('frontend.home.banner')
 <!-- banner-section end -->
