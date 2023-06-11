@@ -11,6 +11,7 @@ use App\Http\Controllers\Backend\StateController;
 use App\Http\Controllers\Backend\TestimonialController;
 use App\Http\Controllers\Backend\BlogCategoryController;
 use App\Http\Controllers\Backend\SettingController;
+use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Agent\AgentPropertyController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Controllers\Frontend\IndexController;
@@ -599,7 +600,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/smtp/setting', 'SmtpSetting')
       ->name('smtp.setting');
 
-    Route::post('/update/site/setting', 'UpdateSmptSetting')
+    Route::post('/update/smpt/setting', 'UpdateSmtpSetting')
       ->name('update.smpt.setting');
   });
 
@@ -611,5 +612,31 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::post('/update/site/setting', 'UpdateSiteSetting')
       ->name('update.site.setting');
+  });
+
+  Route::controller(RoleController::class)->group(function () {
+
+    Route::get('/all/permission', 'AllPermission')
+      ->name('all.permission');
+
+    // permission:新規作成のルート
+    Route::get('/add/permission', 'AddPermission')
+      ->name('add.permission');
+
+    // permission:保存のルート
+    Route::post('/store/permission', 'StorePermission')
+      ->name('store.permission');
+
+    // permission:編集のルート
+    Route::get('/edit/permission/{id}', 'EditPermission')
+      ->name('edit.permission');
+
+    // permission:更新のルート
+    Route::post('/update/permission', 'UpdatePermission')
+      ->name('update.permission');
+
+    // permission:削除のルート
+    Route::get('/delete/permission/{id}', 'DeletePermission')
+      ->name('delete.permission');
   });
 }); // End Group Admin Middleware

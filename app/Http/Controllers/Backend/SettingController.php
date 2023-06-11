@@ -21,7 +21,7 @@ class SettingController extends Controller
     );
   } // End Method 
 
-  public function UpdateSmptSetting(Request $request)
+  public function UpdateSmtpSetting(Request $request)
   {
 
     $stmp_id = $request->id;
