@@ -92,13 +92,15 @@ class RoleController extends Controller
     return view('backend.pages.permission.import_permission');
   } // End Method 
 
+  /////////// Role ALL Method ///////////////
+
   public function AllRoles()
   {
-    // $roles = Role::all();
+    $roles = Role::all();
 
     return view(
       'backend.pages.roles.all_roles',
-      // compact('roles')
+      compact('roles')
     );
   } // End Method 
 
@@ -120,4 +122,5 @@ class RoleController extends Controller
 
     return redirect()->route('all.roles')->with($notification);
   } // End Method 
+
 }
