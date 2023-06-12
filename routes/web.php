@@ -642,13 +642,28 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
   Route::controller(RoleController::class)->group(function () {
 
+    // role:一覧のルート
     Route::get('/all/roles', 'AllRoles')
       ->name('all.roles');
 
+    // role:新規作成のルート
     Route::get('/add/roles', 'AddRoles')
       ->name('add.roles');
 
+    // role:保存のルート
     Route::post('/store/roles', 'StoreRoles')
       ->name('store.roles');
+
+    // role:編集のルート
+    Route::get('/edit/roles/{id}', 'EditRoles')
+      ->name('edit.roles');
+
+    // role:更新のルート
+    Route::post('/update/roles', 'UpdateRoles')
+      ->name('update.roles');
+
+    // role:削除のルート
+    Route::get('/delete/roles/{id}', 'DeleteRoles')
+      ->name('delete.roles');
   });
 }); // End Group Admin Middleware
