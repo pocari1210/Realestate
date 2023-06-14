@@ -1,0 +1,84 @@
+
+◆モデルの編集◆
+
+ディレクトリ
+\app\Models\User.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public static function getpermissionGroups()
+  {
+    $permission_groups = DB::table('permissions')
+	->select('guard_name')
+	->groupBy('guard_name')
+	->get();
+    return $permission_groups;
+  } // End Method 
+
+  public static function getpermissionByGroupName($guard_name)
+  {
+
+    $permissions = DB::table('permissions')
+      ->select('name', 'id')
+      ->where('guard_name', $guard_name)
+      ->get();
+    return $permissions;
+  } // End Method 
+
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+    Route::get('/add/roles/permission', 'AddRolesPermission')
+      ->name('add.roles.permission');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <li class="nav-item">
+    <a href="{{ route('add.roles.permission') }}" class="nav-link">Role in Permission </a>
+  </li>
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\RoleController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AddRolesPermission()
+  {
+    $roles = Role::all();
+    $permissions = Permission::all();
+    $permission_groups = User::getpermissionGroups();
+
+    return view(
+      'backend.pages.rolesetup.add_roles_permission',
+      compact('roles', 'permissions', 'permission_groups')
+    );
+  } // End Method 
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\pages\rolesetup\add_roles_permission.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・

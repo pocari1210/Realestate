@@ -1,0 +1,57 @@
+
+
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  Route::controller(RoleController::class)->group(function () {
+
+    Route::get('/add/roles/permission', 'AddRolesPermission')
+      ->name('add.roles.permission');
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <li class="nav-item">
+    <a href="{{ route('add.roles.permission') }}" class="nav-link">Role in Permission </a>
+  </li>
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\resources\views\backend\pages\rolesetup\add_roles_permission.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AddRolesPermission()
+  {
+    $roles = Role::all();
+    $permissions = Permission::all();
+
+    return view(
+      'backend.pages.rolesetup.add_roles_permission',
+      compact('roles', 'permissions')
+    );
+  } // End Method 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\pages\rolesetup\add_roles_permission.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
