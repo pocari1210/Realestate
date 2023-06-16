@@ -1,4 +1,6 @@
 
+git commit のrole_permisson:追加処理を確認
+
 ◆モデルの編集◆
 
 ディレクトリ
