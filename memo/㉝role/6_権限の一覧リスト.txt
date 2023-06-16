@@ -1,0 +1,66 @@
+
+6_権限の一覧リスト
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  Route::controller(RoleController::class)->group(function () {
+
+    // ROLE & PERMISSION:一覧表示
+    Route::get('/all/roles/permission', 'AllRolesPermission')
+      ->name('all.roles.permission');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <li class="nav-item">
+    <a href="{{ route('add.roles.permission') }}" class="nav-link">Role in Permission </a>
+  </li>
+
+  ↓追記↓
+  <li class="nav-item">
+    <a href="{{ route('all.roles.permission') }}" class="nav-link">All Role in Permission </a>
+  </li>
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\RoleController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AllRolesPermission()
+  {
+    $roles = Role::all();
+
+    return view(
+      'backend.pages.rolesetup.all_roles_permission',
+      compact('roles')
+    );
+  } // End Method   
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\pages\rolesetup\all_roles_permission.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+一覧が表示されたらOK

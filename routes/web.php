@@ -669,8 +669,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/add/roles/permission', 'AddRolesPermission')
       ->name('add.roles.permission');
 
-    // ロールの権限:保存処理
+    // ROLE & PERMISSION:保存処理
     Route::post('/role/permission/store', 'RolePermissionStore')
       ->name('role.permission.store');
+
+    // ROLE & PERMISSION:一覧表示
+    Route::get('/all/roles/permission', 'AllRolesPermission')
+      ->name('all.roles.permission');
   });
 }); // End Group Admin Middleware
