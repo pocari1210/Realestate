@@ -35,7 +35,7 @@ class RoleController extends Controller
   {
     $permission = Permission::create([
       'name' => $request->name,
-      'guard_name' => $request->guard_name,
+      'group_name' => $request->group_name,
     ]);
 
     $notification = array(
@@ -49,7 +49,6 @@ class RoleController extends Controller
   public function EditPermission($id)
   {
     $permission = Permission::findOrFail($id);
-
     return view(
       'backend.pages.permission.edit_permission',
       compact('permission')
@@ -62,7 +61,7 @@ class RoleController extends Controller
 
     Permission::findOrFail($per_id)->update([
       'name' => $request->name,
-      'guard_name' => $request->guard_name,
+      'group_name' => $request->group_name,
     ]);
 
     $notification = array(
@@ -209,6 +208,18 @@ class RoleController extends Controller
       'backend.pages.rolesetup.all_roles_permission',
       compact('roles')
     );
-  } // End Method   
+  } // End Method  
+
+  public function AdminEditRoles($id)
+  {
+    $role = Role::findOrFail($id);
+    $permissions = Permission::all();
+    $permission_groups = User::getpermissionGroups();
+
+    return view(
+      'backend.pages.rolesetup.edit_roles_permission',
+      compact('role', 'permissions', 'permission_groups')
+    );
+  } // End Method 
 
 }
