@@ -689,4 +689,19 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/delete/roles/{id}', 'AdminDeleteRoles')
       ->name('admin.delete.roles');
   });
+  // Admin User All Route 
+  Route::controller(AdminController::class)->group(function () {
+
+    // MultiAdmin:一覧
+    Route::get('/all/admin', 'AllAdmin')
+      ->name('all.admin');
+
+    // MultiAdmin:新規作成
+    Route::get('/add/admin', 'AddAdmin')
+      ->name('add.admin');
+
+    // MultiAdmin:保存処理
+    Route::post('/store/admin', 'StoreAdmin')
+      ->name('store.admin');
+  });
 }); // End Group Admin Middleware

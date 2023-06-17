@@ -8,7 +8,21 @@
 
 ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
 
+  // Admin User All Route 
+  Route::controller(AdminController::class)->group(function () {
 
+    // MultiAdmin:一覧
+    Route::get('/all/admin', 'AllAdmin')
+      ->name('all.admin');
+
+    // MultiAdmin:新規作成
+    Route::get('/add/admin', 'AddAdmin')
+      ->name('add.admin');
+
+    // MultiAdmin:保存処理
+    Route::post('/store/admin', 'StoreAdmin')
+      ->name('store.admin');
+  });
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -16,25 +30,90 @@
 ◆ビューの編集(遷移元)◆
 
 ディレクトリ
+\resources\views\admin\body\sidebar.blade.php
 
 ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
 
-
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="collapse" href="#admin" role="button" aria-expanded="false" aria-controls="admin">
+          <i class="link-icon" data-feather="anchor"></i>
+          <span class="link-title">Manage Admin User</span>
+          <i class="link-arrow" data-feather="chevron-down"></i>
+        </a>
+        <div class="collapse" id="admin">
+          <ul class="nav sub-menu">
+            <li class="nav-item">
+              <a href="{{ route('all.admin') }}" class="nav-link">All Admin</a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('add.admin') }}" class="nav-link">Add Admin </a>
+            </li>
+          </ul>
+        </div>
+      </li>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 ◆コントローラーの編集◆
 
 ディレクトリ
-
+\app\Http\Controllers\AdminController.php
 
 ・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
 
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
+  public function AllAdmin()
+  {
+    $alladmin = User::where('role', 'admin')->get();
 
+    return view(
+      'backend.pages.admin.all_admin',
+      compact('alladmin')
+    );
+  } // End Method 
 
+  public function AddAdmin()
+  {
+    $roles = Role::all();
+    return view(
+      'backend.pages.admin.add_admin',
+      compact('roles')
+    );
+  } // End Method 
 
+  public function StoreAdmin(Request $request)
+  {
+    $user = new User();
+    $user->username = $request->username;
+    $user->name = $request->name;
+    $user->email = $request->email;
+    $user->phone = $request->phone;
+    $user->address = $request->address;
+    $user->password =  Hash::make($request->password);
+    $user->role = 'admin';
+    $user->status = 'active';
+    $user->save();
 
+    if ($request->roles) {
+      $user->assignRole($request->roles);
+    }
 
+    $notification = array(
+      'message' => 'New Admin User Inserted Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.admin')->with($notification);
+  } // End Method 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移先)◆
+
+ディレクトリ
+\resources\views\backend\pages\admin\all_admin.blade.php
+\resources\views\backend\pages\admin\add_admin.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
