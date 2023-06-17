@@ -703,5 +703,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // MultiAdmin:保存処理
     Route::post('/store/admin', 'StoreAdmin')
       ->name('store.admin');
+
+    // MultiAdmin:編集処理
+    Route::get('/edit/admin/{id}', 'EditAdmin')
+      ->name('edit.admin');
+
+    // MultiAdmin:更新処理
+    Route::post('/update/admin/{id}', 'UpdateAdmin')
+      ->name('update.admin');
   });
 }); // End Group Admin Middleware
