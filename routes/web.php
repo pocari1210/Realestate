@@ -680,5 +680,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // ROLE & PERMISSION:編集
     Route::get('/admin/edit/roles/{id}', 'AdminEditRoles')
       ->name('admin.edit.roles');
+
+    // ROLE & PERMISSION:更新処理
+    Route::post('/admin/roles/update/{id}', 'AdminRolesUpdate')
+      ->name('admin.roles.update');
   });
 }); // End Group Admin Middleware

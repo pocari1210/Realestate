@@ -1,0 +1,70 @@
+
+8_権限の更新
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  Route::controller(RoleController::class)->group(function () {
+
+    // ROLE & PERMISSION:更新処理
+    Route::post('/admin/roles/update/{id}', 'AdminRolesUpdate')
+      ->name('admin.roles.update');
+  });
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\pages\rolesetup\edit_roles_permission.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  ↓↓ルートを編集↓↓
+  <form id="myForm" method="POST" action="{{ route('admin.roles.update',$role->id) }}" class="forms-sample">
+    @csrf
+
+    <div class="form-group mb-3">
+      <label for="exampleInputEmail1" class="form-label">Roles Name </label>
+      <h3>{{ $role->name }}</h3>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\RoleController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AdminRolesUpdate(Request $request, $id)
+  {
+
+    $role = Role::findOrFail($id);
+    $permissions = $request->permission;
+
+    if (!empty($permissions)) {
+      $role->syncPermissions($permissions);
+    }
+
+    $notification = array(
+      'message' => 'Role Permission Updated Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->route('all.roles.permission')->with($notification);
+  } // End Method 
+
+
+★コード解説★
+
+設定されている Permission を一度削除して、
+指定して Permission を設定する場合は
+ syncPermissions メソッドを利用。(更新処理)
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
