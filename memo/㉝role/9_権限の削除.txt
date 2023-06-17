@@ -1,0 +1,60 @@
+
+9_権限の削除
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+/// Admin Group Middleware 
+Route::middleware(['auth', 'role:admin'])->group(function () {
+
+  Route::controller(RoleController::class)->group(function () {
+
+    // ROLE & PERMISSION:削除処理
+    Route::get('/admin/delete/roles/{id}', 'AdminDeleteRoles')
+      ->name('admin.delete.roles');
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+\resources\views\backend\pages\rolesetup\all_roles_permission.blade.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <td>
+    <a href="{{ route('admin.edit.roles',$item->id) }}" class="btn btn-inverse-warning"> Edit </a>
+
+    ↓↓ルート編集↓↓
+    <a href="{{ route('admin.delete.roles',$item->id) }}" class="btn btn-inverse-danger" id="delete"> Delete </a>
+  </td>
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\Backend\RoleController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function AdminDeleteRoles($id)
+  {
+    $role = Role::findOrFail($id);
+    if (!is_null($role)) {
+      $role->delete();
+    }
+
+    $notification = array(
+      'message' => 'Role Permission Deleted Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method  
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
