@@ -1,0 +1,62 @@
+
+3_削除処理
+
+◆ルートの編集◆
+
+ディレクトリ
+\routes\web.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  // Admin User All Route 
+  Route::controller(AdminController::class)->group(function () {
+
+    // MultiAdmin:削除処理
+    Route::get('/delete/admin/{id}', 'DeleteAdmin')
+      ->name('delete.admin');
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆ビューの編集(遷移元)◆
+
+ディレクトリ
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  <td>
+    <a href="{{ route('edit.admin',$item->id) }}" class="btn btn-inverse-warning" title="Edit"> <i data-feather="edit"></i> </a>
+
+    ↓↓編集↓↓
+    <a href="{{ route('delete.admin',$item->id) }}" class="btn btn-inverse-danger" id="delete" title="Delete"> <i data-feather="trash-2"></i> </a>
+  </td>
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+◆コントローラーの編集◆
+
+ディレクトリ
+\app\Http\Controllers\AdminController.php
+
+・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・・
+
+  public function DeleteAdmin($id)
+  {
+
+    $user = User::findOrFail($id);
+
+    if (!is_null($user)) {
+      $user->delete();
+    }
+
+    $notification = array(
+      'message' => 'New Admin User Deleted Successfully',
+      'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+  } // End Method   
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////

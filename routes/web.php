@@ -711,5 +711,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // MultiAdmin:更新処理
     Route::post('/update/admin/{id}', 'UpdateAdmin')
       ->name('update.admin');
+
+    // MultiAdmin:削除処理
+    Route::get('/delete/admin/{id}', 'DeleteAdmin')
+      ->name('delete.admin');
   });
 }); // End Group Admin Middleware
